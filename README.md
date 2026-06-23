@@ -4,6 +4,19 @@ A curated collection of interview preparation and learning materials for **Softw
 
 ---
 
+## Repository Structure
+
+| Folder | Contents |
+|--------|----------|
+| [`html/`](html/) | Interactive Java interview guide — **start at [`html/index.html`](html/index.html)** |
+| [`pdfs/`](pdfs/) | PDF notes, cheat sheets, and interview Q&A documents |
+
+**Quick links**
+- **Web guide (main):** [html/index.html](html/index.html)
+- **Topic checklist (100+):** [html/interview-topics-checklist.html](html/interview-topics-checklist.html)
+
+---
+
 ## Topics Covered
 
 | Category | What's Inside |
@@ -116,10 +129,12 @@ A curated collection of interview preparation and learning materials for **Softw
 
 ## How to Use
 
-1. **Browse by topic** — Use the tables above to find materials for the area you are preparing for.
-2. **Start with fundamentals** — For DevOps roles, begin with Linux, Docker, and CI/CD; for backend roles, start with Java, OOP, and Spring Boot.
-3. **Use cheat sheets for revision** — Quick-reference PDFs are ideal for last-minute review before interviews.
-4. **Practice alongside reading** — Set up Docker, run a Spring Boot app, or deploy to Kubernetes while studying the related guides.
+1. **Interactive guide** — Open [`html/index.html`](html/index.html) in a browser (or use [GitHub Pages](https://ashishshah1710.github.io/InterviewPrep/html/index.html) if enabled).
+2. **PDF materials** — Browse the [`pdfs/`](pdfs/) folder for cheat sheets and notes by topic.
+3. **Browse by topic** — Use the tables below to find PDF materials for the area you are preparing for.
+4. **Start with fundamentals** — For DevOps roles, begin with Linux, Docker, and CI/CD; for backend roles, start with Java, OOP, and Spring Boot.
+5. **Use cheat sheets for revision** — Quick-reference PDFs are ideal for last-minute review before interviews.
+6. **Practice alongside reading** — Set up Docker, run a Spring Boot app, or deploy to Kubernetes while studying the related guides.
 
 ---
 
