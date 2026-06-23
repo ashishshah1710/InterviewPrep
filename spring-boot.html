@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spring Boot — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html" class="nav-active">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub nav-active">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="spring-boot">
+      <h2 class="section-title">Spring Boot</h2>
+      <p class="section-desc">Spring Framework fundamentals plus a deep-dive into internals — auto-configuration, startup flow, embedded servers, profiles, Actuator, and production pitfalls.</p>
+
+      <article>
+        <h3>What does @SpringBootApplication do internally?</h3>
+        <span class="tag">Annotation</span>
+        <span class="tag">Bootstrap</span>
+        <p><code>@SpringBootApplication</code> is a convenience composite annotation that combines three annotations:</p>
+        <pre><code>@SpringBootConfiguration   // Specialized @Configuration
+@EnableAutoConfiguration   // Enables Spring Boot auto-config
+@ComponentScan             // Scans current package and sub-packages</code></pre>
+        <p>When you run <code>SpringApplication.run(App.class, args)</code>:</p>
+        <ul class="detail-list">
+          <li>Creates an <code>ApplicationContext</code> (IoC container)</li>
+          <li>Registers all <code>@Component</code>, <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code> beans via component scanning</li>
+          <li>Triggers auto-configuration based on classpath and properties</li>
+          <li>Starts the embedded web server (Tomcat/Jetty/Undertow) if web starter is present</li>
+          <li>Publishes <code>ApplicationReadyEvent</code> when fully initialized</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What is @EnableAutoConfiguration, and how does it work?</h3>
+        <span class="tag">Auto-Config</span>
+        <p><code>@EnableAutoConfiguration</code> tells Spring Boot to automatically configure beans based on the jars present on the classpath. The mechanism:</p>
+        <ul class="detail-list">
+          <li>Reads auto-config class names from <code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code></li>
+          <li>Each auto-config class is annotated with conditional annotations like <code>@ConditionalOnClass</code>, <code>@ConditionalOnMissingBean</code>, <code>@ConditionalOnProperty</code></li>
+          <li>Only configurations whose conditions match are activated</li>
+          <li>Auto-configs are processed <strong>after</strong> user-defined beans, so your custom beans take precedence</li>
+        </ul>
+        <div class="highlight-box">
+          Example: If <code>spring-boot-starter-data-jpa</code> is on the classpath and no <code>DataSource</code> bean exists, Spring Boot auto-configures a <code>DataSource</code>, <code>EntityManagerFactory</code>, and <code>JpaTransactionManager</code> using properties from <code>application.properties</code>.
+        </div>
+      </article>
+
+      <article>
+        <h3>What is the difference between constructor-based and field-based @Autowired injection?</h3>
+        <span class="tag">DI</span>
+        <table>
+          <tr><th>Aspect</th><th>Constructor Injection</th><th>Field Injection</th></tr>
+          <tr><td>Spring recommendation</td><td>Preferred</td><td>Discouraged</td></tr>
+          <tr><td>Immutability</td><td>Dependencies can be <code>final</code></td><td>Cannot be <code>final</code></td></tr>
+          <tr><td>Testability</td><td>Easy — pass mocks via constructor</td><td>Requires reflection or <code>@InjectMocks</code></td></tr>
+          <tr><td>Null safety</td><td>Guaranteed before use</td><td>Null if object created with <code>new</code></td></tr>
+          <tr><td>Circular dependencies</td><td>Detected early at startup</td><td>Can hide issues</td></tr>
+          <tr><td>Framework coupling</td><td>Minimal (no Spring annotation needed if single constructor)</td><td>Requires Spring to inject via reflection</td></tr>
+        </table>
+        <pre><code>// Recommended: Constructor injection
+@Service
+public class OrderService {
+    private final PaymentService paymentService;
+    private final InventoryService inventoryService;
+
+    public OrderService(PaymentService paymentService,
+                        InventoryService inventoryService) {
+        this.paymentService = paymentService;
+        this.inventoryService = inventoryService;
+    }
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>What does @PostConstruct do, and at what stage is it executed?</h3>
+        <span class="tag">Lifecycle</span>
+        <p><code>@PostConstruct</code> (JSR-250) marks a method to run after the bean's dependency injection is complete but before the bean is put into service. It is part of the Spring bean lifecycle:</p>
+        <div class="diagram">1. Instantiate bean (call constructor)
+2. Populate properties (@Autowired / @Value)
+3. BeanNameAware / BeanFactoryAware callbacks
+4. @PostConstruct method executes  ← HERE
+5. InitializingBean.afterPropertiesSet()
+6. Custom init-method (if configured)
+7. Bean is ready for use
+---
+On shutdown:
+8. @PreDestroy method
+9. DisposableBean.destroy()</div>
+        <p>Use <code>@PostConstruct</code> for initialization logic that depends on injected dependencies — loading caches, validating configuration, opening connections, or setting up internal state.</p>
+      </article>
+
+      <article>
+        <h3>How does Dependency Injection work internally in Spring Boot?</h3>
+        <span class="tag">IoC Container</span>
+        <p>Spring's DI is built on the <strong>Inversion of Control (IoC)</strong> principle — the framework creates and wires objects instead of your code calling <code>new</code>.</p>
+        <p><strong>Internal flow:</strong></p>
+        <ul class="detail-list">
+          <li><strong>Component scanning:</strong> Classpath is scanned for classes annotated with stereotype annotations. Each becomes a <code>BeanDefinition</code>.</li>
+          <li><strong>Bean registration:</strong> Definitions are stored in the <code>BeanFactory</code> / <code>ApplicationContext</code>.</li>
+          <li><strong>Instantiation:</strong> During context refresh, beans are created. Singletons are created once; prototypes per injection.</li>
+          <li><strong>Dependency resolution:</strong> Spring analyzes constructor parameters, <code>@Autowired</code> fields/setters, and resolves matching beans by type (and <code>@Qualifier</code> by name).</li>
+          <li><strong>Injection:</strong> Dependencies are injected via reflection (fields/setters) or constructor arguments.</li>
+          <li><strong>Lifecycle callbacks:</strong> <code>@PostConstruct</code>, <code>InitializingBean</code>, etc. are invoked.</li>
+          <li><strong>Proxy creation:</strong> For <code>@Transactional</code>, <code>@Async</code>, and AOP — Spring creates JDK dynamic proxies or CGLIB subclass proxies.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What is the difference between @Component, @Service, and @Repository?</h3>
+        <span class="tag">Stereotypes</span>
+        <p>All three are specializations of <code>@Component</code>. They are functionally identical for Spring's component scanning and bean registration — Spring treats them the same internally.</p>
+        <table>
+          <tr><th>Annotation</th><th>Semantic Layer</th><th>Special Behavior</th></tr>
+          <tr><td>@Component</td><td>Generic Spring-managed bean</td><td>None</td></tr>
+          <tr><td>@Service</td><td>Business logic layer</td><td>None (semantic only)</td></tr>
+          <tr><td>@Repository</td><td>Data access / persistence layer</td><td>Translates persistence exceptions into Spring's <code>DataAccessException</code> hierarchy</td></tr>
+          <tr><td>@Controller</td><td>Web/MVC layer</td><td>Handles HTTP requests</td></tr>
+          <tr><td>@RestController</td><td>REST API layer</td><td>@Controller + @ResponseBody</td></tr>
+        </table>
+        <p>Use specific stereotypes for code clarity, layer separation, and to enable framework features like exception translation on <code>@Repository</code>.</p>
+      </article>
+
+      <article>
+        <h3>How do you implement global exception handling in Spring Boot?</h3>
+        <span class="tag">Exception Handling</span>
+        <p>Use <code>@ControllerAdvice</code> (or <code>@RestControllerAdvice</code> for REST APIs) combined with <code>@ExceptionHandler</code> to centralize exception handling across all controllers.</p>
+        <pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(
+            ResourceNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            ex.getMessage(),
+            LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidation(
+            MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult().getFieldErrors().stream()
+            .map(e -> e.getField() + ": " + e.getDefaultMessage())
+            .collect(Collectors.joining(", "));
+        return ResponseEntity.badRequest()
+            .body(new ErrorResponse(400, message, LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleGeneral(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ErrorResponse(500, "Internal server error",
+                                    LocalDateTime.now()));
+    }
+}</code></pre>
+        <p>Benefits: consistent error response format, no try-catch in every controller, separation of error handling from business logic, and proper HTTP status codes.</p>
+      </article>
+
+      <article>
+        <h3>What happens if @Autowired is not used in Spring?</h3>
+        <span class="tag">DI</span>
+        <p>Without Spring managing the object:</p>
+        <ul class="detail-list">
+          <li>If you create an object with <code>new MyService()</code>, Spring does not inject dependencies — all <code>@Autowired</code> fields remain <code>null</code>.</li>
+          <li>Only classes registered as Spring beans (via stereotype annotations or <code>@Bean</code> methods) participate in dependency injection.</li>
+          <li><strong>Exception:</strong> Since Spring 4.3, if a class has only <strong>one constructor</strong>, Spring implicitly autowires it even without <code>@Autowired</code>.</li>
+          <li>Manual wiring (<code>setter</code> calls) works but defeats the purpose of DI and makes testing harder.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Explain the annotations inside @SpringBootApplication</h3>
+        <span class="tag">Annotation</span>
+        <pre><code>@SpringBootApplication
+// expands to:
+@SpringBootConfiguration   // @Configuration — this class provides @Bean definitions
+@EnableAutoConfiguration   // enable Spring Boot auto-config machinery
+@ComponentScan             // scan current package + sub-packages for components</code></pre>
+        <table>
+          <tr><th>Annotation</th><th>Role</th></tr>
+          <tr><td><code>@SpringBootConfiguration</code></td><td>Marks the class as a source of bean definitions (specialized <code>@Configuration</code>). Used by Spring Boot to identify the primary config class.</td></tr>
+          <tr><td><code>@EnableAutoConfiguration</code></td><td>Loads auto-config classes from classpath based on <code>@ConditionalOn*</code> rules (e.g., auto-configure JPA if Hibernate is present).</td></tr>
+          <tr><td><code>@ComponentScan</code></td><td>Registers <code>@Component</code>, <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code> beans. Default base package = package of the class annotated with <code>@SpringBootApplication</code>.</td></tr>
+        </table>
+        <p>Customize scan path: <code>@SpringBootApplication(scanBasePackages = "com.myapp")</code>. Exclude auto-config: <code>@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)</code>.</p>
+      </article>
+
+      <article>
+        <h3>Why do we use @Qualifier with @Autowired?</h3>
+        <span class="tag">DI</span>
+        <p>When multiple beans implement the same type (or match the injection point), Spring cannot decide which one to inject. <code>@Qualifier</code> specifies the bean <strong>by name</strong>.</p>
+        <pre><code>@Service("stripePayment")
+class StripePaymentService implements PaymentService { }
+
+@Service("paypalPayment")
+class PayPalPaymentService implements PaymentService { }
+
+@Service
+class OrderService {
+    public OrderService(
+        @Qualifier("stripePayment") PaymentService paymentService) {
+        // injects StripePaymentService bean
+    }
+}</code></pre>
+        <p><strong>Alternatives:</strong> <code>@Primary</code> on one bean (default when no qualifier), custom <code>@Qualifier</code> annotation (type-safe), or inject <code>List&lt;PaymentService&gt;</code> for all implementations.</p>
+      </article>
+
+      <article>
+        <h3>Difference between @Controller and @RestController</h3>
+        <span class="tag">Web</span>
+        <table>
+          <tr><th>Aspect</th><th>@Controller</th><th>@RestController</th></tr>
+          <tr><td>Definition</td><td><code>@Controller</code> stereotype for MVC</td><td><code>@Controller</code> + <code>@ResponseBody</code></td></tr>
+          <tr><td>Return type</td><td>View name (Thymeleaf/JSP) or ModelAndView</td><td>JSON/XML serialized directly to HTTP body</td></tr>
+          <tr><td>Use case</td><td>Server-rendered HTML pages</td><td>REST APIs returning JSON</td></tr>
+          <tr><td>@ResponseBody</td><td>Needed per method for JSON APIs</td><td>Applied to all handler methods automatically</td></tr>
+        </table>
+        <pre><code>@Controller
+public class PageController {
+    @GetMapping("/home")
+    public String home(Model model) {
+        return "home"; // resolves to home.html
+    }
+}
+
+@RestController
+@RequestMapping("/api/orders")
+public class OrderController {
+    @GetMapping("/{id}")
+    public Order getOrder(@PathVariable Long id) {
+        return orderService.findById(id); // serialized as JSON
+    }
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>What is Thread Scope?</h3>
+        <span class="tag">Spring Scope</span>
+        <p>In Spring, <strong>thread scope</strong> means a bean instance is created once per thread and reused for all requests/work on that thread. Spring Framework 6.2+ provides built-in support via custom scope or community libraries; in practice it is often implemented with <code>ThreadLocal</code> or request-like context in worker threads.</p>
+        <pre><code>// Conceptual: one UserContext per request thread
+@Component
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = TARGET_CLASS)
+public class RequestContext { }
+
+// For async worker threads, use TaskDecorator to propagate context:
+@Bean
+public ThreadPoolTaskExecutor taskExecutor() {
+    ThreadPoolTaskExecutor ex = new ThreadPoolTaskExecutor();
+    ex.setTaskDecorator(runnable -> () -> {
+        try {
+            // copy MDC / SecurityContext / ThreadLocal into worker thread
+            runnable.run();
+        } finally {
+            ContextHolder.clear();
+        }
+    });
+    return ex;
+}</code></pre>
+        <p><strong>Common scopes for comparison:</strong> <code>singleton</code> (one per container), <code>prototype</code> (new instance every injection), <code>request</code> (one per HTTP request), <code>session</code> (one per HTTP session). Thread scope is useful for background jobs where each worker thread needs isolated state — always clean up ThreadLocal to avoid leaks.</p>
+      </article>
+
+      <!-- ========== SPRING BOOT DEEP DIVE ========== -->
+      <div id="spring-boot-deep" class="deep-dive-banner">
+        <h3>Spring Boot Deep Dive — Real Interview Questions</h3>
+        <p>Spring Boot looks easy until the interviewer goes deep. These 30 questions cover internal mechanics, startup flow, auto-configuration, and production pitfalls.</p>
+      </div>
+
+      <article>
+        <h3>How does Spring Boot decide which auto-configuration to apply?</h3>
+        <span class="tag">Auto-Config</span>
+        <span class="tag">Internals</span>
+        <p>Spring Boot uses a <strong>conditional evaluation pipeline</strong> during context refresh:</p>
+        <ul class="detail-list">
+          <li><code>AutoConfigurationImportSelector</code> loads candidate classes from <code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code> on the classpath (Boot 3.x; Boot 2.x used <code>spring.factories</code>).</li>
+          <li>Candidates are filtered and sorted (order matters — e.g., <code>@AutoConfigureBefore</code> / <code>@AutoConfigureAfter</code>).</li>
+          <li>Each auto-config class is wrapped in configuration-class processing and evaluated against <strong>@Conditional</strong> annotations:</li>
+        </ul>
+        <table>
+          <tr><th>Condition</th><th>Typical check</th></tr>
+          <tr><td><code>@ConditionalOnClass</code></td><td>Is a library on the classpath? (e.g., <code>javax.sql.DataSource</code>)</td></tr>
+          <tr><td><code>@ConditionalOnMissingBean</code></td><td>Did the user already define this bean?</td></tr>
+          <tr><td><code>@ConditionalOnProperty</code></td><td>Is <code>spring.datasource.url</code> set?</td></tr>
+          <tr><td><code>@ConditionalOnWebApplication</code></td><td>Is this a servlet/reactive web app?</td></tr>
+          <tr><td><code>@ConditionalOnResource</code></td><td>Does a config file exist?</td></tr>
+        </table>
+        <p>Only configs whose <strong>all</strong> conditions pass are registered. User-defined <code>@Configuration</code> and <code>@Bean</code> methods always win over auto-config when both could create the same bean (<code>@ConditionalOnMissingBean</code> backs off).</p>
+      </article>
+
+      <article>
+        <h3>What happens internally when you add spring-boot-starter-web?</h3>
+        <span class="tag">Starter</span>
+        <p>A starter is a <strong>dependency aggregator</strong> — it pulls in transitive jars and triggers matching auto-configurations. <code>spring-boot-starter-web</code> brings:</p>
+        <ul class="detail-list">
+          <li><code>spring-web</code>, <code>spring-webmvc</code> — MVC framework</li>
+          <li><code>spring-boot-starter-tomcat</code> — embedded Tomcat (default servlet container)</li>
+          <li><code>spring-boot-starter-json</code> — Jackson for JSON serialization</li>
+          <li><code>spring-boot-starter-logging</code> — Logback by default</li>
+        </ul>
+        <p>Auto-configurations activated include: <code>DispatcherServletAutoConfiguration</code>, <code>ServletWebServerFactoryAutoConfiguration</code> (Tomcat), <code>HttpEncodingAutoConfiguration</code>, <code>JacksonAutoConfiguration</code>, <code>WebMvcAutoConfiguration</code>, and error handling (<code>ErrorMvcAutoConfiguration</code>).</p>
+        <p>Result: an embedded Tomcat starts on port 8080, a <code>DispatcherServlet</code> is registered at <code>/</code>, and your <code>@RestController</code> beans are mapped to HTTP endpoints — zero XML, zero manual servlet setup.</p>
+      </article>
+
+      <article>
+        <h3>Why does Spring Boot prefer convention over configuration?</h3>
+        <span class="tag">Philosophy</span>
+        <p><strong>Convention over configuration</strong> means sensible defaults cover 80% of use cases so developers focus on business logic, not infrastructure wiring.</p>
+        <ul class="detail-list">
+          <li><strong>Reduced boilerplate:</strong> No manual <code>web.xml</code>, DataSource XML, or component-scan XML.</li>
+          <li><strong>Faster onboarding:</strong> Same project structure, same config file names, same starter patterns across teams.</li>
+          <li><strong>Sensible defaults:</strong> Port 8080, HikariCP pool, Jackson JSON, Logback logging — all work out of the box.</li>
+          <li><strong>Override when needed:</strong> Conventions are not locked in — properties, <code>@Bean</code>, and exclusions let you customize without fighting the framework.</li>
+        </ul>
+        <p>Spring Boot encodes conventions as auto-configuration classes + default property values in <code>application.properties</code> inside each starter jar.</p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot load application.properties internally?</h3>
+        <span class="tag">Configuration</span>
+        <p>Property loading is handled by the <strong>Environment</strong> abstraction, built during application startup:</p>
+        <div class="flow-step"><span class="flow-step-num">1</span><span><code>SpringApplication</code> creates <code>StandardServletEnvironment</code> (or reactive equivalent).</span></div>
+        <div class="flow-step"><span class="flow-step-num">2</span><span><code>ConfigDataEnvironmentPostProcessor</code> loads config data from classpath, file system, and optional cloud config sources.</span></div>
+        <div class="flow-step"><span class="flow-step-num">3</span><span>Default search order: <code>application.properties</code> / <code>application.yml</code> in <code>classpath:/</code>, <code>classpath:/config/</code>, file <code>./</code>, <code>./config/</code>.</span></div>
+        <div class="flow-step"><span class="flow-step-num">4</span><span>Profile-specific files loaded: <code>application-{profile}.properties</code> (e.g., <code>application-prod.yml</code>).</span></div>
+        <div class="flow-step"><span class="flow-step-num">5</span><span>Properties bind to <code>@ConfigurationProperties</code> beans via <code>ConfigurationPropertiesBindingPostProcessor</code>.</span></div>
+        <div class="flow-step"><span class="flow-step-num">6</span><span><code>@Value("${key}")</code> resolves placeholders via <code>PropertySourcesPropertyResolver</code>.</span></div>
+        <p>Later sources override earlier ones in the property source chain. Command-line args and OS env vars sit at high priority.</p>
+      </article>
+
+      <article>
+        <h3>What is the exact startup flow of a Spring Boot application?</h3>
+        <span class="tag">Startup</span>
+        <div class="diagram">main() → SpringApplication.run()
+  ├─ Create SpringApplication instance
+  ├─ Deduce application type (Servlet / Reactive / None)
+  ├─ Load ApplicationContextInitializers (SpringFactoriesLoader)
+  ├─ Load ApplicationListeners
+  ├─ Prepare Environment (properties, profiles, config data)
+  ├─ Print banner (optional)
+  ├─ Create ApplicationContext
+  │    ├─ Servlet: AnnotationConfigServletWebServerApplicationContext
+  │    └─ Register @SpringBootApplication as source
+  ├─ prepareContext() — post-process, apply initializers
+  ├─ refreshContext() — THE BIG ONE:
+  │    ├─ Parse @Configuration classes
+  │    ├─ Component scan → register bean definitions
+  │    ├─ Process @Import → auto-configuration classes
+  │    ├─ Instantiate singleton beans (DI wiring)
+  │    ├─ @PostConstruct, InitializingBean callbacks
+  │    └─ Start embedded web server (WebServerStartStopLifecycle)
+  ├─ callRunners() — CommandLineRunner / ApplicationRunner
+  └─ Publish ApplicationReadyEvent → app is live</div>
+        <p>Failure at any step during <code>refresh()</code> triggers <code>FailureAnalyzer</code> reports (e.g., "Failed to configure DataSource").</p>
+      </article>
+
+      <article>
+        <h3>Difference between @ComponentScan and @SpringBootApplication?</h3>
+        <span class="tag">Annotation</span>
+        <table>
+          <tr><th>Aspect</th><th>@ComponentScan</th><th>@SpringBootApplication</th></tr>
+          <tr><td>Scope</td><td>Only component scanning</td><td>Scanning + auto-config + marks main config class</td></tr>
+          <tr><td>Auto-configuration</td><td>Not enabled</td><td>Enabled via <code>@EnableAutoConfiguration</code></td></tr>
+          <tr><td>Default base package</td><td>Must specify or uses declaring class package</td><td>Package of annotated class</td></tr>
+          <tr><td>Use alone?</td><td>Yes — for partial/custom setups</td><td>Main application entry annotation</td></tr>
+        </table>
+        <p><code>@SpringBootApplication</code> = <code>@Configuration</code> + <code>@EnableAutoConfiguration</code> + <code>@ComponentScan</code>. Using only <code>@ComponentScan</code> on a config class gives you beans from scanned packages but <strong>no</strong> DataSource/Tomcat/Jackson auto-setup unless you add <code>@EnableAutoConfiguration</code> separately.</p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot detect embedded Tomcat and configure it?</h3>
+        <span class="tag">Embedded Server</span>
+        <ul class="detail-list">
+          <li><code>ServletWebServerFactoryAutoConfiguration</code> activates when servlet web classes are on classpath and no custom <code>ServletWebServerFactory</code> bean exists.</li>
+          <li><code>@ConditionalOnClass({ Servlet.class, Tomcat.class })</code> checks Tomcat is available (from <code>spring-boot-starter-tomcat</code>).</li>
+          <li>Creates a <code>TomcatServletWebServerFactory</code> bean configured via <code>ServerProperties</code> (port, context-path, SSL, compression).</li>
+          <li>During context refresh, <code>ServletWebServerApplicationContext</code> calls <code>factory.getWebServer()</code> which builds and starts Tomcat programmatically — no external installation.</li>
+          <li><code>DispatcherServlet</code> is registered as a servlet on the embedded container.</li>
+        </ul>
+        <p>Switch to Jetty/Undertow by excluding Tomcat and adding <code>spring-boot-starter-jetty</code> — same auto-config mechanism picks the available factory.</p>
+      </article>
+
+      <article>
+        <h3>What happens if two beans of same type exist and no @Qualifier?</h3>
+        <span class="tag">DI</span>
+        <p>Spring's resolution order:</p>
+        <ul class="detail-list">
+          <li>If one bean is marked <code>@Primary</code> → that bean is injected.</li>
+          <li>If parameter/field name matches a bean name (e.g., <code>stripePayment</code>) → inject by name.</li>
+          <li>If neither applies → <strong>startup fails</strong> with <code>NoUniqueBeanDefinitionException</code>: "expected single matching bean but found 2".</li>
+        </ul>
+        <div class="warn-box">
+          Application won't start — this is fail-fast by design. Fix with <code>@Qualifier</code>, <code>@Primary</code>, or refactor to a single implementation / strategy pattern with explicit selection.
+        </div>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot handle profile-specific configuration?</h3>
+        <span class="tag">Profiles</span>
+        <pre><code># application.yml (default)
+server.port: 8080
+
+# application-dev.yml
+spring.datasource.url: jdbc:postgresql://localhost/dev
+
+# application-prod.yml
+spring.datasource.url: jdbc:postgresql://prod-host/prod</code></pre>
+        <p>Activate profiles via <code>spring.profiles.active=dev,prod</code> (property, env var <code>SPRING_PROFILES_ACTIVE</code>, or command line <code>--spring.profiles.active=prod</code>).</p>
+        <ul class="detail-list">
+          <li>Profile-specific property files merge into the Environment — profile properties override defaults.</li>
+          <li><code>@Profile("dev")</code> on <code>@Configuration</code> or <code>@Bean</code> — bean only registered when profile is active.</li>
+          <li><code>@ConditionalOnProfile</code> used internally in auto-config classes.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What is the role of SpringFactoriesLoader?</h3>
+        <span class="tag">SPI</span>
+        <p><code>SpringFactoriesLoader</code> loads implementation classes listed in <code>META-INF/spring.factories</code> (Spring Framework SPI mechanism). Spring Boot uses it to discover:</p>
+        <ul class="detail-list">
+          <li><code>ApplicationContextInitializer</code> — run before context refresh</li>
+          <li><code>ApplicationListener</code> — early event listeners</li>
+          <li><code>FailureAnalyzer</code> — human-readable startup error messages</li>
+          <li><code>EnvironmentPostProcessor</code> — modify Environment before context creation</li>
+          <li><code>SpringApplicationRunListener</code> — hooks into run lifecycle</li>
+        </ul>
+        <p><strong>Note (Boot 3):</strong> Auto-configuration classes moved to <code>AutoConfiguration.imports</code>, but <code>SpringFactoriesLoader</code> is still used for the extension points above. It's the plugin discovery mechanism — libraries register hooks without modifying Spring Boot core code.</p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot reduce XML configuration completely?</h3>
+        <span class="tag">Configuration</span>
+        <p>XML is replaced by three mechanisms working together:</p>
+        <ul class="detail-list">
+          <li><strong>Annotation-driven config:</strong> <code>@Component</code>, <code>@Autowired</code>, <code>@Configuration</code>, <code>@Bean</code> replace <code>&lt;bean&gt;</code> tags.</li>
+          <li><strong>Auto-configuration:</strong> Replaces hundreds of lines of infrastructure XML (DataSource, transaction manager, MVC) with conditional Java config classes.</li>
+          <li><strong>Externalized properties:</strong> <code>application.yml</code> replaces property placeholders in XML.</li>
+          <li><strong>Component scanning:</strong> Replaces <code>&lt;context:component-scan&gt;</code>.</li>
+        </ul>
+        <p>XML is still supported (<code>@ImportResource</code>) but virtually unused in modern Spring Boot projects.</p>
+      </article>
+
+      <article>
+        <h3>Difference between @RestController and @Controller internally?</h3>
+        <span class="tag">Web Internals</span>
+        <pre><code>@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Controller
+@ResponseBody
+public @interface RestController { }</code></pre>
+        <p><strong>Internal difference at request-handling time:</strong></p>
+        <table>
+          <tr><th>@Controller</th><th>@RestController</th></tr>
+          <tr><td>Return value handled by <code>ViewResolver</code> → template name → HTML page</td><td><code>RequestResponseBodyMethodProcessor</code> serializes return value via <code>HttpMessageConverter</code> (Jackson) → JSON/XML in response body</td></tr>
+          <tr><td>Needs <code>@ResponseBody</code> per method for APIs</td><td>Every handler method treated as <code>@ResponseBody</code> via class-level meta-annotation</td></tr>
+        </table>
+        <p>Both register as <code>@Controller</code> beans in <code>RequestMappingHandlerMapping</code>. The difference is purely in how the <code>HandlerMethodReturnValueHandler</code> chain processes the return type.</p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot manage dependency versions automatically?</h3>
+        <span class="tag">BOM</span>
+        <p>Via the <strong>Bill of Materials (BOM)</strong> — <code>spring-boot-dependencies</code> POM imported in your build:</p>
+        <pre><code>// Maven — spring-boot-starter-parent imports the BOM
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;3.2.0&lt;/version&gt;
+&lt;/parent&gt;
+
+// Gradle — dependency management plugin
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // no version needed — BOM pins it
+}</code></pre>
+        <p>The BOM defines tested, compatible versions for 200+ libraries (Spring Framework, Hibernate, Jackson, Tomcat, Logback, etc.). You override individual versions only when needed. This eliminates dependency hell and classpath conflicts.</p>
+      </article>
+
+      <article>
+        <h3>What is the lifecycle of a Spring Bean in Spring Boot?</h3>
+        <span class="tag">Lifecycle</span>
+        <div class="diagram">1. BeanDefinition registered (scan / @Bean / auto-config)
+2. Instantiation (constructor call)
+3. Dependency injection (@Autowired, constructor args)
+4. Aware interfaces (BeanNameAware, ApplicationContextAware)
+5. BeanPostProcessor.beforeInitialization()
+6. @PostConstruct
+7. InitializingBean.afterPropertiesSet()
+8. Custom init-method
+9. BeanPostProcessor.afterInitialization() → AOP proxy created here
+10. Bean in use (singleton cached in container)
+---
+Shutdown:
+11. @PreDestroy
+12. DisposableBean.destroy()
+13. Custom destroy-method</div>
+        <p><code>BeanPostProcessor</code> is critical — <code>@Transactional</code>, <code>@Cacheable</code>, and <code>@Async</code> proxies are applied in step 9, wrapping your bean in a JDK/CGLIB proxy.</p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot handle externalized configuration?</h3>
+        <span class="tag">Externalized Config</span>
+        <p>Configuration is externalized so the same jar runs in dev, staging, and prod with different settings — no rebuild required.</p>
+        <ul class="detail-list">
+          <li><strong>Property files:</strong> <code>application.yml</code>, profile-specific files</li>
+          <li><strong>Environment variables:</strong> <code>SERVER_PORT=9090</code> → binds to <code>server.port</code></li>
+          <li><strong>Command-line args:</strong> <code>--server.port=9090</code> (highest priority among defaults)</li>
+          <li><strong>@ConfigurationProperties:</strong> Type-safe binding to POJOs</li>
+          <li><strong>Cloud config:</strong> Spring Cloud Config Server for centralized config across microservices</li>
+          <li><strong>Kubernetes ConfigMaps/Secrets:</strong> Mounted as env vars or files</li>
+        </ul>
+        <p>Priority (low → high): default properties in jar → <code>application.properties</code> → profile files → env vars → command line.</p>
+      </article>
+
+      <article>
+        <h3>What happens if application.yml and application.properties both exist?</h3>
+        <span class="tag">Configuration</span>
+        <p><strong>Both are loaded</strong> into the Environment as separate property sources. If the same key exists in both, <strong>application.properties takes precedence over application.yml</strong> (within the same location/priority level).</p>
+        <p>Best practice: pick one format per project — mixing causes confusion. Use YAML for nested/hierarchical config; use properties for simple flat key-value setups.</p>
+        <div class="highlight-box">
+          Profile files follow the same rule: <code>application-prod.properties</code> overrides duplicate keys in <code>application-prod.yml</code>.
+        </div>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot integrate with Actuator internally?</h3>
+        <span class="tag">Actuator</span>
+        <p>Adding <code>spring-boot-starter-actuator</code> triggers <code>EndpointAutoConfiguration</code> and related auto-configs:</p>
+        <ul class="detail-list">
+          <li>Registers <strong>endpoints</strong> as Spring beans (<code>HealthEndpoint</code>, <code>MetricsEndpoint</code>, <code>InfoEndpoint</code>, etc.) annotated with <code>@Endpoint</code>.</li>
+          <li><code>WebEndpointAutoConfiguration</code> exposes endpoints over HTTP (or JMX) via <code>@WebEndpoint</code> / <code>@ControllerEndpoint</code>.</li>
+          <li><code>HealthContributor</code> beans aggregate into <code>/actuator/health</code> (DB, disk, custom checks).</li>
+          <li>Micrometer integration auto-configures metrics export (Prometheus, Datadog).</li>
+          <li>Security auto-config can restrict endpoints — only <code>/health</code> and <code>/info</code> public by default in recent versions.</li>
+        </ul>
+        <p>Actuator endpoints are discovered via classpath scanning + conditional auto-config — same pattern as everything else in Spring Boot.</p>
+      </article>
+
+      <article>
+        <h3>Difference between @Configuration and normal class?</h3>
+        <span class="tag">Configuration</span>
+        <table>
+          <tr><th>Normal class</th><th>@Configuration class</th></tr>
+          <tr><td>Not processed by Spring unless explicitly instantiated</td><td>Parsed by <code>ConfigurationClassPostProcessor</code> at startup</td></tr>
+          <tr><td><code>@Bean</code> methods ignored</td><td><code>@Bean</code> methods register beans in the container</td></tr>
+          <tr><td>No CGLIB enhancement</td><td>CGLIB-enhanced (full mode) so <code>@Bean</code> method calls return the same singleton instance</td></tr>
+          <tr><td>Cannot use <code>@Import</code>, <code>@ComponentScan</code> effectively</td><td>Can import other configs, scan packages, define infrastructure beans</td></tr>
+        </table>
+        <pre><code>@Configuration
+public class AppConfig {
+    @Bean
+    public ServiceA serviceA() { return new ServiceA(serviceB()); }
+
+    @Bean
+    public ServiceB serviceB() { return new ServiceB(); }
+    // serviceB() called once — @Configuration proxy ensures singleton
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot create DataSource automatically?</h3>
+        <span class="tag">DataSource</span>
+        <p><code>DataSourceAutoConfiguration</code> activates when:</p>
+        <ul class="detail-list">
+          <li><code>javax.sql.DataSource</code> is on classpath (from JDBC starter or JPA starter)</li>
+          <li>No existing <code>DataSource</code> bean (<code>@ConditionalOnMissingBean</code>)</li>
+          <li><code>spring.datasource.url</code> is set (or embedded DB like H2 detected)</li>
+        </ul>
+        <p>It reads <code>spring.datasource.*</code> properties, creates a <code>HikariDataSource</code> (default pool), and registers it. If JPA starter is present, <code>HibernateJpaAutoConfiguration</code> chains off the DataSource to create <code>EntityManagerFactory</code> and <code>JpaTransactionManager</code>.</p>
+        <pre><code>spring.datasource.url=jdbc:postgresql://localhost:5432/mydb
+spring.datasource.username=app
+spring.datasource.password=secret
+spring.datasource.driver-class-name=org.postgresql.Driver
+# HikariCP pool settings optional — sensible defaults apply</code></pre>
+      </article>
+
+      <article>
+        <h3>What is the real use of CommandLineRunner?</h3>
+        <span class="tag">Startup Hook</span>
+        <p><code>CommandLineRunner</code> (and <code>ApplicationRunner</code>) run <strong>after</strong> the ApplicationContext is fully started — the app is live, all beans are wired, embedded server is running.</p>
+        <pre><code>@Component
+public class DataSeeder implements CommandLineRunner {
+    private final UserRepository repo;
+    public DataSeeder(UserRepository repo) { this.repo = repo; }
+
+    @Override
+    public void run(String... args) {
+        if (repo.count() == 0) {
+            repo.saveAll(defaultUsers());
+        }
+    }
+}</code></pre>
+        <p><strong>Real uses:</strong> seed database, warm caches, print startup diagnostics, run one-time migrations, load reference data, validate external service connectivity. Ordered via <code>@Order</code> or <code>Ordered</code> interface when multiple runners exist.</p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot handle exception translation?</h3>
+        <span class="tag">Exceptions</span>
+        <ul class="detail-list">
+          <li><strong>@Repository:</strong> <code>PersistenceExceptionTranslationPostProcessor</code> wraps beans in a proxy that converts vendor exceptions (e.g., <code>SQLException</code>, Hibernate exceptions) into Spring's unchecked <code>DataAccessException</code> hierarchy.</li>
+          <li><strong>Web layer:</strong> <code>DispatcherServlet</code> catches exceptions and delegates to <code>HandlerExceptionResolver</code> chain — including your <code>@ControllerAdvice</code> methods.</li>
+          <li><strong>Validation:</strong> <code>MethodArgumentNotValidException</code> from <code>@Valid</code> → handled by exception resolver → 400 response.</li>
+          <li><strong>Default error handling:</strong> <code>BasicErrorController</code> serves <code>/error</code> with JSON error payload (<code>timestamp</code>, <code>status</code>, <code>message</code>).</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Difference between @EnableAutoConfiguration and @Import?</h3>
+        <span class="tag">Import</span>
+        <table>
+          <tr><th>@EnableAutoConfiguration</th><th>@Import</th></tr>
+          <tr><td>Loads 100+ conditional auto-config classes from classpath metadata</td><td>Directly imports specific <code>@Configuration</code> classes you name</td></tr>
+          <tr><td>Smart — only applies matching configs</td><td>Explicit — always imports what you specify</td></tr>
+          <tr><td>Framework-controlled list</td><td>Developer-controlled list</td></tr>
+          <tr><td>Used on main application class</td><td>Used to compose modular configs or third-party modules</td></tr>
+        </table>
+        <pre><code>@Import({ KafkaConfig.class, RedisConfig.class })
+@Configuration
+public class InfrastructureConfig { }
+
+// @EnableAutoConfiguration internally uses @Import(AutoConfigurationImportSelector.class)
+// which dynamically selects auto-config classes — not a static list</code></pre>
+      </article>
+
+      <article>
+        <h3>What happens if you exclude an auto-configuration class?</h3>
+        <span class="tag">Exclude</span>
+        <pre><code>@SpringBootApplication(exclude = {
+    DataSourceAutoConfiguration.class,
+    HibernateJpaAutoConfiguration.class
+})
+public class App { }</code></pre>
+        <p>The excluded class is filtered out during <code>AutoConfigurationImportSelector</code> processing — its <code>@Bean</code> methods never run. Use when:</p>
+        <ul class="detail-list">
+          <li>You provide your own DataSource / security config</li>
+          <li>Running a batch/CLI app that doesn't need web auto-config (<code>WebMvcAutoConfiguration</code>)</li>
+          <li>Debugging — isolate which auto-config causes a failure</li>
+        </ul>
+        <p>Also excludable via property: <code>spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration</code></p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot support microservices so easily?</h3>
+        <span class="tag">Microservices</span>
+        <ul class="detail-list">
+          <li><strong>Standalone executable jars:</strong> Each service is independently deployable.</li>
+          <li><strong>Opinionated defaults:</strong> REST APIs, JSON, health checks ready in minutes.</li>
+          <li><strong>Spring Cloud integration:</strong> Service discovery (Eureka/Consul), config server, API gateway, circuit breakers plug in via starters.</li>
+          <li><strong>Actuator:</strong> Health, metrics, info endpoints for Kubernetes liveness/readiness probes.</li>
+          <li><strong>Externalized config + profiles:</strong> Same artifact, different config per environment/service.</li>
+          <li><strong>Embedded server:</strong> No shared app server — true process isolation.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What is the difference between fat jar and normal jar?</h3>
+        <span class="tag">Packaging</span>
+        <table>
+          <tr><th>Normal JAR</th><th>Fat JAR (Spring Boot)</th></tr>
+          <tr><td>Contains only your compiled classes</td><td>Contains your classes + all dependency jars nested inside</td></tr>
+          <tr><td>Run with <code>java -cp lib/*:app.jar Main</code></td><td>Run with <code>java -jar app.jar</code> — self-contained</td></tr>
+          <tr><td>Dependencies managed separately</td><td>Dependencies bundled via <code>spring-boot-maven-plugin repackage</code></td></tr>
+          <tr><td>Smaller artifact</td><td>Larger (30–80 MB typical) but portable</td></tr>
+        </table>
+        <p>Internally, Boot's fat jar uses a custom <code>JarLauncher</code> with nested jars in <code>BOOT-INF/lib/</code> and your code in <code>BOOT-INF/classes/</code>. Layered jars (Docker-optimized) separate dependencies, snapshot dependencies, and application code for better cache reuse.</p>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot handle logging by default?</h3>
+        <span class="tag">Logging</span>
+        <ul class="detail-list">
+          <li><code>spring-boot-starter-logging</code> brings <strong>Logback</strong> by default (Log4j2 if you exclude Logback and add log4j starter).</li>
+          <li>Default config in <code>spring-boot-{version}.jar</code> → <code>base.xml</code>: console appender, color output, log level INFO for root, DEBUG for your app package if dev profile.</li>
+          <li>Override via <code>src/main/resources/logback-spring.xml</code> or properties: <code>logging.level.com.myapp=DEBUG</code>, <code>logging.file.name=app.log</code>.</li>
+          <li>All logging frameworks bridged through SLF4J — no direct Log4j/Logback calls needed in code.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>How does Spring Boot decide server port priority?</h3>
+        <span class="tag">Server</span>
+        <p>Port resolution follows the standard property precedence chain. Highest wins:</p>
+        <table>
+          <tr><th>Priority (high → low)</th><th>Source</th></tr>
+          <tr><td>1</td><td>Command line: <code>--server.port=9090</code></td></tr>
+          <tr><td>2</td><td>OS environment variable: <code>SERVER_PORT=9090</code></td></tr>
+          <tr><td>3</td><td><code>application-{profile}.properties</code></td></tr>
+          <tr><td>4</td><td><code>application.properties</code> / <code>application.yml</code></td></tr>
+          <tr><td>5</td><td>Default in <code>ServerProperties</code>: <strong>8080</strong></td></tr>
+        </table>
+        <p>Random port for tests: <code>server.port=0</code> — OS assigns a free port. Embedded server reads final resolved value from <code>Environment</code> during <code>WebServerStartStopLifecycle</code>.</p>
+      </article>
+
+      <article>
+        <h3>What happens internally when you hit a REST endpoint?</h3>
+        <span class="tag">Request Flow</span>
+        <div class="diagram">HTTP Request → Embedded Tomcat (Connector/Thread)
+  → Coyote Adapter → Servlet Container
+  → DispatcherServlet.doDispatch()
+      ├─ HandlerMapping: find @GetMapping handler method
+      ├─ HandlerAdapter: invoke method (resolve @PathVariable, @RequestBody)
+      │     ├─ Argument resolvers (@RequestParam, @Valid → validation)
+      │     └─ Call controller method on (possibly proxied) bean
+      ├─ Return value handling
+      │     └─ RequestResponseBodyMethodProcessor → Jackson → JSON
+      ├─ Exception? → HandlerExceptionResolver → @ControllerAdvice
+      └─ HttpServletResponse written → client receives JSON + status code</div>
+        <p>Filters (<code>FilterChain</code>) run before DispatcherServlet — security (<code>SecurityFilterChain</code>), CORS, request logging, etc.</p>
+      </article>
+
+      <article>
+        <h3>Why is Spring Boot preferred for cloud-native apps?</h3>
+        <span class="tag">Cloud Native</span>
+        <ul class="detail-list">
+          <li><strong>12-factor app alignment:</strong> Config in environment, stateless processes, port binding, disposability (graceful shutdown).</li>
+          <li><strong>Container-friendly:</strong> Single fat jar, fast startup (especially with GraalVM native images), low memory tuning.</li>
+          <li><strong>Kubernetes-ready:</strong> Actuator health probes, Prometheus metrics, externalized config via ConfigMaps.</li>
+          <li><strong>Microservice ecosystem:</strong> Spring Cloud for discovery, config, resilience, gateway.</li>
+          <li><strong>Observability:</strong> Micrometer + OpenTelemetry integration out of the box.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What are the most common Spring Boot performance mistakes?</h3>
+        <span class="tag">Performance</span>
+        <span class="tag">Pitfalls</span>
+        <table>
+          <tr><th>Mistake</th><th>Impact</th><th>Fix</th></tr>
+          <tr><td>Default Tomcat thread pool too small/large for load</td><td>Thread starvation or memory waste</td><td>Tune <code>server.tomcat.threads.max</code> based on profiling</td></tr>
+          <tr><td>N+1 query problem with JPA lazy loading</td><td> Hundreds of DB queries per request</td><td>JOIN FETCH, <code>@EntityGraph</code>, DTO projections</td></tr>
+          <tr><td>No connection pool tuning (HikariCP)</td><td>Connection exhaustion under load</td><td>Set <code>maximum-pool-size</code>, <code>connection-timeout</code></td></tr>
+          <tr><td>Loading entire tables without pagination</td><td>Memory spikes, slow responses</td><td>Pageable queries, streaming</td></tr>
+          <tr><td>Excessive auto-config / unused starters</td><td>Slower startup, larger memory footprint</td><td>Exclude unused auto-config, trim dependencies</td></tr>
+          <tr><td>Synchronous calls to slow external APIs</td><td>Thread blocking</td><td>WebClient/WebFlux, async, circuit breakers</td></tr>
+          <tr><td>Missing <code>@Cacheable</code> on hot read paths</td><td>Repeated expensive computation/DB hits</td><td>Redis/Caffeine caching</td></tr>
+          <tr><td>Logging at DEBUG in production</td><td>I/O bottleneck</td><td>INFO/WARN in prod, structured logging</td></tr>
+          <tr><td>Creating new RestTemplate per request</td><td>Socket exhaustion</td><td>Singleton bean with connection pooling</td></tr>
+          <tr><td>No Actuator/metrics monitoring</td><td>Blind to bottlenecks</td><td>Enable Micrometer + Prometheus/Grafana</td></tr>
+        </table>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ Topics Checklist — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html" class="nav-active">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="interview-topics-checklist">
+      <h2 class="section-title">Frequently Asked Interview Topics — Master Checklist</h2>
+      <p class="section-desc">The topics interviewers actually ask — mapped to sections in this guide. Each row links to <strong>this guide</strong> plus <strong>external deep-dive references</strong> (Oracle, Baeldung, Spring docs, etc.). Tick each row as you complete it.</p>
+
+      <div class="section-banner">
+        <span class="trend-badge">100+ TOPICS · 8 CATEGORIES</span>
+        <h3>Scenario-based prep — not syntax memorization</h3>
+        <p>Interviews test decisions and trade-offs. Every chapter should cover theory, &ldquo;what will happen if&hellip;&rdquo; scenarios, follow-up traps, and structured answers.</p>
+      </div>
+
+      <div class="faq-count-bar">
+        <span class="faq-count-pill">Core Java · 24</span>
+        <span class="faq-count-pill">Spring &amp; Hibernate · 17</span>
+        <span class="faq-count-pill">Docker · 4</span>
+        <span class="faq-count-pill">Cloud &amp; DevOps · 8</span>
+        <span class="faq-count-pill">Database &amp; Caching · 16</span>
+        <span class="faq-count-pill">Microservices · 10</span>
+        <span class="faq-count-pill">System Design · 14</span>
+        <span class="faq-count-pill">Production · 10</span>
+      </div>
+
+      <div class="faq-master-grid">
+
+        <div class="faq-category faq-core">
+          <h4>🔹 1. Core Java (Theory + Scenarios)</h4>
+          <ul>
+            <li><a href="java-learning-journey.html">Java Basics</a></li>
+            <li><a href="java-oop.html">OOP Principles (Abstraction, Encapsulation, Inheritance, Polymorphism)</a></li>
+            <li><a href="java-concurrency.html">Multithreading &amp; Executor Framework</a></li>
+            <li><a href="concurrency-20.html">Multithreading &amp; Concurrency (20 concepts)</a></li>
+            <li><a href="java-learning-journey.html">Java Networking</a></li>
+            <li><a href="java-learning-journey.html">Exception Handling</a></li>
+            <li><a href="production-topics.html">Collection Framework</a></li>
+            <li><a href="additional-topics.html">HashMap Internal Working</a></li>
+            <li><a href="java-concurrency.html">ConcurrentHashMap</a></li>
+            <li><a href="top-companies.html">String vs StringBuilder vs StringBuffer</a></li>
+            <li><a href="additional-topics.html">Strings &amp; Regular Expressions</a></li>
+            <li><a href="additional-topics.html">equals() vs ==</a></li>
+            <li><a href="java-learning-journey.html">Advanced Java</a></li>
+            <li><a href="additional-topics.html">File I/O &amp; Serialization</a></li>
+            <li><a href="java-learning-journey.html">Annotations &amp; Reflection</a></li>
+            <li><a href="spring-boot.html#spring-boot-deep">JDBC</a></li>
+            <li><a href="interview-rounds.html">Java Testing (JUnit &amp; Mockito)</a></li>
+            <li><a href="spring-boot.html">Web Development (REST / HTTP basics)</a></li>
+            <li><a href="production-topics.html">Java 8 Features (Streams, Lambda, Functional Interfaces)</a></li>
+            <li><a href="microservices-2026.html">Optional Class</a></li>
+            <li><a href="design-patterns.html">Design Patterns (Backend-relevant)</a></li>
+            <li><a href="spring-boot.html">Java Security &amp; Spring Security Basics</a></li>
+            <li><a href="real-java-interview.html">CompletableFuture</a></li>
+            <li><a href="microservices.html">Cloud Computing Fundamentals</a></li>
+          </ul>
+        </div>
+
+        <div class="faq-category faq-spring">
+          <h4>🔹 2. Spring &amp; Spring Boot (Heavy Focus)</h4>
+          <ul>
+            <li><a href="spring-boot.html">Spring Core &amp; Dependency Injection</a></li>
+            <li><a href="spring-boot.html#spring-boot-deep">Bean Lifecycle &amp; Scopes</a></li>
+            <li><a href="spring-boot.html">@Component vs @Service vs @Repository</a></li>
+            <li><a href="spring-boot.html#spring-boot-deep">Spring Boot Auto Configuration</a></li>
+            <li><a href="spring-boot.html">Profiles &amp; Configuration Management</a></li>
+            <li><a href="spring-boot.html">REST API Design &amp; Validation Framework</a></li>
+            <li><a href="microservices-2026.html">Exception Handling using @ControllerAdvice</a></li>
+            <li><a href="spring-boot.html">@Transactional &amp; Propagation</a></li>
+            <li><a href="spring-boot.html#spring-boot-deep">Interceptors &amp; Filters</a></li>
+            <li><a href="production-topics.html">Hibernate &amp; JPA Internals</a></li>
+            <li><a href="production-topics.html">Lazy vs Eager Loading</a></li>
+            <li><a href="production-topics.html">N+1 Query Problem</a></li>
+            <li><a href="production-topics.html">Caching &amp; Performance Tuning</a></li>
+            <li><a href="microservices-2026.html">Spring Security &amp; JWT Authentication</a></li>
+            <li><a href="microservices-2026.html">OAuth2 vs JWT</a></li>
+            <li><a href="production-topics.html">Actuator</a></li>
+            <li><a href="spring-boot.html#spring-boot-deep">Spring Framework Deep Dive (30 Q)</a></li>
+          </ul>
+        </div>
+
+        <div class="faq-category faq-docker">
+          <h4>🔹 3. Docker for Java Backend</h4>
+          <ul>
+            <li><a href="microservices.html">Docker Fundamentals for Java Apps</a></li>
+            <li><a href="microservices.html">Multi-stage Docker Builds for Spring Boot</a></li>
+            <li><a href="real-java-interview.html">JVM Memory Tuning Inside Containers</a></li>
+            <li><a href="microservices.html">Common Docker Production Mistakes</a></li>
+          </ul>
+        </div>
+
+        <div class="faq-category faq-cloud">
+          <h4>🔹 4. Cloud + DevOps (Production Engineering)</h4>
+          <ul>
+            <li><a href="production-topics.html">Deploy Spring Boot on AWS (EC2 / ECS / Lambda)</a></li>
+            <li><a href="microservices.html">Dockerized Deployments</a></li>
+            <li><a href="microservices.html">Kubernetes Basics (Pods, Services, Autoscaling)</a></li>
+            <li><a href="production-topics.html">CI/CD Pipelines (GitHub Actions / Jenkins)</a></li>
+            <li><a href="production-topics.html">Logging, Monitoring &amp; Distributed Tracing</a></li>
+            <li><a href="top-companies.html">Prometheus &amp; Grafana Basics</a></li>
+            <li><a href="production-topics.html">Terraform Fundamentals</a></li>
+            <li><a href="production-topics.html">Deploying Spring Boot Microservice to Production</a></li>
+          </ul>
+        </div>
+
+        <div class="faq-category faq-db">
+          <h4>🔹 5. Database &amp; Caching</h4>
+          <ul>
+            <li><a href="sql.html">ACID Properties</a></li>
+            <li><a href="sql.html">SQL Indexing &amp; Optimization</a></li>
+            <li><a href="sql.html">Transactions</a></li>
+            <li><a href="sql.html">Transaction Isolation Levels</a></li>
+            <li><a href="sql.html">Normalization vs Denormalization</a></li>
+            <li><a href="sql.html">Joins (Inner, Left, Right, Full)</a></li>
+            <li><a href="microservices-2026.html">Query Optimization</a></li>
+            <li><a href="production-topics.html">Hibernate Performance Tuning</a></li>
+            <li><a href="microservices-2026.html">Optimistic vs Pessimistic Locking</a></li>
+            <li><a href="production-topics.html">Redis Caching Strategies</a></li>
+            <li><a href="latency-throughput.html">Cache Invalidation Scenarios</a></li>
+            <li><a href="production-topics.html">Connection Pooling (HikariCP)</a></li>
+            <li><a href="interview-rounds.html">Flyway / Liquibase Migrations</a></li>
+            <li><a href="production-topics.html">ElasticSearch Basics</a></li>
+            <li><a href="sql.html">Pagination</a></li>
+            <li><a href="sql.html">Deadlocks</a></li>
+          </ul>
+        </div>
+
+        <div class="faq-category faq-micro">
+          <h4>🔹 Microservices &amp; Distributed Systems</h4>
+          <ul>
+            <li><a href="microservices.html">Monolith vs Microservices</a></li>
+            <li><a href="microservices.html">Service Discovery</a></li>
+            <li><a href="microservices-2026.html">API Gateway</a></li>
+            <li><a href="microservices.html">Circuit Breaker Pattern</a></li>
+            <li><a href="microservices.html">Distributed Tracing</a></li>
+            <li><a href="microservices.html">Configuration Management</a></li>
+            <li><a href="microservices.html">Load Balancing</a></li>
+            <li><a href="event-driven-architecture.html">Synchronous vs Asynchronous Communication</a></li>
+            <li><a href="microservices.html">Retry &amp; Fallback Mechanisms</a></li>
+            <li><a href="production-topics.html">Resilience Patterns</a></li>
+          </ul>
+        </div>
+
+        <div class="faq-category faq-design">
+          <h4>🔹 6. System Design for Backend Engineers</h4>
+          <ul>
+            <li><a href="index.html">15-Day System Design Interview Strategy</a></li>
+            <li><a href="microservices.html">High-Level Architecture Concepts</a></li>
+            <li><a href="lld.html">Low-Level Design Questions</a></li>
+            <li><a href="lld.html">Parking Lot System Design</a></li>
+            <li><a href="lld.html">Rate Limiter Design</a></li>
+            <li><a href="lld.html">Restaurant Reservation System</a></li>
+            <li><a href="interview-rounds.html">URL Shortener Design</a></li>
+            <li><a href="event-driven-architecture.html">Notification Service Design</a></li>
+            <li><a href="production-topics.html">Flash Sale / Inventory Concurrency Design</a></li>
+            <li><a href="latency-throughput.html">Caching Strategies</a></li>
+            <li><a href="lld.html">Database Scaling</a></li>
+            <li><a href="latency-throughput.html">Horizontal vs Vertical Scaling</a></li>
+            <li><a href="microservices.html">CAP Theorem</a></li>
+            <li><a href="event-driven-architecture.html">Message Queues &amp; Event-Driven Design</a></li>
+          </ul>
+        </div>
+
+        <div class="faq-category faq-prod">
+          <h4>🔹 Production Scenarios</h4>
+          <ul>
+            <li><a href="real-java-interview.html">Application suddenly becomes slow — what to check?</a></li>
+            <li><a href="sql.html">Database CPU reaches 100%</a></li>
+            <li><a href="real-java-interview.html">Memory Leak Investigation</a></li>
+            <li><a href="real-java-interview.html">API response time increases after deployment</a></li>
+            <li><a href="real-java-interview.html">Thread Pool Exhaustion</a></li>
+            <li><a href="real-java-interview.html">High GC pauses</a></li>
+            <li><a href="microservices.html">Service-to-Service communication failures</a></li>
+            <li><a href="real-java-interview.html">Cache not reducing database load</a></li>
+            <li><a href="latency-throughput.html">Handling traffic spikes</a></li>
+            <li><a href="production-topics.html">Debugging production incidents</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="journey-insight">
+        <strong>💡 What separates candidates:</strong> Most know how to build CRUD APIs. Interviewers hire engineers who can explain <em>why</em> the app slowed down, how they'd tune GC, when to pick Saga over 2PC, and what they'd check first when DB CPU hits 100%. Use this checklist — mark weak areas, then study those sections in order via the <a class="cross-link" href="index.html">Learning Roadmap</a>.
+      </div>
+
+      <div class="tip-box">
+        <strong>Prep workflow:</strong> (1) Scan this checklist — highlight gaps. (2) Read the guide section (first link). (3) Use <strong>blue ↗ links</strong> for deeper study on official docs. (4) Prepare one real story per production row using STAR from <a class="cross-link" href="interview-rounds.html">Interview Rounds</a>.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

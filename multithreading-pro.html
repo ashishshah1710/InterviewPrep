@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multithreading Pro Level — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html" class="nav-active">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="multithreading-pro">
+      <h2 class="section-title">Multithreading — Beginner vs Professional</h2>
+      <p class="section-desc">The topic that separates beginners from professional Java developers. Interviewers want <strong>when</strong> and <strong>why</strong> — not just definitions.</p>
+
+      <div class="section-banner">
+        <h3>Why Multithreading Matters in Modern Apps</h3>
+        <p>Every modern application performs multiple tasks simultaneously — HTTP requests, DB calls, file I/O, messaging. Professionals know which tool to use and why.</p>
+      </div>
+
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">PROFESSIONAL MINDSET</span>
+        <h3>When and why multithreading is useful — the interview answer framework</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Use threads when your app waits a lot (I/O) or must do many things at once. Don't use threads for everything — wrong threading causes bugs worse than slow code.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>When:</strong> parallel API calls, background jobs, consumer queues, server handling many clients, batch processing.</li>
+            <li><strong>Why:</strong> better throughput, responsive UI/API, CPU utilization while waiting on I/O.</li>
+            <li><strong>When NOT:</strong> simple CRUD with no concurrency need; CPU-bound on single core without pool tuning.</li>
+            <li>Always tie to a project: "In our order service we used ExecutorService because…"</li>
+          </ul></div>
+        </div>
+        <div class="pro-vs-beginner">
+          <div class="pro-col beginner">
+            <h4>Beginner answer</h4>
+            "A thread is a lightweight process. You extend Thread class to create one."
+          </div>
+          <div class="pro-col professional">
+            <h4>Professional answer</h4>
+            "We use a fixed thread pool for async notifications so Tomcat threads aren't blocked on SMTP. Runnable tasks go to ExecutorService; shared order cache uses ConcurrentHashMap to avoid race conditions."
+          </div>
+        </div>
+      </div>
+
+      <!-- 1 Thread vs Process -->
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">CONCEPT 01</span>
+        <h3>Thread vs Process</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Process = separate application with its own memory. Thread = worker inside a process sharing the same heap — faster to create, but needs careful sync.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>When:</strong> threads inside one Spring Boot app; separate processes for separate microservices.</li>
+            <li><strong>Why threads:</strong> cheap communication via shared memory; Tomcat thread per request.</li>
+            <li><strong>Why processes:</strong> isolation — payment service crash doesn't kill order service.</li>
+            <li><strong>Project:</strong> one JVM runs 200 Tomcat threads; Kubernetes runs 5 pod processes behind load balancer.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 2 Creating Threads -->
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">CONCEPT 02</span>
+        <h3>Creating Threads</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Three ways: extend Thread (avoid), implement Runnable (better), or submit to ExecutorService (production standard).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>When raw Thread:</strong> almost never in enterprise — demos and interviews only.</li>
+            <li><strong>When Runnable/Callable:</strong> defining task logic decoupled from thread management.</li>
+            <li><strong>When ExecutorService:</strong> always in production — pool reuse, bounded concurrency, Future results.</li>
+            <li>Call <code>start()</code> not <code>run()</code> — run() executes in current thread.</li>
+          </ul></div>
+        </div>
+        <pre><code>// Production pattern
+ExecutorService pool = Executors.newFixedThreadPool(8);
+pool.submit(() -> generateReport(orderId));
+
+// Spring Boot — prefer @Async + TaskExecutor bean
+@Async
+public void sendEmailAsync(Order order) { ... }</code></pre>
+      </div>
+
+      <!-- 3 Runnable -->
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">CONCEPT 03</span>
+        <h3>Runnable Interface</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Runnable = a task with a run() method. Separates <em>what to do</em> from <em>who runs it</em> — the thread pool runs it.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>Why Runnable over extending Thread:</strong> Java single inheritance; same task can run on different executors.</li>
+            <li><strong>When:</strong> fire-and-forget work — logging, metrics, cache warming.</li>
+            <li><strong>Need a return value?</strong> Use Callable&lt;V&gt; + Future instead.</li>
+            <li>Lambda: <code>() -> doWork()</code> works because Runnable is a functional interface.</li>
+          </ul></div>
+        </div>
+        <pre><code>Runnable task = () -> auditLog.record(event);
+new Thread(task).start();           // OK for learning
+executor.submit(task);              // correct for production</code></pre>
+      </div>
+
+      <!-- 4 Synchronization -->
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">CONCEPT 04</span>
+        <h3>Synchronization</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Only one thread at a time enters critical code that touches shared data — synchronized, locks, or concurrent collections.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>When:</strong> read-modify-write on shared state (balance, inventory count, cache map).</li>
+            <li><strong>Why:</strong> without sync, race conditions corrupt data under load.</li>
+            <li><strong>Prefer:</strong> ConcurrentHashMap, AtomicInteger over synchronized everywhere.</li>
+            <li><strong>Project:</strong> synchronized block on accountId when transferring funds; or DB row lock for inventory.</li>
+            <li>Keep lock scope minimal — don't hold lock during external HTTP calls.</li>
+          </ul></div>
+        </div>
+        <pre><code>// Too coarse — avoid holding lock during I/O
+synchronized (this) {
+    balance -= amount;
+    callPaymentGateway(); // BAD — blocks other threads
+}
+
+// Better — lock only the state update
+synchronized (this) { balance -= amount; }
+callPaymentGateway();</code></pre>
+      </div>
+
+      <!-- 5 Race Conditions -->
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">CONCEPT 05</span>
+        <h3>Race Conditions</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Two threads read the same value, both update it, one update is lost — result depends on lucky timing. Classic: count++.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>Symptom:</strong> works in dev, fails randomly in prod under load.</li>
+            <li><strong>Detect:</strong> stress tests, thread dumps, wrong totals in reports.</li>
+            <li><strong>Fix hierarchy:</strong> immutability → thread confinement → atomic classes → locks.</li>
+            <li><strong>Project story:</strong> "Ticket counter showed 998 sold but DB had 1000 — race on increment; fixed with AtomicInteger."</li>
+          </ul></div>
+        </div>
+        <pre><code>// Race
+counter++; // not atomic
+
+// Fixes
+AtomicInteger counter = new AtomicInteger();
+counter.incrementAndGet();
+
+// or
+synchronized (lock) { counter++; }</code></pre>
+      </div>
+
+      <!-- 6 Executor Framework -->
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">CONCEPT 06</span>
+        <h3>Executor Framework</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>java.util.concurrent thread pools — submit tasks instead of creating threads manually. Controls how many jobs run at once.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>When:</strong> any async batch — emails, report generation, parallel external API calls.</li>
+            <li><strong>Why:</strong> reuses threads (cheap), queues overflow work, returns Future for results.</li>
+            <li><strong>Pool types:</strong> fixed (bounded), cached (grows/shrinks), scheduled (cron-like).</li>
+            <li><strong>Production:</strong> configure core/max pool, queue size, rejection policy; monitor queue depth.</li>
+            <li>Spring @Async wraps ExecutorFramework for service methods.</li>
+          </ul></div>
+        </div>
+        <pre><code>ThreadPoolExecutor executor = new ThreadPoolExecutor(
+    4, 8, 60L, TimeUnit.SECONDS,
+    new LinkedBlockingQueue&lt;&gt;(100),
+    new ThreadPoolExecutor.CallerRunsPolicy()
+);
+
+Future&lt;Report&gt; f = executor.submit(() -> buildReport(date));
+Report r = f.get(30, TimeUnit.SECONDS);
+
+executor.shutdown();</code></pre>
+      </div>
+
+      <!-- Projects -->
+      <div class="topic-block tb-mtpro">
+        <span class="block-num">BUILD TO LEARN</span>
+        <h3>Projects that prove you understand multithreading</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>The easiest way to answer confidently is building apps that actually use threads — not memorizing definitions.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>Producer-Consumer:</strong> BlockingQueue + multiple producers/consumers — order pipeline.</li>
+            <li><strong>Thread pool web scraper:</strong> ExecutorService fetches 50 URLs in parallel.</li>
+            <li><strong>Bank transfer simulator:</strong> synchronized/locks — demonstrate race then fix.</li>
+            <li><strong>Spring Boot @Async:</strong> order API returns fast, email sends in background pool.</li>
+            <li><strong>Kafka consumer:</strong> multi-threaded listener container — parallel event processing.</li>
+          </ul></div>
+        </div>
+        <table>
+          <tr><th>Concept</th><th>Project where you use it</th></tr>
+          <tr><td>Runnable / Callable</td><td>Background report job after REST call</td></tr>
+          <tr><td>Synchronization</td><td>Seat booking / inventory reservation</td></tr>
+          <tr><td>ExecutorService</td><td>Parallel calls to payment + fraud check APIs</td></tr>
+          <tr><td>Race condition fix</td><td>Load test until bug appears, then AtomicInteger fix</td></tr>
+          <tr><td>ConcurrentHashMap</td><td>In-memory rate limiter or session cache</td></tr>
+        </table>
+        <div class="tip-box">
+          <strong>Interview tip:</strong> For every concept, answer in this order — <em>what it is</em> → <em>when I used it</em> → <em>what broke without it</em> → <em>what I chose instead</em>. That is how professionals answer; definitions alone sound beginner-level.
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

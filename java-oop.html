@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java OOP & Constructors — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html" class="nav-active">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="java-oop">
+      <h2 class="section-title">Java OOP &amp; Constructors</h2>
+      <p class="section-desc">Object-oriented fundamentals and constructor rules commonly tested at 2–3 YOE level.</p>
+
+      <article>
+        <h3>What is a Constructor?</h3>
+        <span class="tag">OOP</span>
+        <p>A constructor is a special block of code invoked when an object is created with <code>new</code>. It initializes instance variables and prepares the object for use. Same name as the class, no return type (not even void).</p>
+        <pre><code>public class Employee {
+    private final String name;
+    private double salary;
+
+    // Default constructor (provided by compiler if none written)
+    public Employee() {
+        this.name = "Unknown";
+    }
+
+    // Parameterized constructor
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+}</code></pre>
+        <p>If you define any constructor, Java does not provide a default no-arg constructor unless you write one explicitly.</p>
+      </article>
+
+      <article>
+        <h3>Can we have multiple constructors in a class?</h3>
+        <span class="tag">OOP</span>
+        <p><strong>Yes</strong> — this is called <strong>constructor overloading</strong>. Multiple constructors in the same class must differ by parameter list (number, type, or order).</p>
+        <pre><code>public class Order {
+    public Order() { this("GUEST"); }
+    public Order(String customerId) { this(customerId, List.of()); }
+    public Order(String customerId, List&lt;LineItem&gt; items) {
+        // initialize
+    }
+}</code></pre>
+        <p>Use <code>this(...)</code> to chain constructors and avoid duplicate initialization logic. Only one <code>this()</code> or <code>super()</code> call allowed as the first statement in a constructor.</p>
+      </article>
+
+      <article>
+        <h3>Why can't constructors be overridden?</h3>
+        <span class="tag">OOP</span>
+        <p>Constructors are <strong>not inherited</strong> and therefore cannot be overridden — overriding requires inheritance of an instance method from a parent class.</p>
+        <ul class="detail-list">
+          <li>Constructors belong to the class that defines them; subclass gets its own constructors.</li>
+          <li>Subclass constructor must call a parent constructor via <code>super(...)</code> before its own logic.</li>
+          <li>What looks like "overriding" is actually <strong>overloading</strong> (same class, different params) or <strong>defining a new constructor</strong> in a subclass.</li>
+          <li>Constructors are not polymorphic — the compiler binds <code>new SubClass()</code> to SubClass's constructor at compile time.</li>
+        </ul>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

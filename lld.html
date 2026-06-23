@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Low-Level Design — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html" class="nav-active">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="lld">
+      <h2 class="section-title">Low-Level Design</h2>
+      <p class="section-desc">Object-oriented design problems with class diagrams, design patterns, thread safety, and immutability considerations.</p>
+
+      <article>
+        <h3>Design a ConcurrentHashMap from scratch</h3>
+        <span class="tag">LLD</span>
+        <span class="tag">Concurrency</span>
+        <p>Core design: array of buckets, each bucket is a linked list. Writes synchronize on the bucket head; reads are mostly lock-free.</p>
+        <pre><code>public class SimpleConcurrentHashMap&lt;K, V&gt; {
+    private static final int DEFAULT_CAPACITY = 16;
+    private final Node&lt;K, V&gt;[] buckets;
+    private final ReentrantLock[] locks;
+
+    static class Node&lt;K, V&gt; {
+        final K key;
+        volatile V value;
+        volatile Node&lt;K, V&gt; next;
+
+        Node(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public SimpleConcurrentHashMap(int capacity) {
+        this.buckets = new Node[capacity];
+        this.locks = new ReentrantLock[capacity];
+        for (int i = 0; i < capacity; i++) {
+            locks[i] = new ReentrantLock();
+        }
+    }
+
+    private int index(K key) {
+        return Math.abs(key.hashCode()) &amp; (buckets.length - 1);
+    }
+
+    public V get(K key) {
+        int idx = index(key);
+        Node&lt;K, V&gt; node = buckets[idx]; // volatile read
+        while (node != null) {
+            if (node.key.equals(key)) return node.value;
+            node = node.next;
+        }
+        return null;
+    }
+
+    public void put(K key, V value) {
+        int idx = index(key);
+        locks[idx].lock();
+        try {
+            Node&lt;K, V&gt; node = buckets[idx];
+            while (node != null) {
+                if (node.key.equals(key)) {
+                    node.value = value; // update existing
+                    return;
+                }
+                node = node.next;
+            }
+            // insert at head
+            Node&lt;K, V&gt; newNode = new Node&lt;&gt;(key, value);
+            newNode.next = buckets[idx];
+            buckets[idx] = newNode;
+        } finally {
+            locks[idx].unlock();
+        }
+    }
+}</code></pre>
+        <p><strong>Key design decisions:</strong> Per-bucket locking (not global lock), volatile fields for visibility, no null keys/values, resize requires locking all buckets or using a separate resize lock.</p>
+      </article>
+
+      <article>
+        <h3>Design a Restaurant Reservation System</h3>
+        <span class="tag">LLD</span>
+        <span class="tag">OOP</span>
+        <p><strong>Entities:</strong> Restaurant, Table, Reservation, Customer, TimeSlot</p>
+        <pre><code>enum ReservationStatus { CONFIRMED, CANCELLED, COMPLETED, NO_SHOW }
+
+class Table {
+    private final String id;
+    private final int capacity;
+    private final String location; // indoor, outdoor, bar
+}
+
+class Reservation {
+    private final String id;
+    private final String customerId;
+    private final String tableId;
+    private final LocalDateTime startTime;
+    private final int partySize;
+    private final ReservationStatus status;
+    // Immutable — status changes via new object or event
+}
+
+interface ReservationRepository {
+    Optional&lt;Reservation&gt; findById(String id);
+    List&lt;Reservation&gt; findByRestaurantAndTimeRange(
+        String restaurantId, LocalDateTime from, LocalDateTime to);
+    void save(Reservation reservation);
+}
+
+interface ReservationService {
+    Reservation book(String restaurantId, String customerId,
+                     int partySize, LocalDateTime time);
+    void cancel(String reservationId);
+    List&lt;Table&gt; getAvailableTables(String restaurantId,
+                                   LocalDateTime time, int partySize);
+}</code></pre>
+        <p><strong>Concurrency:</strong> Lock per restaurant+timeSlot during booking to prevent double-booking. Use optimistic locking with version field on Reservation.</p>
+        <p><strong>Patterns:</strong> Repository (persistence), Strategy (cancellation policy — free vs penalty fee), Factory (reservation ID generation), Observer (notify customer on confirmation/cancellation).</p>
+      </article>
+
+      <article>
+        <h3>Design a Parking Lot System</h3>
+        <span class="tag">LLD</span>
+        <span class="tag">State Pattern</span>
+        <pre><code>enum VehicleType { MOTORCYCLE, CAR, BUS }
+enum SpotType    { COMPACT, LARGE, HANDICAPPED }
+
+class Vehicle {
+    private final String licensePlate;
+    private final VehicleType type;
+}
+
+class ParkingSpot {
+    private final String id;
+    private final SpotType type;
+    private final int floor;
+    private volatile boolean occupied;
+}
+
+class Ticket {
+    private final String ticketId;
+    private final String spotId;
+    private final LocalDateTime entryTime;
+    private final Vehicle vehicle;
+}
+
+interface FeeStrategy {
+    double calculateFee(LocalDateTime entry, LocalDateTime exit);
+}
+
+class ParkingLot {
+    private final Map&lt;SpotType, Queue&lt;ParkingSpot&gt;&gt; availableSpots;
+    private final FeeStrategy feeStrategy;
+
+    synchronized Ticket park(Vehicle vehicle) {
+        SpotType needed = mapVehicleToSpot(vehicle.getType());
+        ParkingSpot spot = availableSpots.get(needed).poll();
+        if (spot == null) throw new ParkingFullException();
+        spot.setOccupied(true);
+        return new Ticket(generateId(), spot.getId(),
+                          LocalDateTime.now(), vehicle);
+    }
+
+    synchronized double unpark(Ticket ticket) {
+        double fee = feeStrategy.calculateFee(
+            ticket.getEntryTime(), LocalDateTime.now());
+        // release spot back to queue
+        return fee;
+    }
+}</code></pre>
+        <p><strong>Design points:</strong> Motorcycle can use compact/large/handicapped; car uses compact/large; bus uses large only. Singleton for ParkingLot. Synchronized spot allocation. Strategy pattern for hourly vs flat fee.</p>
+      </article>
+
+      <article>
+        <h3>Design a Rate Limiter</h3>
+        <span class="tag">LLD</span>
+        <span class="tag">Design Patterns</span>
+        <pre><code>// Core interface
+interface RateLimiter {
+    boolean allowRequest(String clientId);
+    int remainingTokens(String clientId);
+}
+
+// Token Bucket implementation
+class TokenBucketRateLimiter implements RateLimiter {
+    private final int capacity;
+    private final double refillRatePerSecond;
+    private final Map&lt;String, Bucket&gt; buckets = new ConcurrentHashMap&lt;&gt;();
+
+    private static class Bucket {
+        double tokens;
+        long lastRefillTimestamp;
+
+        synchronized boolean tryConsume(int n, int capacity,
+                                        double refillRate) {
+            refill(capacity, refillRate);
+            if (tokens >= n) {
+                tokens -= n;
+                return true;
+            }
+            return false;
+        }
+
+        private void refill(int capacity, double refillRate) {
+            long now = System.nanoTime();
+            double elapsed = (now - lastRefillTimestamp) / 1_000_000_000.0;
+            tokens = Math.min(capacity, tokens + elapsed * refillRate);
+            lastRefillTimestamp = now;
+        }
+    }
+
+    public boolean allowRequest(String clientId) {
+        Bucket bucket = buckets.computeIfAbsent(
+            clientId, k -> new Bucket(capacity));
+        return bucket.tryConsume(1, capacity, refillRatePerSecond);
+    }
+}
+
+// Factory for different tiers
+class RateLimiterFactory {
+    static RateLimiter create(RateLimitTier tier) {
+        return switch (tier) {
+            case FREE    -> new TokenBucketRateLimiter(10, 1.0);
+            case PREMIUM -> new TokenBucketRateLimiter(100, 10.0);
+            case ENTERPRISE -> new SlidingWindowRateLimiter(1000, 60);
+        };
+    }
+}</code></pre>
+        <p><strong>Algorithms:</strong> Token Bucket (smooth rate, allows bursts), Leaking Bucket (constant output rate), Fixed Window (simple but boundary burst problem), Sliding Window Log (precise, memory-heavy), Sliding Window Counter (Redis-based, distributed).</p>
+        <p><strong>Patterns:</strong> Strategy (swap algorithm), Factory (create by tier), Decorator (add logging/metrics), Singleton (shared limiter instance).</p>
+      </article>
+
+      <article>
+        <h3>Ensure thread safety and immutability in your design</h3>
+        <span class="tag">Immutability</span>
+        <span class="tag">Thread Safety</span>
+        <pre><code>// Immutable value object
+public final class Money {
+    private final BigDecimal amount;
+    private final String currency;
+
+    public Money(BigDecimal amount, String currency) {
+        this.amount = amount;
+        this.currency = Objects.requireNonNull(currency);
+    }
+
+    public Money add(Money other) {
+        assertSameCurrency(other);
+        return new Money(this.amount.add(other.amount), this.currency);
+    }
+
+    // No setters — new instance for every change
+}
+
+// Defensive copying for mutable fields
+public final class Order {
+    private final String id;
+    private final List&lt;LineItem&gt; items;
+    private final LocalDateTime createdAt;
+
+    public Order(String id, List&lt;LineItem&gt; items) {
+        this.id = id;
+        this.items = List.copyOf(items); // immutable copy
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public List&lt;LineItem&gt; getItems() {
+        return items; // already immutable
+    }
+}</code></pre>
+        <ul class="detail-list">
+          <li>Declare class as <code>final</code> to prevent subclassing that breaks immutability</li>
+          <li>All fields <code>private final</code></li>
+          <li>No setters — return new instances for changes</li>
+          <li>Defensive copy mutable inputs in constructor; return unmodifiable views from getters</li>
+          <li>Use <code>List.of()</code>, <code>Map.of()</code>, or Guava immutable collections</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Deep vs. Shallow Cloning: When does it matter?</h3>
+        <span class="tag">Cloning</span>
+        <table>
+          <tr><th>Aspect</th><th>Shallow Clone</th><th>Deep Clone</th></tr>
+          <tr><td>Primitive fields</td><td>Copied by value</td><td>Copied by value</td></tr>
+          <tr><td>Object references</td><td>Copied by reference (shared)</td><td>Recursively copied (independent)</td></tr>
+          <tr><td>Default Object.clone()</td><td>Shallow</td><td>Must override</td></tr>
+          <tr><td>Memory</td><td>Less</td><td>More</td></tr>
+          <tr><td>Safety with mutable nested objects</td><td>Unsafe — changes affect both</td><td>Safe — fully independent</td></tr>
+        </table>
+        <pre><code>class Address { String city; }
+class Person implements Cloneable {
+    String name;
+    Address address; // mutable reference type
+
+    @Override
+    protected Person clone() throws CloneNotSupportedException {
+        Person copy = (Person) super.clone(); // shallow
+        copy.address = new Address();          // deep copy nested
+        copy.address.city = this.address.city;
+        return copy;
+    }
+}</code></pre>
+        <p><strong>When it matters:</strong> When nested objects are mutable (Lists, Maps, custom objects). Shallow clone is fine when all fields are primitives or immutable (String, Integer, LocalDate). Prefer copy constructors or serialization libraries (Jackson, Apache Commons) for reliable deep copies.</p>
+      </article>
+
+      <article>
+        <h3>Design a Vending Machine</h3>
+        <span class="tag">LLD</span>
+        <span class="tag">State Pattern</span>
+        <pre><code>// State interface
+interface VendingMachineState {
+    void insertCoin(VendingMachine vm, int amount);
+    void selectProduct(VendingMachine vm, String productId);
+    void dispense(VendingMachine vm);
+    void cancel(VendingMachine vm);
+}
+
+class IdleState implements VendingMachineState {
+    public void insertCoin(VendingMachine vm, int amount) {
+        vm.addBalance(amount);
+        vm.setState(new HasMoneyState());
+    }
+    // selectProduct and dispense throw IllegalStateException
+}
+
+class HasMoneyState implements VendingMachineState {
+    public void selectProduct(VendingMachine vm, String productId) {
+        Product product = vm.getInventory().get(productId);
+        if (product == null) throw new ProductNotFoundException();
+        if (vm.getBalance() &lt; product.getPrice())
+            throw new InsufficientFundsException();
+        vm.setSelectedProduct(product);
+        vm.setState(new DispensingState());
+        vm.dispense();
+    }
+}
+
+class VendingMachine {
+    private VendingMachineState state = new IdleState();
+    private final Map&lt;String, Product&gt; inventory;
+    private int balance;
+    private Product selectedProduct;
+
+    void insertCoin(int amount) { state.insertCoin(this, amount); }
+    void selectProduct(String id) { state.selectProduct(this, id); }
+    void dispense() { state.dispense(this); }
+    void setState(VendingMachineState state) { this.state = state; }
+}</code></pre>
+        <p><strong>State transitions:</strong> Idle → HasMoney (coin inserted) → Dispensing (product selected) → Idle (product dispensed, change returned).</p>
+        <p><strong>Patterns used:</strong> State (behavior changes by machine state), Strategy (payment method — coin, card, UPI), Singleton (one machine instance), Observer (low-inventory alert to admin).</p>
+        <p><strong>Thread safety:</strong> Synchronize state transitions and inventory decrements to prevent double-dispense in concurrent access.</p>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

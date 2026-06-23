@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL & Database — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html" class="nav-active">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="sql">
+      <h2 class="section-title">SQL and Database</h2>
+      <p class="section-desc">Query writing, joins, aggregations, deduplication, and performance optimization techniques.</p>
+
+      <article>
+        <h3>Write a query using GROUP BY and HAVING</h3>
+        <span class="tag">Aggregation</span>
+        <pre><code>-- Find departments where average salary exceeds 50,000
+-- and that have more than 5 employees
+SELECT
+    department_id,
+    COUNT(*)          AS employee_count,
+    AVG(salary)       AS avg_salary,
+    MAX(salary)       AS max_salary
+FROM employees
+WHERE status = 'ACTIVE'          -- filter rows BEFORE grouping
+GROUP BY department_id
+HAVING AVG(salary) > 50000       -- filter groups AFTER aggregation
+   AND COUNT(*) > 5
+ORDER BY avg_salary DESC;</code></pre>
+        <p><strong>Key distinction:</strong> <code>WHERE</code> filters individual rows before grouping. <code>HAVING</code> filters aggregated groups after <code>GROUP BY</code>. You cannot use aggregate functions in <code>WHERE</code>.</p>
+      </article>
+
+      <article>
+        <h3>What is the difference between UNION and UNION ALL?</h3>
+        <span class="tag">Set Operations</span>
+        <table>
+          <tr><th>Feature</th><th>UNION</th><th>UNION ALL</th></tr>
+          <tr><td>Duplicate handling</td><td>Removes duplicates (implicit DISTINCT)</td><td>Keeps all rows including duplicates</td></tr>
+          <tr><td>Performance</td><td>Slower — requires sort + dedup</td><td>Faster — no dedup step</td></tr>
+          <tr><td>Result set</td><td>Unique rows only</td><td>All rows from both queries</td></tr>
+          <tr><td>Use when</td><td>Need unique combined results</td><td>Duplicates impossible or acceptable</td></tr>
+        </table>
+        <pre><code>-- UNION: returns unique cities from both tables
+SELECT city FROM customers
+UNION
+SELECT city FROM suppliers;
+
+-- UNION ALL: returns all cities (faster)
+SELECT city FROM customers
+UNION ALL
+SELECT city FROM suppliers;</code></pre>
+      </article>
+
+      <article>
+        <h3>What is the difference between LEFT JOIN and RIGHT JOIN?</h3>
+        <span class="tag">Joins</span>
+        <p><strong>LEFT JOIN (LEFT OUTER JOIN):</strong> Returns all rows from the left table, plus matching rows from the right table. If no match exists, right-side columns are <code>NULL</code>.</p>
+        <p><strong>RIGHT JOIN (RIGHT OUTER JOIN):</strong> Returns all rows from the right table, plus matching rows from the left table. If no match exists, left-side columns are <code>NULL</code>.</p>
+        <pre><code>-- All employees and their departments (even if unassigned)
+SELECT e.name, d.dept_name
+FROM employees e
+LEFT JOIN departments d ON e.dept_id = d.id;
+
+-- All departments and their employees (even if no employees)
+SELECT e.name, d.dept_name
+FROM employees e
+RIGHT JOIN departments d ON e.dept_id = d.id;</code></pre>
+        <p><strong>Practical note:</strong> <code>A RIGHT JOIN B</code> is equivalent to <code>B LEFT JOIN A</code>. LEFT JOIN is preferred in practice for readability — always put the "primary" table on the left.</p>
+      </article>
+
+      <article>
+        <h3>How would you retrieve the second-highest salary from a table?</h3>
+        <span class="tag">Subquery</span>
+        <span class="tag">Window Functions</span>
+        <pre><code>-- Approach 1: Subquery (works everywhere)
+SELECT MAX(salary) AS second_highest
+FROM employees
+WHERE salary &lt; (SELECT MAX(salary) FROM employees);
+
+-- Approach 2: DENSE_RANK (handles ties correctly)
+SELECT salary
+FROM (
+    SELECT salary,
+           DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+    FROM employees
+) ranked
+WHERE rnk = 2;
+
+-- Approach 3: LIMIT/OFFSET (PostgreSQL, MySQL)
+SELECT DISTINCT salary
+FROM employees
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1;
+
+-- Approach 4: Self-join count
+SELECT DISTINCT e1.salary
+FROM employees e1
+WHERE 1 = (
+    SELECT COUNT(DISTINCT e2.salary)
+    FROM employees e2
+    WHERE e2.salary > e1.salary
+);</code></pre>
+        <p><strong>Interview tip:</strong> Clarify whether "second highest" means exactly one value or should handle ties. <code>DENSE_RANK</code> is the most robust approach for tie handling.</p>
+      </article>
+
+      <article>
+        <h3>How do you eliminate duplicate records in SQL?</h3>
+        <span class="tag">Deduplication</span>
+        <pre><code>-- Method 1: DELETE keeping the lowest ID (PostgreSQL)
+DELETE FROM employees a
+USING employees b
+WHERE a.id > b.id
+  AND a.email = b.email;
+
+-- Method 2: ROW_NUMBER window function (most flexible)
+DELETE FROM employees
+WHERE id IN (
+    SELECT id FROM (
+        SELECT id,
+               ROW_NUMBER() OVER (
+                   PARTITION BY email ORDER BY created_at ASC
+               ) AS rn
+        FROM employees
+    ) t
+    WHERE rn > 1
+);
+
+-- Method 3: Prevention — add UNIQUE constraint
+ALTER TABLE employees ADD CONSTRAINT uq_email UNIQUE (email);</code></pre>
+        <p>Always prefer <strong>prevention</strong> (unique constraints) over cleanup. Use <code>ROW_NUMBER</code> when you need control over which duplicate to keep (e.g., keep the oldest record).</p>
+      </article>
+
+      <article>
+        <h3>How do you optimize a slow-performing SQL query?</h3>
+        <span class="tag">Performance</span>
+        <ul class="detail-list">
+          <li><strong>EXPLAIN / EXPLAIN ANALYZE:</strong> Always start here. Identify full table scans, missing indexes, and expensive sort/hash operations.</li>
+          <li><strong>Add indexes:</strong> On columns in WHERE, JOIN, ORDER BY, and GROUP BY clauses. Use composite indexes for multi-column filters (leftmost prefix rule).</li>
+          <li><strong>Avoid SELECT *:</strong> Fetch only needed columns to reduce I/O and enable index-only scans.</li>
+          <li><strong>Rewrite subqueries as JOINs:</strong> Correlated subqueries execute per row; JOINs are often more efficient.</li>
+          <li><strong>Use pagination wisely:</strong> Replace <code>OFFSET</code> with keyset/cursor pagination for large tables (<code>WHERE id > last_seen_id LIMIT 20</code>).</li>
+          <li><strong>Denormalize or materialize:</strong> Pre-compute heavy aggregations in materialized views for reporting queries.</li>
+          <li><strong>Update statistics:</strong> Run <code>ANALYZE</code> so the query planner has accurate row count estimates.</li>
+          <li><strong>Partition tables:</strong> Split large tables by date or range so queries scan fewer partitions.</li>
+          <li><strong>Connection pooling:</strong> Use PgBouncer/HikariCP to avoid connection overhead.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Find the highest salary for each department</h3>
+        <span class="tag">GROUP BY</span>
+        <span class="tag">Window Functions</span>
+        <pre><code>-- Approach 1: GROUP BY + MAX (most common interview answer)
+SELECT department_id, MAX(salary) AS highest_salary
+FROM employees
+GROUP BY department_id;
+
+-- Approach 2: With department name (JOIN)
+SELECT d.dept_name, MAX(e.salary) AS highest_salary
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+GROUP BY d.dept_name;
+
+-- Approach 3: Employee names who earn the max (handle ties)
+SELECT department_id, name, salary
+FROM (
+    SELECT department_id, name, salary,
+           RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rnk
+    FROM employees
+) ranked
+WHERE rnk = 1;</code></pre>
+        <p><strong>Follow-up:</strong> If two employees tie for highest salary, <code>MAX + GROUP BY</code> still returns one max value; use <code>RANK()</code> or <code>DENSE_RANK()</code> to return all top earners.</p>
+      </article>
+
+      <article>
+        <h3>Difference between SQL and NoSQL (quick reference)</h3>
+        <span class="tag">Database</span>
+        <p>See also the detailed comparison in <a href="microservices.html" style="color: var(--accent);">Microservices &amp; DevOps</a>. Quick summary for interviews:</p>
+        <table>
+          <tr><th>SQL</th><th>NoSQL</th></tr>
+          <tr><td>Structured tables, fixed schema, ACID transactions</td><td>Flexible schema, horizontal scale, eventual consistency (often)</td></tr>
+          <tr><td>PostgreSQL, MySQL — joins, reporting, OLTP</td><td>MongoDB, Redis, Cassandra — cache, documents, high write volume</td></tr>
+          <tr><td>Use when data is relational and consistency matters</td><td>Use when scale, flexibility, or speed of iteration dominates</td></tr>
+        </table>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Microservices & DevOps — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html" class="nav-active">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="microservices">
+      <h2 class="section-title">Microservices and DevOps</h2>
+      <p class="section-desc">Architecture decisions, messaging systems, CI/CD pipelines, containerization, and distributed system patterns.</p>
+
+      <article>
+        <h3>Why was a microservices architecture chosen over a monolithic architecture?</h3>
+        <span class="tag">Architecture</span>
+        <p><strong>Key reasons to choose microservices:</strong></p>
+        <ul class="detail-list">
+          <li><strong>Independent deployability:</strong> Deploy the payment service without redeploying the entire application.</li>
+          <li><strong>Technology flexibility:</strong> Use Python for ML services, Java for transactional services, Node.js for real-time features.</li>
+          <li><strong>Scalability:</strong> Scale only the bottleneck service (e.g., 10 instances of search, 2 of billing).</li>
+          <li><strong>Team autonomy:</strong> Small teams own a service end-to-end — development, deployment, and operations.</li>
+          <li><strong>Fault isolation:</strong> A crash in the notification service doesn't bring down order processing.</li>
+          <li><strong>Faster release cycles:</strong> Smaller codebases mean faster builds, tests, and deployments.</li>
+        </ul>
+        <p><strong>Trade-offs:</strong> Distributed complexity (network latency, partial failures), data consistency challenges, increased operational overhead (monitoring, tracing, service discovery), and higher initial infrastructure cost.</p>
+      </article>
+
+      <article>
+        <h3>How does Kafka differ from RabbitMQ, and when would you choose one over the other?</h3>
+        <span class="tag">Messaging</span>
+        <table>
+          <tr><th>Feature</th><th>Apache Kafka</th><th>RabbitMQ</th></tr>
+          <tr><td>Architecture</td><td>Distributed commit log / event stream</td><td>Traditional AMQP message broker</td></tr>
+          <tr><td>Message retention</td><td>Persistent, configurable retention, replayable</td><td>Consumed messages typically deleted</td></tr>
+          <tr><td>Throughput</td><td>Millions of messages/sec</td><td>Tens of thousands/sec</td></tr>
+          <tr><td>Ordering</td><td>Guaranteed per partition</td><td>Per queue</td></tr>
+          <tr><td>Routing</td><td>Topic + partition model</td><td>Exchanges, bindings, routing keys (flexible)</td></tr>
+          <tr><td>Consumer model</td><td>Pull-based (consumer polls)</td><td>Push-based (broker delivers)</td></tr>
+          <tr><td>Message replay</td><td>Yes — reset offset and re-read</td><td>No — once consumed, message is gone</td></tr>
+        </table>
+        <p><strong>Choose Kafka when:</strong> Event sourcing, log aggregation, stream processing (Kafka Streams/Flink), high-volume analytics, need to replay events, multiple consumers reading the same stream independently.</p>
+        <p><strong>Choose RabbitMQ when:</strong> Task/job queues, RPC-style request-reply, complex routing (topic/direct/fanout exchanges), low-latency messaging, work queue patterns with acknowledgments.</p>
+      </article>
+
+      <article>
+        <h3>What are the differences between SQL and NoSQL databases?</h3>
+        <span class="tag">Database</span>
+        <table>
+          <tr><th>Aspect</th><th>SQL (RDBMS)</th><th>NoSQL</th></tr>
+          <tr><td>Schema</td><td>Fixed, enforced schema</td><td>Flexible / schema-less</td></tr>
+          <tr><td>Scaling</td><td>Vertical + read replicas; sharding is complex</td><td>Horizontal scaling built-in</td></tr>
+          <tr><td>ACID</td><td>Strong ACID compliance</td><td>Often eventual consistency (BASE)</td></tr>
+          <tr><td>Joins</td><td>Native SQL joins</td><td>Denormalized data or application-side joins</td></tr>
+          <tr><td>Query language</td><td>Standard SQL</td><td>Varies (MongoDB query API, CQL, etc.)</td></tr>
+          <tr><td>Examples</td><td>PostgreSQL, MySQL, Oracle</td><td>MongoDB, Cassandra, Redis, DynamoDB</td></tr>
+        </table>
+        <p><strong>Use SQL when:</strong> Complex transactions, relational data with joins, strict consistency requirements, reporting/analytics with ad-hoc queries.</p>
+        <p><strong>Use NoSQL when:</strong> Massive scale writes, flexible/evolving schema, caching (Redis), time-series data, document storage, graph relationships (Neo4j).</p>
+      </article>
+
+      <article>
+        <h3>Explain the CI/CD workflow. Walk through your Jenkins build pipeline.</h3>
+        <span class="tag">CI/CD</span>
+        <span class="tag">Jenkins</span>
+        <div class="diagram">Developer Push → Git Webhook → Jenkins Triggered
+  │
+  ├─ 1. Checkout source code from Git
+  ├─ 2. Build (mvn clean package / npm run build)
+  ├─ 3. Run unit tests (JUnit, Jest)
+  ├─ 4. Static code analysis (SonarQube — code smells, coverage)
+  ├─ 5. Build Docker image (docker build -t app:tag .)
+  ├─ 6. Push image to registry (ECR, Harbor, Docker Hub)
+  ├─ 7. Deploy to Dev environment (kubectl apply / Helm upgrade)
+  ├─ 8. Run integration / API tests
+  ├─ 9. Manual approval gate (for Staging/Prod)
+  ├─ 10. Deploy to Staging → Smoke tests
+  ├─ 11. Deploy to Production (blue-green or canary)
+  └─ 12. Post-deploy health checks &amp; monitoring alerts</div>
+        <p><strong>CI (Continuous Integration):</strong> Automatically build and test every code change to catch integration issues early. <strong>CD (Continuous Delivery/Deployment):</strong> Automatically deploy validated artifacts to environments, with optional manual gates for production.</p>
+      </article>
+
+      <article>
+        <h3>What are the key features of Istio and Service Mesh in Kubernetes?</h3>
+        <span class="tag">Service Mesh</span>
+        <span class="tag">Kubernetes</span>
+        <p>A service mesh is an infrastructure layer that handles service-to-service communication. Istio is the most popular implementation, using an <strong>Envoy sidecar proxy</strong> injected alongside each application pod.</p>
+        <ul class="detail-list">
+          <li><strong>Traffic management:</strong> Canary deployments, A/B testing, traffic splitting, retries, timeouts, circuit breaking — all without changing application code.</li>
+          <li><strong>Security (mTLS):</strong> Automatic mutual TLS encryption between all services. Certificate management and rotation handled by Istio.</li>
+          <li><strong>Observability:</strong> Automatic distributed tracing (Jaeger/Zipkin), metrics (Prometheus), and access logs for every request — without instrumentation in app code.</li>
+          <li><strong>Policy enforcement:</strong> Rate limiting, access control (RBAC), quota management at the mesh level.</li>
+          <li><strong>Resilience:</strong> Outlier detection (eject unhealthy hosts), connection pooling, fault injection for chaos testing.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>How do you Dockerize a Spring Boot application?</h3>
+        <span class="tag">Docker</span>
+        <pre><code># Multi-stage Dockerfile
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+RUN addgroup -S appgroup &amp;&amp; adduser -S appuser -G appgroup
+COPY --from=build /app/target/*.jar app.jar
+USER appuser
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget -qO- http://localhost:8080/actuator/health || exit 1
+ENTRYPOINT ["java", "-jar", "app.jar"]</code></pre>
+        <p><strong>Best practices:</strong> Multi-stage build (smaller final image), use JRE not JDK in runtime, run as non-root user, add health checks, use <code>.dockerignore</code>, leverage Spring Boot's <code>spring-boot:build-image</code> with Cloud Native Buildpacks for optimized images without writing a Dockerfile.</p>
+      </article>
+
+      <article>
+        <h3>How do you manage distributed transactions across microservices?</h3>
+        <span class="tag">Distributed Transactions</span>
+        <p><strong>1. Saga Pattern (most common):</strong> A series of local transactions, each with a compensating action on failure.</p>
+        <ul class="detail-list">
+          <li><strong>Choreography:</strong> Services publish events; other services react. Decentralized, but harder to track.</li>
+          <li><strong>Orchestration:</strong> A central saga orchestrator coordinates steps and compensations. Easier to monitor.</li>
+        </ul>
+        <p><strong>2. Outbox Pattern:</strong> Write business data and an event to the same local DB in one transaction. A separate process reads the outbox table and publishes to a message broker — ensures at-least-once delivery.</p>
+        <p><strong>3. Two-Phase Commit (2PC):</strong> Coordinator asks all participants to prepare, then commit. Strong consistency but slow, tight coupling, and single point of failure. Rarely used in microservices.</p>
+        <p><strong>4. Idempotency:</strong> Design all operations to be safely retried using idempotency keys — essential for reliable sagas.</p>
+      </article>
+
+      <article>
+        <h3>What is the Circuit Breaker pattern, and when should it be implemented?</h3>
+        <span class="tag">Resilience</span>
+        <p>The Circuit Breaker prevents cascading failures by stopping calls to a failing downstream service, giving it time to recover.</p>
+        <div class="diagram">         ┌──────────┐
+  Calls ──│  CLOSED  │── Normal operation, requests pass through
+         └────┬─────┘
+              │ Failure threshold exceeded
+              ▼
+         ┌──────────┐
+         │   OPEN   │── Fail fast, return fallback immediately
+         └────┬─────┘
+              │ After timeout period
+              ▼
+         ┌──────────┐
+         │HALF-OPEN │── Allow one test request
+         └────┬─────┘
+         Success → CLOSED  |  Failure → OPEN</div>
+        <p><strong>Implement when:</strong> Calling external/unreliable services, experiencing frequent timeouts, need graceful degradation (return cached/default response), preventing thread pool exhaustion from slow downstream calls.</p>
+        <p><strong>Libraries:</strong> Resilience4j (recommended for Spring Boot 3), Spring Cloud Circuit Breaker, Istio outlier detection at the mesh level.</p>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Rounds — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html" class="nav-active">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub nav-active">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub nav-active">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub nav-active">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="interview-rounds">
+      <h2 class="section-title">Interview Rounds — Full Playbook</h2>
+      <p class="section-desc">Real multi-round Java Backend interview structure. Interviewers care more about how you <strong>apply</strong> concepts in real projects than textbook definitions alone.</p>
+
+      <div class="tip-box">
+        <strong>Biggest learning:</strong> Tie every technical answer to something you built — "In our order service we used ConcurrentHashMap because…" beats a generic definition every time.
+      </div>
+
+      <!-- ===== ROUND 1 ===== -->
+      <div id="round-1" class="round-header">
+        <span class="round-badge r1">Round 1</span>
+        <h3>Technical Round — Core Java + Spring Boot</h3>
+        <p>Project discussion, core Java fundamentals, Spring Boot basics, and live coding.</p>
+      </div>
+
+      <article>
+        <h3>Introduce yourself and explain your project architecture</h3>
+        <span class="tag">Project</span>
+        <span class="round-badge r1">Round 1</span>
+        <p><strong>Structure (2–3 min):</strong> Name → years of experience → current role → one-line project → architecture → your contribution.</p>
+        <pre><code>"I'm a Java Backend developer with 2.5 years building microservices at [Company].
+Our project is an Order Management Platform — clients place orders via REST API,
+which flows through API Gateway → Order Service → Payment Service → Notification Service.
+We use Spring Boot, PostgreSQL, Redis cache, and Kafka for async events.
+Architecture: microservices on Kubernetes, each service owns its DB (database-per-service).
+I own the Order Service — API design, business logic, DB schema, and Kafka integration."</code></pre>
+        <p><strong>Architecture points to mention:</strong> layered design (Controller → Service → Repository), sync vs async communication, where caching fits, how you handle failures, CI/CD deployment flow.</p>
+      </article>
+
+      <article>
+        <h3>Explain your role and responsibilities in the project</h3>
+        <span class="tag">Project</span>
+        <span class="round-badge r1">Round 1</span>
+        <ul class="detail-list">
+          <li><strong>Development:</strong> REST APIs, business logic, integration with downstream services</li>
+          <li><strong>Database:</strong> Schema design, query optimization, migrations (Flyway/Liquibase)</li>
+          <li><strong>Code quality:</strong> unit tests (JUnit/Mockito), code reviews, SonarQube compliance</li>
+          <li><strong>DevOps exposure:</strong> Docker builds, Jenkins pipeline, deployment to dev/staging</li>
+          <li><strong>Production support:</strong> debugging incidents, log analysis, hotfixes</li>
+        </ul>
+        <div class="highlight-box">Use STAR lightly: Situation → what you built → measurable outcome (e.g., "reduced API latency 40% with Redis caching").</div>
+      </article>
+
+      <article>
+        <h3>Difference between HashMap and ConcurrentHashMap</h3>
+        <span class="tag">Core Java</span>
+        <span class="round-badge r1">Round 1</span>
+        <p><code>HashMap</code> is not thread-safe — concurrent writes can corrupt internal structure or cause infinite loops (Java 7). <code>ConcurrentHashMap</code> allows concurrent reads and controlled concurrent writes using bucket-level locking and CAS (Java 8+). No null keys/values in CHM. Iterator is weakly consistent, not fail-fast.</p>
+        <p><a class="cross-link" href="java-concurrency.html">→ Full comparison in Core Java section</a></p>
+      </article>
+
+      <article>
+        <h3>String vs StringBuilder vs StringBuffer</h3>
+        <span class="tag">Core Java</span>
+        <span class="round-badge r1">Round 1</span>
+        <table>
+          <tr><th>Class</th><th>Mutable?</th><th>Thread-safe?</th><th>Use when</th></tr>
+          <tr><td><code>String</code></td><td>Immutable</td><td>Yes (immutable)</td><td>Constants, keys, short literals — use for few concatenations (compiler optimizes with constant pool)</td></tr>
+          <tr><td><code>StringBuilder</code></td><td>Mutable</td><td>No</td><td>Single-threaded string building in loops — fastest</td></tr>
+          <tr><td><code>StringBuffer</code></td><td>Mutable</td><td>Yes (synchronized methods)</td><td>Multi-threaded string building — slower due to locking; rarely needed today</td></tr>
+        </table>
+        <pre><code>// Bad: creates new String object each iteration — O(n²)
+String s = "";
+for (int i = 0; i &lt; 1000; i++) s += i;
+
+// Good: single mutable buffer — O(n)
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i &lt; 1000; i++) sb.append(i);
+String result = sb.toString();</code></pre>
+      </article>
+
+      <article>
+        <h3>Explain Java Memory Model</h3>
+        <span class="tag">JVM</span>
+        <span class="round-badge r1">Round 1</span>
+        <p>JVM memory divides into: <strong>Stack</strong> (per-thread — method frames, local vars), <strong>Heap</strong> (shared — all objects; Young Gen + Old Gen, GC managed), <strong>Metaspace</strong> (class metadata, static fields). Object references live on stack; actual objects live on heap.</p>
+        <p><strong>JMM (Java Memory Model)</strong> additionally defines visibility rules between threads — without <code>volatile</code> or synchronization, one thread's writes may not be visible to another due to CPU cache reordering.</p>
+        <p><a class="cross-link" href="java-concurrency.html">→ JVM diagram in Core Java section</a></p>
+      </article>
+
+      <article>
+        <h3>What is the difference between ArrayList and LinkedList?</h3>
+        <span class="tag">Collections</span>
+        <span class="round-badge r1">Round 1</span>
+        <table>
+          <tr><th>Aspect</th><th>ArrayList</th><th>LinkedList</th></tr>
+          <tr><td>Internal structure</td><td>Dynamic array</td><td>Doubly linked nodes</td></tr>
+          <tr><td>Random access get(i)</td><td>O(1)</td><td>O(n)</td></tr>
+          <tr><td>Insert/delete at end</td><td>O(1) amortized</td><td>O(1)</td></tr>
+          <tr><td>Insert/delete in middle</td><td>O(n) — array shift</td><td>O(1) if you have the node; O(n) to find it</td></tr>
+          <tr><td>Memory</td><td>Less overhead</td><td>Extra pointer per element</td></tr>
+          <tr><td>Default choice</td><td>Yes — 99% of use cases</td><td>Queues/deques where frequent head/tail ops matter</td></tr>
+        </table>
+      </article>
+
+      <article>
+        <h3>Explain Exception Handling and Custom Exceptions</h3>
+        <span class="tag">Core Java</span>
+        <span class="round-badge r1">Round 1</span>
+        <p>Java exceptions: <strong>Checked</strong> (must handle — IOException) vs <strong>Unchecked</strong> (RuntimeException — NullPointerException). Flow: <code>try</code> → exception thrown → matching <code>catch</code> → <code>finally</code> always runs.</p>
+        <pre><code>// Custom unchecked exception — preferred in Spring Boot services
+public class OrderNotFoundException extends RuntimeException {
+    public OrderNotFoundException(Long orderId) {
+        super("Order not found: " + orderId);
+    }
+}
+
+@Service
+public class OrderService {
+    public Order getOrder(Long id) {
+        return repo.findById(id)
+            .orElseThrow(() -> new OrderNotFoundException(id));
+    }
+}
+// Global handler maps it to HTTP 404 — see @ControllerAdvice</code></pre>
+        <p><strong>Best practices:</strong> Don't catch generic Exception unless at top level; never swallow exceptions; use custom exceptions for domain errors; log with context; prefer unchecked in service layer (Spring translates to HTTP status).</p>
+      </article>
+
+      <article>
+        <h3>What is an Immutable Class and how would you create one?</h3>
+        <span class="tag">OOP</span>
+        <span class="round-badge r1">Round 1</span>
+        <ul class="detail-list">
+          <li>Declare class <code>final</code> — prevent subclassing</li>
+          <li>All fields <code>private final</code></li>
+          <li>No setters — state set only via constructor</li>
+          <li>Defensive copy mutable inputs (List, Date) in constructor</li>
+          <li>Return unmodifiable copies from getters — <code>List.copyOf()</code>, <code>Collections.unmodifiableList()</code></li>
+        </ul>
+        <pre><code>public final class Employee {
+    private final String name;
+    private final List&lt;String&gt; skills;
+
+    public Employee(String name, List&lt;String&gt; skills) {
+        this.name = name;
+        this.skills = List.copyOf(skills); // defensive copy
+    }
+    public String getName() { return name; }
+    public List&lt;String&gt; getSkills() { return skills; } // already immutable
+}</code></pre>
+        <p>Benefits: thread-safe without locks, safe to share, usable as HashMap keys, easier reasoning.</p>
+      </article>
+
+      <article>
+        <h3>What happens internally when a Spring Boot application starts?</h3>
+        <span class="tag">Spring Boot</span>
+        <span class="round-badge r1">Round 1</span>
+        <p><code>SpringApplication.run()</code> → create Environment (load properties) → create ApplicationContext → refresh context (component scan, auto-config, bean creation, DI wiring) → start embedded Tomcat → run CommandLineRunners → publish ApplicationReadyEvent.</p>
+        <p><a class="cross-link" href="spring-boot.html#spring-boot-deep">→ Full startup flow diagram in Deep Dive section</a></p>
+      </article>
+
+      <article>
+        <h3>Difference between @Component, @Service, and @Repository</h3>
+        <span class="tag">Spring Boot</span>
+        <span class="round-badge r1">Round 1</span>
+        <p>All are <code>@Component</code> stereotypes — same scanning/registration. <code>@Service</code> = business layer (semantic). <code>@Repository</code> = data layer + automatic exception translation (SQLException → DataAccessException). Use specific stereotypes for clarity and framework features.</p>
+        <p><a class="cross-link" href="spring-boot.html">→ Details in Spring Boot section</a></p>
+      </article>
+
+      <article>
+        <h3>Constructor Injection vs Field Injection</h3>
+        <span class="tag">DI</span>
+        <span class="round-badge r1">Round 1</span>
+        <p>Constructor injection is Spring's recommendation: dependencies are <code>final</code>, guaranteed non-null, easy to unit test with mocks, no reflection needed. Field injection couples code to Spring, hides dependencies, and can't use <code>final</code> fields.</p>
+        <p><a class="cross-link" href="spring-boot.html">→ Comparison table in Spring Boot section</a></p>
+      </article>
+
+      <article>
+        <h3>Explain Bean Lifecycle in Spring</h3>
+        <span class="tag">Lifecycle</span>
+        <span class="round-badge r1">Round 1</span>
+        <p>Instantiate → inject dependencies → <code>@PostConstruct</code> → bean ready → (on shutdown) <code>@PreDestroy</code>. AOP proxies for <code>@Transactional</code> applied via BeanPostProcessor after initialization.</p>
+        <p><a class="cross-link" href="spring-boot.html#spring-boot-deep">→ Full lifecycle diagram in Deep Dive</a></p>
+      </article>
+
+      <article>
+        <h3>How does @Transactional work internally?</h3>
+        <span class="tag">Spring Boot</span>
+        <span class="round-badge r1">Round 1</span>
+        <p>Spring creates an <strong>AOP proxy</strong> (JDK or CGLIB) around your service bean. When a <code>@Transactional</code> method is called:</p>
+        <ul class="detail-list">
+          <li>Proxy opens a DB transaction (via <code>PlatformTransactionManager</code>)</li>
+          <li>Calls your actual method</li>
+          <li>On success → commit; on RuntimeException → rollback (default)</li>
+          <li>Checked exceptions do NOT rollback unless <code>rollbackFor</code> specified</li>
+        </ul>
+        <div class="warn-box">
+          <strong>Common pitfall:</strong> <code>@Transactional</code> on private methods or self-invocation (<code>this.save()</code> from same class) — proxy is bypassed, no transaction! Call through injected bean or refactor.
+        </div>
+        <pre><code>@Transactional(rollbackFor = Exception.class)
+public void placeOrder(Order order) {
+    orderRepo.save(order);       // same transaction
+    inventoryRepo.decrement();   // rolls back together on failure
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>Find the first non-repeating character in a String</h3>
+        <span class="tag">Coding</span>
+        <span class="round-badge r1">Round 1</span>
+        <pre><code>public static Character firstNonRepeating(String s) {
+    Map&lt;Character, Integer&gt; freq = new LinkedHashMap&lt;&gt;();
+    for (char c : s.toCharArray()) {
+        freq.merge(c, 1, Integer::sum);
+    }
+    for (Map.Entry&lt;Character, Integer&gt; e : freq.entrySet()) {
+        if (e.getValue() == 1) return e.getKey();
+    }
+    return null;
+}
+// "aabbcdd" → 'c'   |   Time O(n), Space O(1) — max 26/128 chars</code></pre>
+      </article>
+
+      <article>
+        <h3>Find duplicate elements in an array</h3>
+        <span class="tag">Coding</span>
+        <span class="round-badge r1">Round 1</span>
+        <pre><code>// Approach 1: HashSet — O(n) time, O(n) space
+public static Set&lt;Integer&gt; findDuplicates(int[] arr) {
+    Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+    Set&lt;Integer&gt; dupes = new HashSet&lt;&gt;();
+    for (int n : arr) {
+        if (!seen.add(n)) dupes.add(n);
+    }
+    return dupes;
+}
+
+// Approach 2: Sort + scan — O(n log n), O(1) extra space
+Arrays.sort(arr);
+for (int i = 1; i &lt; arr.length; i++) {
+    if (arr[i] == arr[i-1]) /* duplicate found */;
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>Reverse a String without using built-in methods</h3>
+        <span class="tag">Coding</span>
+        <span class="round-badge r1">Round 1</span>
+        <pre><code>public static String reverse(String s) {
+    char[] chars = s.toCharArray(); // toCharArray is usually allowed
+    int left = 0, right = chars.length - 1;
+    while (left &lt; right) {
+        char temp = chars[left];
+        chars[left++] = chars[right];
+        chars[right--] = temp;
+    }
+    return new String(chars);
+}
+// Pure manual: build new string char-by-char from end
+// "hello" → "olleh"</code></pre>
+      </article>
+
+      <!-- ===== ROUND 2 ===== -->
+      <div id="round-2" class="round-header round-2">
+        <span class="round-badge r2">Round 2</span>
+        <h3>Advanced Technical — Microservices + SQL + System Design</h3>
+        <p>Architecture depth, database tuning, caching, messaging, concurrency, and system design.</p>
+      </div>
+
+      <article>
+        <h3>Difference between Monolithic and Microservices Architecture</h3>
+        <span class="tag">Microservices</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Monolith: single deployable unit, shared DB, simpler to start, harder to scale individual features. Microservices: independently deployable services, own databases, team autonomy, fault isolation — but adds network complexity, distributed tracing, and eventual consistency challenges.</p>
+        <p><a class="cross-link" href="microservices.html">→ Full comparison in Microservices section</a></p>
+      </article>
+
+      <article>
+        <h3>How do microservices communicate with each other?</h3>
+        <span class="tag">Microservices</span>
+        <span class="round-badge r2">Round 2</span>
+        <table>
+          <tr><th>Style</th><th>Protocol</th><th>Use when</th></tr>
+          <tr><td>Synchronous</td><td>REST (HTTP/JSON), gRPC</td><td>Request-response, need immediate result (get user profile)</td></tr>
+          <tr><td>Asynchronous</td><td>Kafka, RabbitMQ</td><td>Fire-and-forget, event-driven (order placed → send email)</td></tr>
+        </table>
+        <p>Patterns: API Gateway as single entry point; service discovery (Eureka/Consul) for dynamic routing; circuit breakers for sync calls; outbox pattern for reliable async events.</p>
+      </article>
+
+      <article>
+        <h3>What is API Gateway and why is it needed?</h3>
+        <span class="tag">Microservices</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Single entry point for all client requests (web, mobile). Routes to appropriate microservice. Provides:</p>
+        <ul class="detail-list">
+          <li><strong>Routing:</strong> <code>/api/orders</code> → Order Service</li>
+          <li><strong>Authentication/Authorization:</strong> JWT validation once at gateway</li>
+          <li><strong>Rate limiting:</strong> protect backend from abuse</li>
+          <li><strong>SSL termination, load balancing, request logging</strong></li>
+          <li><strong>Response aggregation:</strong> combine multiple service calls into one response</li>
+        </ul>
+        <p>Tools: Spring Cloud Gateway, Kong, AWS API Gateway. Clients never call microservices directly — reduces coupling and centralizes cross-cutting concerns.</p>
+      </article>
+
+      <article>
+        <h3>How do you handle service failures in Microservices?</h3>
+        <span class="tag">Resilience</span>
+        <span class="round-badge r2">Round 2</span>
+        <ul class="detail-list">
+          <li><strong>Circuit Breaker:</strong> stop calling failing service, fail fast (Resilience4j)</li>
+          <li><strong>Retry with backoff:</strong> transient failures (network blip)</li>
+          <li><strong>Fallback:</strong> return cached/default response when downstream is down</li>
+          <li><strong>Timeout:</strong> don't wait forever — set per-call timeouts</li>
+          <li><strong>Bulkhead:</strong> isolate thread pools so one slow service doesn't exhaust all threads</li>
+          <li><strong>Async + events:</strong> decouple with Kafka so failure in notification doesn't block order</li>
+          <li><strong>Health checks + auto-restart:</strong> Kubernetes liveness/readiness probes</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Explain Circuit Breaker Pattern</h3>
+        <span class="tag">Resilience</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Closed (normal) → Open (fail fast after threshold failures) → Half-Open (test one request). Prevents cascading failures when a downstream service is down. Implement with Resilience4j or Istio outlier detection.</p>
+        <p><a class="cross-link" href="microservices.html">→ State diagram in Microservices section</a></p>
+      </article>
+
+      <article>
+        <h3>Difference between SQL and NoSQL</h3>
+        <span class="tag">Database</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>SQL: structured schema, ACID, joins, best for transactional relational data. NoSQL: flexible schema, horizontal scale, eventual consistency — MongoDB (documents), Redis (key-value cache), Cassandra (wide-column, high writes).</p>
+        <p><a class="cross-link" href="sql.html">→ Full comparison in SQL section</a></p>
+      </article>
+
+      <article>
+        <h3>Find the 2nd Highest Salary</h3>
+        <span class="tag">SQL</span>
+        <span class="round-badge r2">Round 2</span>
+        <pre><code>SELECT MAX(salary) FROM employees
+WHERE salary &lt; (SELECT MAX(salary) FROM employees);
+
+-- Handles ties:
+SELECT salary FROM (
+  SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) rnk
+  FROM employees
+) t WHERE rnk = 2;</code></pre>
+        <p><a class="cross-link" href="sql.html">→ More approaches in SQL section</a></p>
+      </article>
+
+      <article>
+        <h3>Difference between WHERE and HAVING</h3>
+        <span class="tag">SQL</span>
+        <span class="round-badge r2">Round 2</span>
+        <table>
+          <tr><th>WHERE</th><th>HAVING</th></tr>
+          <tr><td>Filters rows <strong>before</strong> grouping</td><td>Filters groups <strong>after</strong> GROUP BY</td></tr>
+          <tr><td>Cannot use aggregate functions</td><td>Can use COUNT, AVG, SUM, etc.</td></tr>
+          <tr><td>Used with SELECT, UPDATE, DELETE</td><td>Used with SELECT + GROUP BY only</td></tr>
+        </table>
+        <pre><code>SELECT dept_id, AVG(salary) avg_sal
+FROM employees
+WHERE status = 'ACTIVE'        -- filter rows first
+GROUP BY dept_id
+HAVING AVG(salary) > 50000;    -- filter groups after</code></pre>
+      </article>
+
+      <article>
+        <h3>Explain Database Indexing</h3>
+        <span class="tag">SQL</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>An index is a separate data structure (typically B-Tree) that stores sorted column values + pointer to row — avoids full table scan.</p>
+        <ul class="detail-list">
+          <li><strong>Clustered index:</strong> determines physical row order (one per table — usually PK)</li>
+          <li><strong>Non-clustered index:</strong> separate structure pointing to rows (can have many)</li>
+          <li><strong>Composite index:</strong> multiple columns — follows leftmost prefix rule</li>
+        </ul>
+        <pre><code>CREATE INDEX idx_emp_dept_sal ON employees(department_id, salary);
+-- Speeds: WHERE department_id = 5 ORDER BY salary
+-- Won't help: WHERE salary > 50000 alone (salary is second column)</code></pre>
+        <p>Trade-off: faster reads, slower writes (index must update on INSERT/UPDATE/DELETE), extra storage.</p>
+      </article>
+
+      <article>
+        <h3>How would you optimize a slow-running query?</h3>
+        <span class="tag">SQL</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Run EXPLAIN ANALYZE → check for Seq Scan → add indexes → avoid SELECT * → rewrite correlated subqueries as JOINs → paginate with keyset instead of OFFSET → update table statistics → consider materialized views for heavy aggregations.</p>
+        <p><a class="cross-link" href="sql.html">→ Full checklist in SQL section</a></p>
+      </article>
+
+      <article>
+        <h3>What is Redis and why do we use it?</h3>
+        <span class="tag">Caching</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Redis is an in-memory key-value store — extremely fast (sub-millisecond reads). Used for:</p>
+        <ul class="detail-list">
+          <li><strong>Caching:</strong> cache DB query results, API responses (TTL-based expiry)</li>
+          <li><strong>Session storage:</strong> distributed session across multiple app instances</li>
+          <li><strong>Rate limiting:</strong> sliding window counters</li>
+          <li><strong>Pub/Sub:</strong> lightweight messaging</li>
+          <li><strong>Leaderboards, real-time counters</strong> with sorted sets</li>
+        </ul>
+        <p>In Spring Boot: <code>spring-boot-starter-data-redis</code> + <code>@Cacheable</code> or <code>RedisTemplate</code>.</p>
+      </article>
+
+      <article>
+        <h3>Explain Cache-Aside Pattern</h3>
+        <span class="tag">Caching</span>
+        <span class="round-badge r2">Round 2</span>
+        <div class="diagram">READ:
+  App → check cache → hit? return
+                   → miss? read DB → write to cache → return
+
+WRITE:
+  App → update DB → invalidate/delete cache entry
+  (don't update cache on write — avoids stale data race)</div>
+        <p>Most common caching pattern. Application manages cache explicitly. Alternative: Read-Through (cache loads from DB itself), Write-Through (write to cache + DB together).</p>
+        <pre><code>public Product getProduct(Long id) {
+    Product cached = redis.get("product:" + id);
+    if (cached != null) return cached;
+    Product fromDb = repo.findById(id).orElseThrow();
+    redis.set("product:" + id, fromDb, TTL_5_MIN);
+    return fromDb;
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>What is Kafka?</h3>
+        <span class="tag">Messaging</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Distributed event streaming platform. Producers write messages to <strong>topics</strong> (partitioned logs). Consumers read at their own pace. Messages retained on disk (configurable retention) — replayable. High throughput, fault-tolerant, used for event-driven microservices, log aggregation, stream processing.</p>
+        <p><a class="cross-link" href="microservices.html">→ Kafka vs RabbitMQ in Microservices section</a></p>
+      </article>
+
+      <article>
+        <h3>How does Kafka ensure message durability?</h3>
+        <span class="tag">Kafka</span>
+        <span class="round-badge r2">Round 2</span>
+        <ul class="detail-list">
+          <li><strong>Replication:</strong> each partition replicated across brokers (replication factor, e.g., 3)</li>
+          <li><strong>Leader + ISR (In-Sync Replicas):</strong> leader handles writes; followers replicate; ack only after replicas confirm</li>
+          <li><strong>Producer acks:</strong> <code>acks=all</code> — wait for all ISR replicas before confirming</li>
+          <li><strong>Persistent storage:</strong> messages written to disk (sequential I/O), not just memory</li>
+          <li><strong>Consumer offsets:</strong> committed offset tracking — replay from any point</li>
+        </ul>
+        <p>Trade-off: higher durability settings (<code>acks=all</code>, <code>min.insync.replicas=2</code>) = lower throughput but no message loss on broker failure.</p>
+      </article>
+
+      <article>
+        <h3>Design a URL Shortener System</h3>
+        <span class="tag">System Design</span>
+        <span class="round-badge r2">Round 2</span>
+        <p><strong>Requirements:</strong> Given long URL → return short code. Given short code → redirect to long URL. High read volume, moderate writes.</p>
+        <p><strong>Core components:</strong></p>
+        <ul class="detail-list">
+          <li><strong>Encoding:</strong> Base62 (a-z, A-Z, 0-9) — 6 chars = 62⁶ ≈ 56 billion URLs. Or hash (MD5) truncated + collision check.</li>
+          <li><strong>Storage:</strong> DB table <code>(short_code PK, long_url, created_at, expiry)</code> + Redis cache for hot redirects.</li>
+          <li><strong>API:</strong> POST /shorten {url} → {shortUrl}; GET /{code} → 302 redirect.</li>
+          <li><strong>Scale:</strong> read-heavy → cache 80% redirects in Redis; DB sharded by short_code hash.</li>
+          <li><strong>Analytics:</strong> async click tracking via Kafka.</li>
+        </ul>
+        <pre><code>// Base62 encode auto-increment ID
+char[] BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+String encode(long id) {
+    StringBuilder sb = new StringBuilder();
+    while (id > 0) { sb.append(BASE62[(int)(id % 62)]); id /= 62; }
+    return sb.reverse().toString();
+}</code></pre>
+      </article>
+
+      <article>
+        <h3>Difference between Process and Thread</h3>
+        <span class="tag">Concurrency</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Process = independent program with own memory. Thread = lightweight execution unit within a process sharing heap. Processes isolated; threads share memory (need synchronization).</p>
+        <p><a class="cross-link" href="java-concurrency.html">→ Full table in Core Java section</a></p>
+      </article>
+
+      <article>
+        <h3>What is ExecutorService?</h3>
+        <span class="tag">Concurrency</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Thread pool manager — submit Runnable/Callable tasks instead of creating raw threads. Handles queue, reuse, and graceful shutdown. Prefer over manual Thread creation in production.</p>
+        <p><a class="cross-link" href="java-concurrency.html">→ Code examples in Core Java section</a></p>
+      </article>
+
+      <article>
+        <h3>CompletableFuture vs Future</h3>
+        <span class="tag">Concurrency</span>
+        <span class="round-badge r2">Round 2</span>
+        <table>
+          <tr><th>Future</th><th>CompletableFuture</th></tr>
+          <tr><td><code>get()</code> blocks until done</td><td>Non-blocking callbacks: <code>thenApply</code>, <code>thenCompose</code></td></tr>
+          <tr><td>No chaining</td><td>Chain async pipelines</td></tr>
+          <tr><td>Cannot combine multiple futures easily</td><td><code>allOf</code>, <code>anyOf</code> for parallel composition</td></tr>
+          <tr><td>Java 5</td><td>Java 8+ — manual completion via <code>complete()</code></td></tr>
+        </table>
+        <pre><code>CompletableFuture&lt;String&gt; result = CompletableFuture
+    .supplyAsync(() -> fetchUser(id))       // async task 1
+    .thenCompose(user -> fetchOrders(user)) // chain dependent task
+    .exceptionally(ex -> "fallback");       // handle failure</code></pre>
+      </article>
+
+      <article>
+        <h3>What are Virtual Threads in Java 21?</h3>
+        <span class="tag">Java 21</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Lightweight threads managed by the JVM, not the OS. Millions can run concurrently vs thousands of platform threads. Ideal for I/O-bound workloads (HTTP calls, DB queries) where threads mostly wait.</p>
+        <pre><code>// Create virtual thread (Java 21+)
+Thread.startVirtualThread(() -> callExternalApi());
+
+// ExecutorService with virtual threads
+ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+executor.submit(() -> processRequest());</code></pre>
+        <p>Spring Boot 3.2+ supports virtual threads via <code>spring.threads.virtual.enabled=true</code> — Tomcat handles each request on a virtual thread. Not for CPU-bound work (use platform threads + limited pool).</p>
+      </article>
+
+      <article>
+        <h3>How does ConcurrentHashMap achieve thread safety?</h3>
+        <span class="tag">Concurrency</span>
+        <span class="round-badge r2">Round 2</span>
+        <p>Java 8+ ConcurrentHashMap:</p>
+        <ul class="detail-list">
+          <li><strong>Reads:</strong> mostly lock-free via volatile node references</li>
+          <li><strong>Writes:</strong> synchronized on individual bucket head (not whole map)</li>
+          <li><strong>Null rejection:</strong> no null keys/values — avoids ambiguity in concurrent get/put</li>
+          <li><strong>CAS operations:</strong> for counter updates and some insertions</li>
+          <li><strong>Size computation:</strong> striped counter cells to avoid global lock</li>
+        </ul>
+        <p>Result: much higher concurrency than <code>Collections.synchronizedMap</code> which locks the entire map on every operation.</p>
+      </article>
+
+      <!-- ===== ROUND 3 ===== -->
+      <div id="round-3" class="round-header round-3">
+        <span class="round-badge r3">Round 3</span>
+        <h3>Managerial + HR Round</h3>
+        <p>Project ownership, teamwork, motivation, and culture fit. Prepare concrete stories — not generic answers.</p>
+      </div>
+
+      <article>
+        <h3>Describe a challenging production issue you solved</h3>
+        <span class="tag">Behavioral</span>
+        <span class="round-badge r3">Round 3</span>
+        <p><strong>Use STAR format:</strong></p>
+        <ul class="detail-list">
+          <li><strong>Situation:</strong> "Payment API latency spiked to 8s during peak hours, affecting 2000 orders/hour."</li>
+          <li><strong>Task:</strong> "I was on-call and led the investigation."</li>
+          <li><strong>Action:</strong> "Checked Grafana → DB connection pool exhausted. Found N+1 query in order listing. Added JOIN FETCH + Redis cache for product catalog. Increased HikariCP pool size after load test."</li>
+          <li><strong>Result:</strong> "Latency dropped to 200ms p99. Added integration test to catch N+1 in CI."</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>How do you handle tight deadlines?</h3>
+        <span class="tag">Behavioral</span>
+        <span class="round-badge r3">Round 3</span>
+        <ul class="detail-list">
+          <li>Clarify scope with PM — what's MVP vs nice-to-have</li>
+          <li>Break work into daily deliverables; flag blockers early (don't wait)</li>
+          <li>Skip gold-plating — ship working solution, refactor later if time allows</li>
+          <li>Communicate progress daily; ask for help or scope cut if at risk</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>How do you prioritize multiple tasks?</h3>
+        <span class="tag">Behavioral</span>
+        <span class="round-badge r3">Round 3</span>
+        <p>Impact vs urgency matrix: production bugs first → sprint commitments → tech debt. Use Jira/backlog ranking. Align with team lead on priorities when unclear. Say no or negotiate deadline when overloaded — better than missing silently.</p>
+      </article>
+
+      <article>
+        <h3>Have you ever disagreed with a team member? How did you resolve it?</h3>
+        <span class="tag">Behavioral</span>
+        <span class="round-badge r3">Round 3</span>
+        <p>Pick a technical disagreement (not personal). Example: colleague wanted synchronous REST chain for order flow; you proposed Kafka events. Presented trade-offs (coupling, latency, failure isolation) with a small POC. Team chose async for notification step, kept sync for payment validation. Focus on data and outcomes, not winning the argument.</p>
+      </article>
+
+      <article>
+        <h3>Why do you want to join KPMG?</h3>
+        <span class="tag">HR</span>
+        <span class="round-badge r3">Round 3</span>
+        <p>Research KPMG's technology consulting practice. Tailor to: enterprise-scale projects, exposure to diverse clients/industries, learning from senior architects, stability + growth. Avoid generic "great company" — mention specific KPMG initiatives, tech stack they use, or consulting domain that interests you.</p>
+        <div class="highlight-box">Customize this answer for whichever company you're interviewing with — replace KPMG with their name, products, and values.</div>
+      </article>
+
+      <article>
+        <h3>What motivates you as a developer?</h3>
+        <span class="tag">HR</span>
+        <span class="round-badge r3">Round 3</span>
+        <p>Authentic answers work best: solving real business problems, seeing your code used in production, learning new tech (recently explored virtual threads / Kafka), mentoring juniors, improving system reliability. Tie to something concrete from your experience.</p>
+      </article>
+
+      <article>
+        <h3>Where do you see yourself in the next 5 years?</h3>
+        <span class="tag">HR</span>
+        <span class="round-badge r3">Round 3</span>
+        <p>Balanced answer: deepen backend expertise (system design, cloud architecture) → tech lead or senior engineer → owning end-to-end features and guiding junior developers. Show ambition without implying you'll leave in 1 year. Align growth path with what the company offers.</p>
+      </article>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

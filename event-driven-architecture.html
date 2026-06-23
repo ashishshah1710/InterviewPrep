@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event-Driven Architecture — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html" class="nav-active">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="event-driven-architecture">
+      <h2 class="section-title">Microservices Event-Driven Architecture</h2>
+      <p class="section-desc">End-to-end workflow — from client request through API Gateway, Kafka events, downstream services, and polyglot persistence. Enterprise-grade interview explanation.</p>
+
+      <div class="section-banner">
+        <h3>Event-Driven Microservices — Complete Workflow</h3>
+        <p>Services communicate asynchronously via events while staying independent, scalable, and deployable on their own.</p>
+      </div>
+
+      <!-- Master overview block -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">ARCHITECTURE OVERVIEW</span>
+        <h3>End-to-End Event-Driven Workflow</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Client places order through the gateway. Order Service saves the order and publishes an event to Kafka. Inventory, Payment, Shipping, and Notification services listen independently and react — no direct calls between them.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Start with the user journey, then zoom into async event flow.</li>
+            <li>Emphasize: each service owns its DB — no shared database anti-pattern.</li>
+            <li>Order Service returns 202 Accepted quickly — processing continues async.</li>
+            <li>Mention idempotency, outbox pattern, and dead-letter queue for production.</li>
+            <li>Draw Client → Gateway → Order → Kafka → 4 consumers on whiteboard.</li>
+          </ul></div>
+        </div>
+
+        <div class="eda-flow-large">┌──────────┐     ┌─────────────────────────────────────┐     ┌───────────────┐
+│  Client  │────▶│           API GATEWAY               │────▶│ Order Service │
+│ Web/App  │     │  Auth · JWT · Rate Limit · Routing  │     │  (REST API)   │
+└──────────┘     └─────────────────────────────────────┘     └───────┬───────┘
+                                                                      │
+                                      ┌───────────────────────────────┼───────────────────────────────┐
+                                      │  1. Validate &amp; save order    │  2. Publish event             │
+                                      │  3. Return 202 / orderId        ▼                               │
+                                      │                    ┌──────────────────────┐                   │
+                                      │                    │   EVENT BUS (Kafka)  │                   │
+                                      │                    │  Topic: order.events │                   │
+                                      │                    └──────────┬───────────┘                   │
+                                      │         ┌──────────┬──────────┼──────────┬──────────┐        │
+                                      │         ▼          ▼          ▼          ▼          │        │
+                                      │   ┌──────────┐┌──────────┐┌──────────┐┌──────────────┐  │
+                                      │   │Inventory ││ Payment  ││ Shipping ││ Notification │  │
+                                      │   │ Service  ││ Service  ││ Service  ││   Service    │  │
+                                      │   └────┬─────┘└────┬─────┘└────┬─────┘└──────┬───────┘  │
+                                      │        │           │           │             │          │
+                                      │   ┌────▼────┐ ┌────▼────┐ ┌────▼────┐   ┌────▼────┐     │
+                                      │   │PostgreSQL│ │PostgreSQL│ │ MongoDB │   │  Redis  │     │
+                                      │   │ (stock)  │ │(payments)│ │(shipments)│ │ (cache) │     │
+                                      │   └──────────┘ └──────────┘ └─────────┘   └─────────┘     │
+                                      │         Event chaining: PaymentCompleted → Shipping       │
+                                      └───────────────────────────────────────────────────────────┘</div>
+
+        <p><strong>Architecture benefits:</strong></p>
+        <div class="eda-benefits">
+          <div class="eda-benefit">Loose coupling — services don't call each other directly</div>
+          <div class="eda-benefit">High scalability — scale consumers independently</div>
+          <div class="eda-benefit">Fault tolerance — Kafka retains events; consumers retry</div>
+          <div class="eda-benefit">Real-time processing — events processed as they arrive</div>
+          <div class="eda-benefit">Independent deployment — deploy Payment without touching Order</div>
+          <div class="eda-benefit">System resilience — one service down doesn't block others</div>
+        </div>
+      </div>
+
+      <!-- Step 1 Client -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 01 · CLIENT</span>
+        <h3>Client Request</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>User submits an order from web or mobile app — JSON payload with items, address, payment method. Hits the API Gateway, never microservices directly.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>POST /api/orders with JWT in Authorization header.</li>
+            <li>Client gets orderId + status PENDING immediately (async model).</li>
+            <li>Poll GET /orders/{id} or use WebSocket/SSE for status updates.</li>
+          </ul></div>
+        </div>
+        <pre><code>POST /api/orders
+Authorization: Bearer &lt;jwt&gt;
+{
+  "customerId": "C-101",
+  "items": [{ "productId": "P-42", "qty": 2 }],
+  "shippingAddress": { ... },
+  "paymentMethod": "CARD"
+}</code></pre>
+      </div>
+
+      <!-- Step 2 Gateway -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 02 · GATEWAY</span>
+        <h3>API Gateway — Authentication, Authorization, Rate Limiting</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Single front door validates JWT, checks user role, limits requests per minute, routes to Order Service, adds correlation ID for tracing.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Auth: validate JWT signature, expiry, issuer (Keycloak/OAuth2).</li>
+            <li>Authorization: role CUSTOMER vs ADMIN on route level.</li>
+            <li>Rate limiting: Redis token bucket — 100 req/min per client.</li>
+            <li>Tools: Spring Cloud Gateway, Kong, AWS API Gateway.</li>
+            <li>Inject X-Correlation-Id for distributed tracing across all services.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- Step 3 Order Service -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 03 · ORDER SERVICE</span>
+        <h3>Order Service Processing</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Validates order, saves to its own DB with status CREATED, publishes OrderCreated event, returns 202 Accepted — doesn't wait for payment or shipping.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Owns orders table — single source of truth for order state.</li>
+            <li>State machine: CREATED → PAID → SHIPPED → DELIVERED (or FAILED).</li>
+            <li>Use Outbox pattern: save order + event in same DB transaction.</li>
+            <li>Separate process reads outbox and publishes to Kafka — guaranteed delivery.</li>
+          </ul></div>
+        </div>
+        <pre><code>@Transactional
+public OrderResponse createOrder(CreateOrderRequest req) {
+    Order order = orderRepo.save(new Order(req, Status.CREATED));
+    outboxRepo.save(new OutboxEvent("OrderCreated", order.toEvent()));
+    return new OrderResponse(order.getId(), Status.CREATED); // 202 Accepted
+}</code></pre>
+      </div>
+
+      <!-- Step 4 Event Publishing -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 04 · EVENT PUBLISHING</span>
+        <h3>Event Publishing</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>After order is saved, an event message is sent to Kafka — a JSON record saying "OrderCreated" with orderId, items, customerId. Other services subscribe to react.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Event schema: orderId, eventType, timestamp, payload, correlationId.</li>
+            <li>Use Avro/JSON Schema for contract evolution.</li>
+            <li>Partition key = orderId — all events for one order stay ordered.</li>
+            <li>Producer acks=all for durability; idempotent producer enabled.</li>
+          </ul></div>
+        </div>
+        <pre><code>{
+  "eventId": "evt-uuid",
+  "eventType": "OrderCreated",
+  "orderId": "ORD-9001",
+  "customerId": "C-101",
+  "items": [{ "productId": "P-42", "qty": 2 }],
+  "timestamp": "2026-06-22T10:30:00Z",
+  "correlationId": "corr-abc123"
+}</code></pre>
+      </div>
+
+      <!-- Step 5 Kafka -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 05 · EVENT BUS</span>
+        <h3>Event Bus / Kafka Integration</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Kafka is the central message log. Producers append events; consumers read at their own pace. Messages persist and can be replayed if a service was down.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Topics: order.events, payment.events, inventory.events.</li>
+            <li>Consumer groups: inventory-group, payment-group — each gets every message once per group.</li>
+            <li>Retention: 7 days — replay for recovery or new consumer.</li>
+            <li>Dead Letter Topic (DLT) for failed messages after N retries.</li>
+            <li>Spring: KafkaTemplate publish, @KafkaListener consume.</li>
+          </ul></div>
+        </div>
+        <pre><code>@KafkaListener(topics = "order.events", groupId = "inventory-group")
+public void onOrderCreated(OrderCreatedEvent event) {
+    inventoryService.reserveStock(event.getOrderId(), event.getItems());
+}</code></pre>
+      </div>
+
+      <!-- Step 6 Consumer Services -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 06 · DOWNSTREAM SERVICES</span>
+        <h3>Inventory, Payment, Shipping &amp; Notification Services</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Four independent services each listen to OrderCreated (or chained events) and do their job: reserve stock, charge card, create shipment, send email — in parallel where possible.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>Inventory:</strong> reserve stock → publish StockReserved or StockFailed.</li>
+            <li><strong>Payment:</strong> on StockReserved → charge → publish PaymentCompleted/Failed.</li>
+            <li><strong>Shipping:</strong> on PaymentCompleted → create label → publish ShipmentCreated.</li>
+            <li><strong>Notification:</strong> listens to all status events → email/SMS/push.</li>
+            <li>Each consumer idempotent — same event processed twice = same result.</li>
+            <li>Saga orchestration or choreography — explain which you used.</li>
+          </ul></div>
+        </div>
+        <div class="diagram">OrderCreated (Kafka)
+    ├─▶ Inventory Service  → StockReserved / StockFailed
+    ├─▶ Payment Service    → (waits StockReserved) → PaymentCompleted
+    ├─▶ Notification       → "Order received" email
+    └─▶ Order Service      → (listens back) updates status
+
+PaymentCompleted
+    ├─▶ Shipping Service   → ShipmentCreated
+    └─▶ Notification       → "Payment confirmed"</div>
+      </div>
+
+      <!-- Step 7 Polyglot Persistence -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 07 · DATABASES</span>
+        <h3>Independent Databases — Polyglot Persistence</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Each microservice has its own database — no shared tables. Pick the best DB per service: PostgreSQL for transactions, MongoDB for flexible shipment docs, Redis for cache.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Database-per-service — core microservices principle.</li>
+            <li>Order → PostgreSQL (ACID). Inventory → PostgreSQL. Shipping → MongoDB. Cache → Redis.</li>
+            <li>No cross-DB joins — use API or events to get data from other services.</li>
+            <li>Eventual consistency accepted — order status catches up async.</li>
+          </ul></div>
+        </div>
+        <table>
+          <tr><th>Service</th><th>Database</th><th>Why</th></tr>
+          <tr><td>Order</td><td>PostgreSQL</td><td>ACID transactions, relational order lines</td></tr>
+          <tr><td>Inventory</td><td>PostgreSQL</td><td>Strong consistency for stock counts</td></tr>
+          <tr><td>Payment</td><td>PostgreSQL</td><td>Financial audit trail</td></tr>
+          <tr><td>Shipping</td><td>MongoDB</td><td>Flexible shipment/tracking documents</td></tr>
+          <tr><td>Notification</td><td>Redis + PostgreSQL</td><td>Queue + delivery log</td></tr>
+        </table>
+      </div>
+
+      <!-- Step 8 Event Chaining -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">STEP 08 · EVENT CHAINING</span>
+        <h3>Event Chaining &amp; Asynchronous Communication</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>One event triggers the next — OrderCreated → StockReserved → PaymentCompleted → ShipmentCreated. Each step is async; failures trigger compensating events (Saga).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Choreography: services react to events without central coordinator.</li>
+            <li>Orchestration: Saga orchestrator sends commands — easier to trace.</li>
+            <li>Compensation: PaymentFailed → release stock, cancel order (Saga undo).</li>
+            <li>All async — no long synchronous chain blocking the user.</li>
+            <li>Observability: correlationId in every event → single trace in Jaeger.</li>
+          </ul></div>
+        </div>
+        <pre><code>// Saga compensation example
+@KafkaListener(topics = "payment.events")
+public void onPaymentFailed(PaymentFailedEvent e) {
+    inventoryService.releaseStock(e.getOrderId());  // compensate
+    orderService.markFailed(e.getOrderId());
+    notificationService.sendPaymentFailedEmail(e);
+}</code></pre>
+      </div>
+
+      <!-- Interview summary -->
+      <div class="topic-block tb-eda">
+        <span class="block-num">INTERVIEW SCRIPT</span>
+        <h3>How to explain this architecture in a 3-minute interview answer</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Tell the story: user orders → gateway secures request → order saved → Kafka event → four services react independently → each has own DB → failures handled with Saga and retries.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li><strong>Minute 1:</strong> Business problem — scale order flow, decouple teams, survive partial failures.</li>
+            <li><strong>Minute 2:</strong> Walk the flow — Gateway → Order → Kafka → parallel consumers.</li>
+            <li><strong>Minute 3:</strong> Production concerns — outbox, idempotency, DLT, tracing, Saga compensation.</li>
+            <li>Close with benefit: "We deployed Payment service 12 times last sprint without touching Order service."</li>
+          </ul></div>
+        </div>
+        <div class="tip-box">
+          <strong>Enterprise context:</strong> In large-scale applications (banking, e-commerce, logistics), Event-Driven Architecture lets teams ship independently, handle peak load (Black Friday), and recover from partial outages without full system downtime.
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

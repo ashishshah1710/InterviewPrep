@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Microservices 2026 — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html" class="nav-active">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="microservices-2026">
+      <h2 class="section-title">Java Microservices — 2026 Interview Trends</h2>
+      <p class="section-desc">Frequently asked questions for <strong>3–5 years experience</strong> — Core Java, Spring Boot, Kafka, JPA, System Design, DevOps.</p>
+      <div class="section-banner">
+        <span class="trend-badge">2026 TREND · 3–5 YOE</span>
+        <h3>Latest Java Microservices Interview Questions</h3>
+        <p>32 questions across 6 categories — each with simple explanation and interview talking points.</p>
+      </div>
+
+      <span class="cat-label-2026 core">➤ Core Java</span>
+
+      <div class="topic-block tb-2026-core"><span class="block-num">CORE 01</span><h3>Difference between Fail-Fast and Fail-Safe?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Fail-fast throws error immediately if collection changes during iteration (ArrayList). Fail-safe works on a snapshot — no error but may miss fresh changes (ConcurrentHashMap iterator).</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Fail-fast: ConcurrentModificationException — HashMap, ArrayList.</li><li>Fail-safe: weakly consistent — ConcurrentHashMap, CopyOnWriteArrayList.</li><li>Never modify collection while iterating except via iterator.remove().</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-core"><span class="block-num">CORE 02</span><h3>How does ConcurrentHashMap work internally?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Array of buckets. Reads mostly lock-free. Writes lock only one bucket. Java 8+ uses synchronized on bucket head + CAS — not the whole map.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>No null key/value — avoids ambiguity concurrent get/put.</li><li>Treeify bucket when chain &gt; 8 nodes.</li><li>Project: shared cache or rate-limit counters in API gateway.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-core"><span class="block-num">CORE 03</span><h3>What is a Daemon Thread?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Background thread that dies when all user (non-daemon) threads finish — JVM exits without waiting for daemons.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li><code>thread.setDaemon(true)</code> before start().</li><li>Examples: GC threads, Tomcat housekeeping — not for business logic you must complete.</li><li>Main thread is always non-daemon by default.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-core"><span class="block-num">CORE 04</span><h3>Comparable vs Comparator?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Comparable = natural order inside class (compareTo). Comparator = external sort rules — multiple sorts without changing class.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Comparable: one sort order. Comparator: salary desc, then name asc.</li><li>Streams: .sorted(Comparator.comparing(...)).</li></ul></div></div>
+        <pre><code>employees.sort(Comparator.comparing(Employee::getSalary).reversed());</code></pre></div>
+
+      <div class="topic-block tb-2026-core"><span class="block-num">CORE 05</span><h3>SOLID principles with real-time example?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Five design rules for maintainable code — single responsibility, open/closed, Liskov, interface segregation, dependency inversion.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>S:</strong> OrderService only orders — PaymentService handles payment.</li>
+          <li><strong>O:</strong> Add UPI payment without editing OrderService — new PaymentStrategy impl.</li>
+          <li><strong>L:</strong> Subclass honors parent contract — no surprise throws.</li>
+          <li><strong>I:</strong> Split fat interface into Reader/Writer not one DatabaseGod.</li>
+          <li><strong>D:</strong> Depend on PaymentGateway interface, inject Stripe/Mock impl.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-2026-core"><span class="block-num">CORE 06</span><h3>Optional: isPresent() vs ifPresent()?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>isPresent() returns boolean — you manually unwrap. ifPresent(consumer) runs action only if value exists — no explicit get().</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Prefer ifPresent / map / orElseThrow — avoid get() without check.</li><li>ifPresent avoids nested if (optional.isPresent()) { get() }.</li></ul></div></div>
+        <pre><code>optional.ifPresent(user -> sendEmail(user.getEmail()));
+User u = optional.orElseThrow(() -> new NotFoundException());</code></pre></div>
+
+      <div class="topic-block tb-2026-core"><span class="block-num">CORE 07</span><h3>How does JVM handle memory management?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Objects on heap (Young + Old gen). GC removes unreferenced objects. Stack per thread for method calls. Metaspace for class metadata.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Minor GC on Eden; long-lived → Old gen; Major/Full GC when Old full.</li><li>Tune -Xmx, G1GC for microservices; watch GC logs in prod.</li><li>OOM types: heap, metaspace, direct memory.</li></ul></div></div></div>
+
+      <span class="cat-label-2026 spring">➤ Spring Boot &amp; Microservices</span>
+
+      <div class="topic-block tb-2026-spring"><span class="block-num">SPRING 01</span><h3>How do you implement JWT authentication?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>User logs in → server signs JWT (header.payload.signature) with secret → client sends Bearer token on each request → filter validates signature and expiry.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Login endpoint returns JWT; store secret server-side only.</li><li>OncePerRequestFilter validates token before controller.</li><li>Spring Security 6 + OAuth2 Resource Server or custom JwtFilter.</li><li>Short expiry + refresh token for security.</li></ul></div></div>
+        <pre><code>@PostMapping("/login")
+public TokenResponse login(@RequestBody LoginRequest req) {
+    User u = authService.authenticate(req);
+    return new TokenResponse(jwtService.generateToken(u));
+}
+// Filter: validate Authorization: Bearer &lt;token&gt;</code></pre></div>
+
+      <div class="topic-block tb-2026-spring"><span class="block-num">SPRING 02</span><h3>OAuth2 vs JWT?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>OAuth2 is an authorization framework (roles, scopes, token exchange). JWT is a token format — often used as the access token inside OAuth2.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>OAuth2: Authorization Code flow with Keycloak/Auth0 — third-party login.</li><li>JWT: self-contained claims — stateless API auth between microservices.</li><li>Not either/or — OAuth2 often issues JWT access tokens.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-spring"><span class="block-num">SPRING 03</span><h3>RestTemplate vs WebClient?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>RestTemplate = blocking sync HTTP — thread waits. WebClient = reactive/non-blocking — better for high concurrency I/O.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>RestTemplate deprecated in Spring 5 — use WebClient for new code.</li><li>WebClient + virtual threads (Java 21) also works for sync-style with better scale.</li><li>Microservice calls: set timeouts, circuit breaker (Resilience4j).</li></ul></div></div>
+        <pre><code>WebClient client = WebClient.create("http://payment-service");
+Mono&lt;PaymentResult&gt; result = client.get()
+    .uri("/payments/{id}", id)
+    .retrieve().bodyToMono(PaymentResult.class);</code></pre></div>
+
+      <div class="topic-block tb-2026-spring"><span class="block-num">SPRING 04</span><h3>How do microservices communicate?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Sync: REST/gRPC when you need immediate answer. Async: Kafka/RabbitMQ when you can fire-and-forget or event-drive.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Sync: order checks inventory via REST — coupling + latency.</li><li>Async: OrderCreated event → payment/inventory consume independently.</li><li>Service discovery + API Gateway for sync routing.</li></ul></div></div>
+        <p><a class="cross-link" href="event-driven-architecture.html">→ Full event-driven workflow</a></p></div>
+
+      <div class="topic-block tb-2026-spring"><span class="block-num">SPRING 05</span><h3>What is API Gateway and why is it required?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Single entry for all clients — auth, rate limit, routing, SSL — microservices stay hidden behind it.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Spring Cloud Gateway, Kong, AWS API Gateway.</li><li>JWT validation once at edge — not in every service.</li><li>Route /orders → order-service, /payments → payment-service.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-spring"><span class="block-num">SPRING 06</span><h3>How to implement Global Exception Handling?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>@RestControllerAdvice + @ExceptionHandler — one place maps all exceptions to consistent JSON error responses.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Return ErrorResponse with code, message, timestamp, traceId.</li><li>Map custom NotFoundException → 404, ValidationException → 400.</li><li>Same pattern in every microservice for client consistency.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-spring"><span class="block-num">SPRING 07</span><h3>How does @Transactional work internally?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Spring AOP proxy wraps your bean — opens DB transaction before method, commits on success, rolls back on RuntimeException.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Proxy via JDK/CGLIB — self-invocation bypasses transaction.</li><li>PlatformTransactionManager + connection bound to thread.</li><li>rollbackFor for checked exceptions when needed.</li></ul></div></div></div>
+
+      <span class="cat-label-2026 kafka">➤ Kafka &amp; Messaging</span>
+
+      <div class="topic-block tb-2026-kafka"><span class="block-num">KAFKA 01</span><h3>Why Kafka instead of RabbitMQ?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Kafka = durable replayable log, massive throughput, event streaming. RabbitMQ = traditional queue, routing, task delivery.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Choose Kafka: event sourcing, audit trail, replay, 1M+ events/day.</li><li>Choose RabbitMQ: simple task queues, complex routing, lower ops overhead.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-kafka"><span class="block-num">KAFKA 02</span><h3>How do partitions work?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Topic split into partitions — parallel lanes. Each partition ordered. Producer picks partition by key hash — same key → same partition → ordering per key.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>More partitions = more parallelism (one consumer per partition per group).</li><li>Partition key = orderId keeps all events for one order in order.</li><li>Replicas per partition for durability across brokers.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-kafka"><span class="block-num">KAFKA 03</span><h3>What happens if a consumer crashes?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Kafka keeps messages on disk. Consumer group rebalances — another consumer takes over partitions. Uncommitted offset messages replayed.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Auto-commit vs manual commit — manual safer for at-least-once.</li><li>Idempotent consumer handles duplicate replay.</li><li>session.timeout.ms triggers rebalance when consumer dead.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-kafka"><span class="block-num">KAFKA 04</span><h3>How do you maintain message ordering?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Order guaranteed only within one partition. Use same partition key (orderId) for related events. Single consumer per partition preserves order.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Don't use multiple threads on same partition without care.</li><li>Global order across topic = 1 partition (limits throughput).</li><li>Compromise: order per entity via key-based partitioning.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-kafka"><span class="block-num">KAFKA 05</span><h3>What is idempotency in distributed systems?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Same request processed twice = same result as once. Critical when Kafka/network retries duplicate messages.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Idempotency key on payment API — store key + result in DB.</li><li>Consumer checks eventId already processed before side effect.</li><li>Kafka idempotent producer + transactional consumer patterns.</li></ul></div></div>
+        <pre><code>if (processedEvents.exists(event.getEventId())) return; // skip duplicate
+processPayment(event);
+processedEvents.save(event.getEventId());</code></pre></div>
+
+      <span class="cat-label-2026 jpa">➤ Database &amp; JPA</span>
+
+      <div class="topic-block tb-2026-jpa"><span class="block-num">JPA 01</span><h3>First-level vs Second-level cache?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>L1 = session-scoped cache (Persistence Context) — automatic, per transaction. L2 = shared cache across sessions — Redis/Ehcache, optional.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>L1: entity loaded once per EntityManager session.</li><li>L2: reference data (country codes) cached cluster-wide.</li><li>Invalidate L2 on writes; L1 cleared when session closes.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-jpa"><span class="block-num">JPA 02</span><h3>What is N+1 problem?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>1 query loads N parents, then N queries load each child — 101 queries instead of 1-2.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Fix: JOIN FETCH, @EntityGraph, batch fetching, DTO projection.</li><li>Detect: Hibernate statistics, p6spy, APM SQL count per request.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-jpa"><span class="block-num">JPA 03</span><h3>How to optimize slow queries?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>EXPLAIN the query, add indexes, paginate, avoid SELECT *, fix N+1, use read-only transactions for reports.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Index FK and WHERE columns; composite indexes for multi-column filters.</li><li>Keyset pagination instead of OFFSET on large tables.</li><li>Materialized views for heavy analytics.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-jpa"><span class="block-num">JPA 04</span><h3>How do you handle concurrent updates?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Optimistic locking (@Version) — detect conflict on save. Pessimistic (SELECT FOR UPDATE) — lock row upfront. Retry on OptimisticLockException.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Optimistic: high read, low collision — e-commerce product update.</li><li>Pessimistic: inventory deduction, wallet balance — must not oversell.</li><li>Combine with idempotency for retry-safe APIs.</li></ul></div></div>
+        <pre><code>@Entity
+class Account {
+    @Version private Long version;
+    private BigDecimal balance;
+}</code></pre></div>
+
+      <span class="cat-label-2026 design">➤ System Design</span>
+
+      <div class="topic-block tb-2026-design"><span class="block-num">DESIGN 01</span><h3>Design a Payment / NEFT Processing System</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>API receives payment → validate → idempotency check → persist PENDING → publish event → async settlement with bank → update SUCCESS/FAILED → notify customer.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Services: Payment, Account, Notification, Reconciliation batch.</li>
+          <li>Idempotency key + unique transaction ref (UTR for NEFT).</li>
+          <li>State machine: INITIATED → PROCESSING → SETTLED / FAILED.</li>
+          <li>Outbox + Kafka for reliable events; Saga for rollback on failure.</li>
+          <li>Reconciliation job matches bank statement vs ledger daily.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-2026-design"><span class="block-num">DESIGN 02</span><h3>How to handle 1M+ transactions daily?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>~12 TPS average, higher peaks — horizontal scale, async Kafka, DB sharding/read replicas, caching, idempotent APIs.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Async pipeline — API returns 202, processing via Kafka consumers.</li><li>Partition Kafka by accountId; scale consumer pods.</li><li>DB: partition by date, archive old data, connection pooling.</li><li>Rate limit + queue during spikes; CDN not relevant for payments API.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-design"><span class="block-num">DESIGN 03</span><h3>Saga Pattern vs 2PC?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>2PC = all services commit or all rollback together — slow, tight coupling. Saga = local commits + compensating steps on failure — eventual consistency.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Microservices use Saga (choreography or orchestration).</li><li>2PC/XA rare — doesn't scale across heterogeneous DBs.</li><li>Compensate: PaymentFailed → release inventory, mark order cancelled.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-design"><span class="block-num">DESIGN 04</span><h3>How to ensure data consistency across services?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Database per service + eventual consistency via events. Outbox pattern, Saga, idempotency — not distributed JOINs.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Outbox: same TX saves business row + event row → relay to Kafka.</li><li>CDC (Debezium) alternative for event publishing.</li><li>Read your own writes: correlation ID + status polling or WebSocket.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-design"><span class="block-num">DESIGN 05</span><h3>How to implement distributed locking?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>When multiple instances need exclusive access — Redis Redisson lock, ZooKeeper, or DB advisory lock.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Redis: SET key NX EX ttl — fast, TTL prevents dead lock if node dies.</li><li>Use for scheduled job "only one pod runs reconciliation".</li><li>Prefer DB row lock for financial inventory when already in DB TX.</li><li>Always set lock timeout; avoid long-held distributed locks.</li></ul></div></div>
+        <pre><code>// Redisson
+RLock lock = redisson.getLock("reconcile-daily");
+if (lock.tryLock(0, 30, TimeUnit.MINUTES)) {
+    try { runReconciliation(); }
+    finally { lock.unlock(); }
+}</code></pre></div>
+
+      <span class="cat-label-2026 devops">➤ Production &amp; DevOps</span>
+
+      <div class="topic-block tb-2026-devops"><span class="block-num">DEVOPS 01</span><h3>How do you deploy microservices using Docker?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Build fat JAR → Dockerfile multi-stage → push image to registry → Kubernetes/Docker Compose deploys containers with env config.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>One image per microservice; tag with git SHA.</li><li>12-factor: config via env vars / K8s ConfigMap.</li><li>Health checks: Actuator /actuator/health for readiness probe.</li><li>Rolling update — zero downtime deploy.</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-devops"><span class="block-num">DEVOPS 02</span><h3>What is Circuit Breaker?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Stop calling failing service — fail fast with fallback until it recovers. Closed → Open → Half-Open.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Resilience4j @CircuitBreaker on WebClient/RestTemplate calls.</li><li>Prevents thread pool exhaustion when payment gateway is down.</li><li>Combine with timeout and retry (only idempotent ops).</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-devops"><span class="block-num">DEVOPS 03</span><h3>How do you monitor logs?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Structured JSON logs with correlationId → centralized ELK/Splunk/Loki → search by traceId across all microservices.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>MDC.put("correlationId", id) in gateway filter — propagates to all logs.</li><li>Promtail/Fluentd ship container logs to Loki/Elasticsearch.</li><li>Alert on error rate spike; link logs + metrics + traces (Grafana stack).</li></ul></div></div></div>
+
+      <div class="topic-block tb-2026-devops"><span class="block-num">DEVOPS 04</span><h3>What is Rate Limiting?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Cap requests per client/IP — token bucket or sliding window in API Gateway or Redis — protects backend from abuse and spikes.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul><li>Gateway: 100 req/min per API key → HTTP 429 Too Many Requests.</li><li>Redis INCR + TTL for distributed rate limit across pods.</li><li>Different tiers: free vs premium customer limits.</li></ul></div></div></div>
+
+      <div class="tip-box">
+        <strong>2026 prep tip (3–5 YOE):</strong> Answer every question with architecture context — "In our payment microservice we used Saga + outbox because…" Interviewers expect production awareness, not textbook-only answers.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

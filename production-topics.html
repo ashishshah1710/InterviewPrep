@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Production Topics — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html" class="nav-active">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="production-topics">
+      <h2 class="section-title">Production-Level Interview Topics</h2>
+      <p class="section-desc">Interviewers no longer check syntax alone. They evaluate production thinking, scalability mindset, concurrency understanding, and system design clarity.</p>
+
+      <div class="tip-box">
+        <strong>What interviewers really want:</strong>
+        <div class="mindset-grid">
+          <div class="mindset-item">Production-level thinking</div>
+          <div class="mindset-item">Scalability mindset</div>
+          <div class="mindset-item">Concurrency understanding</div>
+          <div class="mindset-item">System design clarity</div>
+        </div>
+      </div>
+
+      <!-- Java Streams & Collections -->
+      <div class="topic-category">
+        <h4>Java Streams &amp; Collections</h4>
+        <p>flatMap, ConcurrentHashMap, Set internals, Functional Interface</p>
+      </div>
+
+      <article>
+        <h3>Java Streams — flatMap explained</h3>
+        <span class="tag">Streams</span>
+        <p><code>map</code> transforms each element 1:1. <code>flatMap</code> transforms each element into a <strong>stream of results</strong> and flattens all streams into one.</p>
+        <pre><code>// map: List&lt;Order&gt; → List&lt;List&lt;LineItem&gt;&gt; (nested)
+orders.stream().map(Order::getItems).toList();
+
+// flatMap: List&lt;Order&gt; → List&lt;LineItem&gt; (flattened)
+List&lt;LineItem&gt; allItems = orders.stream()
+    .flatMap(order -> order.getItems().stream())
+    .toList();
+
+// Real use: split sentences into words
+List&lt;String&gt; words = sentences.stream()
+    .flatMap(s -> Arrays.stream(s.split(" ")))
+    .toList();
+
+// Optional chaining — avoid nested if-present checks
+user.flatMap(User::getAddress)
+    .flatMap(Address::getZipCode)
+    .orElse("00000");</code></pre>
+        <p><strong>Interview tip:</strong> Use flatMap when the mapping function returns a collection/stream per element, or when chaining Optional values.</p>
+      </article>
+
+      <article>
+        <h3>ConcurrentHashMap — production use cases</h3>
+        <span class="tag">Collections</span>
+        <p>Thread-safe map without locking the entire structure. Use for shared caches, rate-limit counters, session stores in multi-threaded servers.</p>
+        <pre><code>// Thread-safe cache with computeIfAbsent (atomic get-or-load)
+private final ConcurrentHashMap&lt;Long, Product&gt; cache = new ConcurrentHashMap&lt;&gt;();
+
+public Product getProduct(Long id) {
+    return cache.computeIfAbsent(id, key -> loadFromDb(key));
+}
+
+// Atomic counter per API key (rate limiting)
+ConcurrentHashMap&lt;String, AtomicInteger&gt; requestCounts = new ConcurrentHashMap&lt;&gt;();
+requestCounts.computeIfAbsent(clientId, k -> new AtomicInteger(0))
+             .incrementAndGet();</code></pre>
+        <p><a class="cross-link" href="java-concurrency.html">→ Internal mechanics in Core Java section</a></p>
+      </article>
+
+      <article>
+        <h3>Set internals — HashSet, LinkedHashSet, TreeSet</h3>
+        <span class="tag">Collections</span>
+        <table>
+          <tr><th>Implementation</th><th>Internal structure</th><th>Order</th><th>Performance</th></tr>
+          <tr><td><code>HashSet</code></td><td>HashMap backing (element = key, dummy PRESENT object = value)</td><td>None</td><td>add/contains/remove O(1) avg</td></tr>
+          <tr><td><code>LinkedHashSet</code></td><td>HashMap + doubly-linked list for insertion order</td><td>Insertion order</td><td>O(1) avg, slightly more memory</td></tr>
+          <tr><td><code>TreeSet</code></td><td>Red-Black Tree (NavigableMap)</td><td>Sorted (natural or Comparator)</td><td>add/contains/remove O(log n)</td></tr>
+        </table>
+        <div class="highlight-box">
+          <strong>Key insight:</strong> HashSet uniqueness comes from <code>hashCode()</code> + <code>equals()</code>. If you override equals, you MUST override hashCode — otherwise duplicates slip in and performance degrades to O(n).
+        </div>
+      </article>
+
+      <article>
+        <h3>Functional Interface — production examples</h3>
+        <span class="tag">Java 8+</span>
+        <pre><code>// Predicate — filter active users in stream pipeline
+List&lt;User&gt; active = users.stream()
+    .filter(User::isActive)
+    .toList();
+
+// Function — DTO mapping in service layer
+List&lt;OrderDto&gt; dtos = orders.stream()
+    .map(orderMapper::toDto)
+    .toList();
+
+// Consumer — side effect after processing
+processedOrders.forEach(o -> auditLog.info("Processed {}", o.getId()));
+
+// Supplier — lazy initialization
+Supplier&lt;Connection&gt; connSupplier = () -> dataSource.getConnection();
+
+// Custom @FunctionalInterface for strategy pattern
+@FunctionalInterface
+interface DiscountStrategy {
+    BigDecimal apply(BigDecimal amount);
+}</code></pre>
+      </article>
+
+      <!-- Multithreading & Concurrency -->
+      <div class="topic-category">
+        <h4>Multithreading &amp; Concurrency</h4>
+        <p>wait/notify, race conditions, atomicity, locking</p>
+      </div>
+
+      <article>
+        <h3>wait() and notify() — how they work</h3>
+        <span class="tag">Concurrency</span>
+        <p><code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code> are called on an object's monitor lock — must be inside a <code>synchronized</code> block on that same object.</p>
+        <pre><code>class BoundedBuffer {
+    private final Queue&lt;Task&gt; queue = new LinkedList&lt;&gt;();
+    private final int capacity = 10;
+
+    synchronized void produce(Task task) throws InterruptedException {
+        while (queue.size() == capacity) {
+            wait(); // release lock, wait until consumer notifies
+        }
+        queue.add(task);
+        notifyAll(); // wake waiting consumers
+    }
+
+    synchronized Task consume() throws InterruptedException {
+        while (queue.isEmpty()) {
+            wait();
+        }
+        Task task = queue.poll();
+        notifyAll(); // wake waiting producers
+        return task;
+    }
+}</code></pre>
+        <p><strong>Production note:</strong> Prefer <code>BlockingQueue</code> (ArrayBlockingQueue) over manual wait/notify — less error-prone, handles spurious wakeups with built-in conditions.</p>
+      </article>
+
+      <article>
+        <h3>Race condition handling</h3>
+        <span class="tag">Concurrency</span>
+        <p>A race condition occurs when multiple threads read/write shared mutable state and the outcome depends on timing.</p>
+        <pre><code>// RACE: two threads both read count=5, both write 6
+private int count = 0;
+public void increment() { count++; } // NOT atomic (read-modify-write)
+
+// Fix 1: synchronized
+public synchronized void increment() { count++; }
+
+// Fix 2: AtomicInteger
+private AtomicInteger count = new AtomicInteger(0);
+public void increment() { count.incrementAndGet(); }
+
+// Fix 3: eliminate shared state — immutable objects, ThreadLocal</code></pre>
+        <p><strong>Detection:</strong> intermittent bugs under load, works in dev but fails in prod. Use stress tests, thread dump analysis, and tools like FindBugs/SpotBugs.</p>
+      </article>
+
+      <article>
+        <h3>Atomicity and Locking strategies</h3>
+        <span class="tag">Concurrency</span>
+        <table>
+          <tr><th>Mechanism</th><th>When to use</th><th>Trade-off</th></tr>
+          <tr><td><code>synchronized</code></td><td>Simple critical sections, low contention</td><td>Coarse-grained; can block threads</td></tr>
+          <tr><td><code>ReentrantLock</code></td><td>Need tryLock, timeout, fair ordering</td><td>Must unlock in finally</td></tr>
+          <tr><td><code>ReadWriteLock</code></td><td>Read-heavy, write-rare workloads</td><td>Write lock excludes all readers</td></tr>
+          <tr><td><code>Atomic*</code> variables</td><td>Single variable counters/flags</td><td>Only for simple operations</td></tr>
+          <tr><td><code>StampedLock</code></td><td>Optimistic reads on read-heavy data</td><td>Complex API</td></tr>
+          <tr><td>DB row lock</td><td>Inventory, financial transactions</td><td>Cross-service needs distributed lock</td></tr>
+        </table>
+        <pre><code>Lock lock = new ReentrantLock();
+lock.lock();
+try {
+    // critical section
+} finally {
+    lock.unlock(); // ALWAYS in finally
+}</code></pre>
+      </article>
+
+      <!-- Spring Boot & Microservices -->
+      <div class="topic-category">
+        <h4>Spring Boot &amp; Microservices</h4>
+        <p>@Async, Retry, Circuit Breaker, Stateless vs Stateful</p>
+      </div>
+
+      <article>
+        <h3>@Async — async processing in Spring Boot</h3>
+        <span class="tag">Spring Boot</span>
+        <pre><code>@EnableAsync
+@SpringBootApplication
+public class App { }
+
+@Service
+public class NotificationService {
+    @Async
+    public CompletableFuture&lt;Void&gt; sendEmail(Order order) {
+        emailClient.send(order.getCustomerEmail(), "Order confirmed");
+        return CompletableFuture.completedFuture(null);
+    }
+}</code></pre>
+        <p><strong>Internals:</strong> Spring creates a JDK/CGLIB proxy. Calling <code>sendEmail()</code> from another bean submits work to a <code>TaskExecutor</code> thread pool and returns immediately. Self-invocation (<code>this.sendEmail()</code>) bypasses proxy — no async!</p>
+        <p>Configure pool: <code>@Bean(name = "taskExecutor")</code> with core/max pool size. Propagate MDC/security context with <code>TaskDecorator</code>.</p>
+      </article>
+
+      <article>
+        <h3>Retry pattern in Spring Boot</h3>
+        <span class="tag">Resilience</span>
+        <pre><code>// Resilience4j or Spring Retry
+@Retry(name = "paymentService", fallbackMethod = "paymentFallback")
+public PaymentResult charge(PaymentRequest req) {
+    return paymentClient.charge(req); // may throw on transient failure
+}
+
+public PaymentResult paymentFallback(PaymentRequest req, Exception ex) {
+    return PaymentResult.pending("Queued for retry");
+}
+
+// application.yml
+resilience4j.retry:
+  instances:
+    paymentService:
+      maxAttempts: 3
+      waitDuration: 500ms
+      exponentialBackoffMultiplier: 2</code></pre>
+        <p>Retry only <strong>idempotent</strong> operations or those with idempotency keys. Never blind-retry non-idempotent payment without dedup logic.</p>
+      </article>
+
+      <article>
+        <h3>Circuit Breaker — production implementation</h3>
+        <span class="tag">Resilience</span>
+        <pre><code>@CircuitBreaker(name = "inventoryService", fallbackMethod = "inventoryFallback")
+public StockInfo checkStock(Long productId) {
+    return inventoryClient.getStock(productId);
+}
+
+public StockInfo inventoryFallback(Long productId, CallNotPermittedException ex) {
+    return StockInfo.cached(productId); // serve stale cache when circuit open
+}</code></pre>
+        <p>States: CLOSED → OPEN (after failure threshold) → HALF-OPEN (probe). Prevents thread exhaustion calling a dead service. Combine with timeout + bulkhead for full resilience stack.</p>
+        <p><a class="cross-link" href="microservices.html">→ Full Circuit Breaker explanation</a></p>
+      </article>
+
+      <article>
+        <h3>Stateless vs Stateful services</h3>
+        <span class="tag">Microservices</span>
+        <table>
+          <tr><th>Stateless</th><th>Stateful</th></tr>
+          <tr><td>No session data stored in service memory</td><td>Service holds client state in memory</td></tr>
+          <tr><td>Any instance can handle any request</td><td>Request must hit same instance (sticky session)</td></tr>
+          <tr><td>Horizontally scalable — add more pods freely</td><td>Scaling is harder; state lost on restart</td></tr>
+          <tr><td>State in DB, Redis, or JWT token</td><td>In-memory session, local cache with user data</td></tr>
+        </table>
+        <p><strong>Spring Boot best practice:</strong> Design stateless REST APIs. Store session/auth state in JWT or Redis. Enables Kubernetes autoscaling and zero-downtime rolling deploys without session affinity.</p>
+      </article>
+
+      <!-- Hibernate & Database -->
+      <div class="topic-category">
+        <h4>Hibernate &amp; Database</h4>
+        <p>N+1 problem, Lazy vs Eager, Connection Pooling, Query Optimization</p>
+      </div>
+
+      <article>
+        <h3>The N+1 Query Problem</h3>
+        <span class="tag">Hibernate</span>
+        <p>One query loads N parent entities, then N additional queries load each child — total N+1 queries instead of 1-2.</p>
+        <pre><code>// Triggers N+1: 1 query for orders + N queries for each order's items
+List&lt;Order&gt; orders = orderRepo.findAll(); // SELECT * FROM orders
+orders.forEach(o -> o.getItems().size()); // SELECT * FROM items WHERE order_id=? (×N)
+
+// Fix 1: JOIN FETCH
+@Query("SELECT o FROM Order o JOIN FETCH o.items")
+List&lt;Order&gt; findAllWithItems();
+
+// Fix 2: @EntityGraph
+@EntityGraph(attributePaths = {"items"})
+List&lt;Order&gt; findAll();
+
+// Fix 3: DTO projection — fetch only needed columns
+@Query("SELECT new OrderDto(o.id, o.total) FROM Order o")
+List&lt;OrderDto&gt; findOrderSummaries();</code></pre>
+        <p>Enable <code>spring.jpa.show-sql=true</code> or Hibernate statistics in dev to catch this. Use datasource proxy (p6spy) to count queries per request.</p>
+      </article>
+
+      <article>
+        <h3>Lazy vs Eager Loading</h3>
+        <span class="tag">Hibernate</span>
+        <table>
+          <tr><th>Lazy (default for @OneToMany, @ManyToMany)</th><th>Eager (default for @ManyToOne, @OneToOne)</th></tr>
+          <tr><td>Child loaded on first access via proxy</td><td>Child loaded immediately with parent</td></tr>
+          <tr><td>Better performance — load only what's needed</td><td>Risk of loading entire object graph unintentionally</td></tr>
+          <tr><td>Requires open session or JOIN FETCH in query</td><td>Can cause cartesian product with multiple collections</td></tr>
+        </table>
+        <div class="warn-box">
+          <strong>LazyInitializationException:</strong> Accessing lazy collection outside a transaction (after service method returns). Fix: <code>@Transactional</code> on service, use DTO, or JOIN FETCH in query. Avoid switching everything to EAGER — it causes worse performance at scale.
+        </div>
+      </article>
+
+      <article>
+        <h3>Connection Pooling — HikariCP in Spring Boot</h3>
+        <span class="tag">Database</span>
+        <p>Creating a DB connection is expensive (TCP handshake, auth, memory). Connection pool maintains ready-to-use connections.</p>
+        <pre><code>spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.connection-timeout=30000
+spring.datasource.hikari.idle-timeout=600000
+spring.datasource.hikari.max-lifetime=1800000</code></pre>
+        <ul class="detail-list">
+          <li><strong>Pool too small:</strong> threads block waiting for connection → timeouts under load</li>
+          <li><strong>Pool too large:</strong> overwhelms DB max connections, GC pressure</li>
+          <li><strong>Rule of thumb:</strong> pool size ≈ number of CPU cores × 2 for OLTP (adjust with profiling)</li>
+          <li>Monitor: active connections, pending threads, connection acquire time via Actuator/Micrometer</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Hibernate &amp; SQL Query Optimization</h3>
+        <span class="tag">Performance</span>
+        <ul class="detail-list">
+          <li>Use pagination — <code>Pageable</code> with LIMIT, never load full table</li>
+          <li>Batch inserts — <code>spring.jpa.properties.hibernate.jdbc.batch_size=50</code></li>
+          <li>Avoid <code>SELECT *</code> — use projections/DTOs for list views</li>
+          <li>Second-level cache (Redis/Ehcache) for read-heavy reference data</li>
+          <li>Index foreign keys and WHERE/ORDER BY columns</li>
+          <li>Use native query or JPQL with explicit joins instead of lazy loading in loops</li>
+          <li><code>@QueryHints(@QueryHint(name = "org.hibernate.readOnly", value = "true"))</code> for read-only queries</li>
+        </ul>
+        <p><a class="cross-link" href="sql.html">→ SQL-level optimization checklist</a></p>
+      </article>
+
+      <!-- System Design -->
+      <div class="topic-category">
+        <h4>System Design Scenarios</h4>
+        <p>High-concurrency inventory and overselling prevention</p>
+      </div>
+
+      <article>
+        <h3>Only 1 stock left — 1000 users buying simultaneously. How do you prevent overselling?</h3>
+        <span class="tag">System Design</span>
+        <span class="tag">Concurrency</span>
+        <p>This is a classic inventory concurrency problem. Layer defenses from DB to application:</p>
+        <p><strong>Layer 1 — Pessimistic locking (DB level):</strong></p>
+        <pre><code>-- PostgreSQL: lock the row until transaction commits
+SELECT stock FROM products WHERE id = ? FOR UPDATE;
+-- If stock > 0: UPDATE products SET stock = stock - 1 WHERE id = ?;
+-- Commit. Other 999 threads block on FOR UPDATE, then see stock=0.</code></pre>
+        <p><strong>Layer 2 — Optimistic locking (version column):</strong></p>
+        <pre><code>@Entity
+class Product {
+    @Version
+    private Long version; // Hibernate checks version on UPDATE
+    private int stock;
+}
+// UPDATE fails if version changed → retry or return "sold out"</code></pre>
+        <p><strong>Layer 3 — Atomic Redis decrement:</strong></p>
+        <pre><code>// Lua script or DECR — atomic, sub-millisecond
+Long remaining = redis.decr("stock:product:" + productId);
+if (remaining &lt; 0) { redis.incr(key); return SOLD_OUT; }
+// proceed to create order async</code></pre>
+        <p><strong>Layer 4 — Queue-based ordering:</strong> Flash sale requests go to Kafka queue; single consumer processes sequentially — guarantees order, handles burst traffic.</p>
+        <p><strong>Layer 5 — Idempotency:</strong> Each purchase request has idempotency key — duplicate clicks from same user don't create multiple orders.</p>
+        <div class="highlight-box">
+          <strong>Interview answer structure:</strong> Acknowledge race condition → explain layered approach → pick strategy based on scale (Redis for flash sales, DB lock for normal e-commerce) → mention monitoring and compensating transactions on payment failure.
+        </div>
+      </article>
+
+      <!-- JVM & Performance -->
+      <div class="topic-category">
+        <h4>JVM &amp; Performance</h4>
+        <p>Memory areas, caching strategies, scaling factors</p>
+      </div>
+
+      <article>
+        <h3>JVM Memory Areas — production relevance</h3>
+        <span class="tag">JVM</span>
+        <table>
+          <tr><th>Area</th><th>What lives here</th><th>Production issue</th></tr>
+          <tr><td>Heap (Young + Old)</td><td>All objects, collections, cached data</td><td>OutOfMemoryError, long GC pauses</td></tr>
+          <tr><td>Stack (per thread)</td><td>Method frames, local variables</td><td>StackOverflowError (deep recursion)</td></tr>
+          <tr><td>Metaspace</td><td>Class metadata, static fields</td><td>Metaspace OOM with dynamic class loading</td></tr>
+          <tr><td>Direct memory</td><td>NIO buffers, off-heap</td><td>Native OOM with Netty/gRPC heavy use</td></tr>
+        </table>
+        <p><strong>Tuning:</strong> <code>-Xms</code> = <code>-Xmx</code> (avoid heap resize), G1GC for low-latency services, monitor GC logs with Actuator/Micrometer. Profile with async-profiler before tuning blindly.</p>
+        <p><a class="cross-link" href="java-concurrency.html">→ Full JVM diagram</a></p>
+      </article>
+
+      <article>
+        <h3>Caching strategies for scale</h3>
+        <span class="tag">Performance</span>
+        <table>
+          <tr><th>Level</th><th>Technology</th><th>TTL / Scope</th></tr>
+          <tr><td>L1 — Local (in-process)</td><td>Caffeine, Guava Cache</td><td>Seconds–minutes, per JVM instance</td></tr>
+          <tr><td>L2 — Distributed</td><td>Redis, Memcached</td><td>Minutes–hours, shared across instances</td></tr>
+          <tr><td>L3 — CDN</td><td>CloudFront, Akamai</td><td>Static assets, API responses at edge</td></tr>
+          <tr><td>DB query cache</td><td>Hibernate 2nd level cache</td><td>Reference/lookup tables</td></tr>
+        </table>
+        <p>Cache invalidation on write (cache-aside pattern). Set TTL to bound staleness. Monitor hit ratio — below 80% means cache key design needs work.</p>
+      </article>
+
+      <article>
+        <h3>Scaling factors — vertical vs horizontal</h3>
+        <span class="tag">Performance</span>
+        <ul class="detail-list">
+          <li><strong>Vertical scaling:</strong> bigger CPU/RAM — simple but has ceiling and single point of failure</li>
+          <li><strong>Horizontal scaling:</strong> more instances behind load balancer — requires stateless services</li>
+          <li><strong>Database:</strong> read replicas, connection pooling, sharding for write scale</li>
+          <li><strong>Async processing:</strong> offload heavy work to Kafka consumers — decouple response time from processing time</li>
+          <li><strong>Rate limiting:</strong> protect backend from traffic spikes</li>
+          <li><strong>Auto-scaling triggers:</strong> CPU &gt; 70%, request latency p99, queue depth</li>
+        </ul>
+      </article>
+
+      <!-- Cloud & DevOps -->
+      <div class="topic-category">
+        <h4>Cloud &amp; DevOps</h4>
+        <p>CI/CD, deployment versioning, autoscaling, cloud challenges</p>
+      </div>
+
+      <article>
+        <h3>CI/CD pipeline — production workflow</h3>
+        <span class="tag">DevOps</span>
+        <div class="diagram">Code Push → Build → Unit Tests → SonarQube → Docker Image
+  → Push to Registry (tagged with git SHA)
+  → Deploy to Dev → Integration Tests
+  → Approval Gate → Deploy Staging → Smoke Tests
+  → Deploy Production (rolling / blue-green / canary)
+  → Health Check → Monitor alerts</div>
+        <p><strong>Key principles:</strong> every commit is buildable; artifacts immutable; deploy same jar/image across environments; automated rollback on health check failure.</p>
+        <p><a class="cross-link" href="microservices.html">→ Jenkins pipeline details</a></p>
+      </article>
+
+      <article>
+        <h3>Deployment versioning strategies</h3>
+        <span class="tag">DevOps</span>
+        <ul class="detail-list">
+          <li><strong>Semantic versioning:</strong> MAJOR.MINOR.PATCH (1.4.2) — communicate breaking changes</li>
+          <li><strong>Git SHA tagging:</strong> <code>myapp:abc123f</code> — trace exact code in production</li>
+          <li><strong>Blue-Green:</strong> two identical environments; switch traffic instantly; fast rollback</li>
+          <li><strong>Canary:</strong> route 5% traffic to new version; monitor errors/latency; gradually increase</li>
+          <li><strong>Rolling update:</strong> Kubernetes replaces pods one-by-one — zero downtime with readiness probes</li>
+        </ul>
+        <pre><code># Kubernetes deployment — immutable version tag
+image: myregistry/order-service:1.4.2-abc123f
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1</code></pre>
+      </article>
+
+      <article>
+        <h3>Autoscaling in cloud environments</h3>
+        <span class="tag">Cloud</span>
+        <pre><code># Kubernetes HPA (Horizontal Pod Autoscaler)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+spec:
+  minReplicas: 2
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 70</code></pre>
+        <p>Scale triggers: CPU, memory, custom metrics (request rate, queue lag). Scale-down cooldown prevents flapping. Combine with cluster autoscaler to add nodes when pods can't be scheduled.</p>
+      </article>
+
+      <article>
+        <h3>Common cloud migration challenges</h3>
+        <span class="tag">Cloud</span>
+        <ul class="detail-list">
+          <li><strong>Latency:</strong> services in different AZs/regions — design for network partitions</li>
+          <li><strong>Secrets management:</strong> never in code — use Vault, AWS Secrets Manager, K8s Secrets</li>
+          <li><strong>Observability gap:</strong> distributed tracing (Jaeger/Zipkin) essential across microservices</li>
+          <li><strong>Cost control:</strong> right-size instances, autoscale down, spot instances for batch jobs</li>
+          <li><strong>Data residency/compliance:</strong> GDPR, data sovereignty requirements</li>
+          <li><strong>Cold start:</strong> JVM apps slower to start than Node — use layered Docker jars, GraalVM native images</li>
+          <li><strong>Vendor lock-in:</strong> abstract cloud-specific APIs behind interfaces where possible</li>
+        </ul>
+      </article>
+
+      <!-- Java 17 -->
+      <div class="topic-category">
+        <h4>Java 17 Features</h4>
+        <p>Records and real-world use cases</p>
+      </div>
+
+      <article>
+        <h3>Java Records — what they are and when to use them</h3>
+        <span class="tag">Java 17</span>
+        <p>A record is an immutable data carrier — compiler auto-generates constructor, getters, <code>equals()</code>, <code>hashCode()</code>, <code>toString()</code>.</p>
+        <pre><code>// Before: 30 lines of boilerplate POJO
+public record OrderDto(Long id, String status, BigDecimal total) { }
+
+// Usage — same as a class
+OrderDto dto = new OrderDto(1L, "SHIPPED", new BigDecimal("99.99"));
+dto.id();    // accessor (not getId())
+dto.total();
+
+// Compact constructor — validation
+public record Email(String value) {
+    public Email {
+        if (!value.contains("@")) throw new IllegalArgumentException("Invalid email");
+    }
+}
+
+// Real-world use cases:
+// 1. API response/request DTOs
+// 2. Kafka event payloads
+// 3. JDBC row mapping results
+// 4. Map keys (immutable + correct equals/hashCode)
+// 5. Multiple return values from methods
+public record StockResult(boolean available, int remaining) { }</code></pre>
+        <p><strong>Limitations:</strong> cannot extend other classes (implicitly extend Record), fields are final, not ideal for JPA entities (use regular classes for mutable entity state). Perfect for immutable value objects and DTOs.</p>
+        <p><strong>Other Java 17 features to mention:</strong> Sealed classes (restricted inheritance hierarchies), pattern matching for switch (preview), text blocks (<code>"""</code> multi-line strings).</p>
+      </article>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>
