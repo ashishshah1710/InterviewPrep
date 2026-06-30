@@ -38,9 +38,24 @@
     <li><a href="#p1-incident">P1 Production Issue</a></li>
     <li><a href="#jenkins-blue-green">Jenkins Pipeline Failure (Blue-Green)</a></li>
     <li><a href="#zero-downtime">Deploy Without Downtime</a></li>
-    <li><a href="#api-protection">Protect API from Repeated Failures</a></li>
     <li><a href="#saga-flow">Multi-Step Flow / Saga Pattern</a></li>
     <li><a href="#submit-button">Submit Button → Backend Flow</a></li>
+  </ul>
+  <h2 style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin:1rem 0 0.5rem;padding-left:0.5rem;">Production Deep Dive — learn in order</h2>
+  <ul>
+    <li><a href="#resilience-patterns">① Resilience Patterns (Timeout → CB → Bulkhead → Idempotency)</a></li>
+    <li><a href="#downstream-failure">② Downstream Service Failure</a></li>
+    <li><a href="#api-idempotency">③ API Idempotency</a></li>
+    <li><a href="#prevent-duplicate-requests">④ Prevent Duplicate Submissions</a></li>
+    <li><a href="#api-protection">⑤ Protect API from Retry Storms</a></li>
+    <li><a href="#slow-service-root-cause">⑥ Slow Service — Root Cause</a></li>
+    <li><a href="#logging-monitoring">⑦ Logging &amp; Monitoring</a></li>
+    <li><a href="#slow-sql-query">⑧ Slow SQL Query Tuning</a></li>
+    <li><a href="#caching-strategy">⑨ Caching &amp; Invalidation</a></li>
+    <li><a href="#concurrent-db-updates">⑩ Concurrent DB Updates</a></li>
+    <li><a href="#distributed-transactions">⑪ Cross-Service Consistency</a></li>
+    <li><a href="#secure-rest-api">⑫ Secure REST APIs</a></li>
+    <li><a href="#deployment-strategy">⑬ Deployment Strategy</a></li>
   </ul>
   <p class="nav-intro" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">
     <a href="index.html">← Back to Roadmap</a>
@@ -840,39 +855,6 @@ kubectl set image deployment/my-app app=my-app:v2.0
 </section>
 
 <!-- ============================================================ -->
-<section id="api-protection">
-  <h2 class="section-title">User Repeatedly Hits Failing API — How to Save Your API from Crash?</h2>
-
-  <article>
-    <h3>Defense in depth</h3>
-    <span class="tag">Resilience</span>
-    <table>
-      <tr><th>Mechanism</th><th>What it does</th></tr>
-      <tr><td><strong>Rate limiting</strong></td><td>Cap requests per user/IP (token bucket). Return 429 + Retry-After</td></tr>
-      <tr><td><strong>Circuit breaker</strong></td><td>After N failures, stop calling downstream — fail fast with 503</td></tr>
-      <tr><td><strong>Exponential backoff (client)</strong></td><td>Document that clients should backoff on 429/503</td></tr>
-      <tr><td><strong>Timeout</strong></td><td>Don't let requests hang — release threads/connections</td></tr>
-      <tr><td><strong>Bulkhead</strong></td><td>Isolate thread pools so one failing dependency doesn't exhaust all threads</td></tr>
-      <tr><td><strong>Cache fallback</strong></td><td>Return stale cached data when live source fails</td></tr>
-    </table>
-    <pre><code>// Resilience4j circuit breaker (Spring Boot)
-@CircuitBreaker(name = "paymentService", fallbackMethod = "paymentFallback")
-public PaymentResponse processPayment(PaymentRequest req) {
-    return paymentClient.charge(req);
-}
-
-public PaymentResponse paymentFallback(PaymentRequest req, Exception ex) {
-    return PaymentResponse.failed("Payment service temporarily unavailable");
-}
-
-// Rate limiter at API Gateway: 100 req/min per API key → 429 Too Many Requests</code></pre>
-    <div class="highlight-box">
-      <strong>Interview answer:</strong> "I'd implement rate limiting at the gateway to stop retry storms, add a circuit breaker on the failing downstream so we fail fast instead of queuing threads, set aggressive timeouts, and return a clear 503 with Retry-After so clients back off."
-    </div>
-  </article>
-</section>
-
-<!-- ============================================================ -->
 <section id="saga-flow">
   <h2 class="section-title">Multi-Step Flow Fails at Cab Booking — How to Avoid Further Steps?</h2>
 
@@ -965,6 +947,980 @@ try {
     <div class="tip-box">
       <strong>Bonus points:</strong> Mention CORS preflight (OPTIONS) for cross-origin requests, HTTPS/TLS encryption in transit, and that the frontend should disable the Submit button during the request to prevent double-submit (or use idempotency key).
     </div>
+  </article>
+</section>
+
+<!-- ============================================================ -->
+<!-- ============================================================ -->
+<!-- PRODUCTION DEEP DIVE — learn in order: Timeout → Circuit Breaker → Bulkhead → Idempotency -->
+<!-- ============================================================ -->
+<!-- ============================================================ -->
+<!-- PRODUCTION DEEP DIVE -->
+<!-- ============================================================ -->
+<section id="resilience-patterns">
+  <h2 class="section-title">Resilience Patterns — Timeouts, Circuit Breakers, Bulkheads, Idempotency Keys</h2>
+  <p class="section-desc">Learn in this order: <strong>1 Timeout → 2 Circuit Breaker → 3 Bulkhead → 4 Idempotency Key</strong>. Each builds on the previous.</p>
+
+  <div class="tip-box">
+    <strong>Correct learning sequence:</strong>
+    <ol style="margin:0.5rem 0 0 1.2rem;color:var(--muted);">
+      <li><strong>Timeout</strong> — fail fast, free threads (foundation)</li>
+      <li><strong>Circuit Breaker</strong> — stop calling a dead service (uses timeout failures as signal)</li>
+      <li><strong>Bulkhead</strong> — isolate pools so one failure doesn't sink everything</li>
+      <li><strong>Idempotency Key</strong> — safe retries when clients retry after timeout/error</li>
+    </ol>
+  </div>
+
+  <article>
+    <h3>Why resilience matters</h3>
+    <span class="tag">Foundation</span>
+    <p>In production, failures are normal — networks drop, services restart, databases slow down, users double-click Submit. Without resilience patterns, one slow dependency can exhaust all your threads and crash the entire application.</p>
+    <pre><code>Without resilience:
+  Payment service slow (30s response)
+    → Order service threads all blocked waiting
+      → Order service stops responding
+        → Entire platform down (cascade failure)
+
+With resilience:
+  Timeout at 3s → thread released
+  Circuit breaker opens → fail fast, no more calls to dead service
+  Bulkhead → payment pool exhausted, but catalog API still works
+  Idempotency key → client retry doesn't double-charge</code></pre>
+    <table>
+      <tr><th>Pattern</th><th>One-line purpose</th><th>Analogy</th></tr>
+      <tr><td><strong>Timeout</strong></td><td>Don't wait forever for a response</td><td>Hanging up a phone call after 30 seconds of silence</td></tr>
+      <tr><td><strong>Circuit Breaker</strong></td><td>Stop calling a failing service temporarily</td><td>Electrical breaker — trips when overload detected</td></tr>
+      <tr><td><strong>Bulkhead</strong></td><td>Isolate resources so one failure doesn't sink the ship</td><td>Ship compartments — one flooded section doesn't sink all</td></tr>
+      <tr><td><strong>Idempotency Key</strong></td><td>Same request twice = same result once</td><td>Receipt number — showing it again doesn't charge twice</td></tr>
+    </table>
+  </article>
+
+  <article>
+    <h3>1. Timeouts — fail fast, free resources</h3>
+    <span class="tag">Timeout</span>
+    <p>A <strong>timeout</strong> sets a maximum wait time for a call (HTTP, DB, message queue). If the downstream doesn't respond in time, your service aborts and returns an error — instead of holding a thread for 30+ seconds.</p>
+    <div class="highlight-box">
+      <strong>Why threads matter:</strong> Tomcat/Jetty has a fixed thread pool (e.g. 200 threads). If 200 requests are all waiting on a dead payment service, request #201 waits in queue → your API appears down even though only one dependency failed.
+    </div>
+    <table>
+      <tr><th>Timeout type</th><th>Typical value</th><th>Where to set</th></tr>
+      <tr><td>HTTP client → downstream API</td><td>2–5 seconds</td><td>RestTemplate, WebClient, Feign</td></tr>
+      <tr><td>Database query</td><td>5–30 seconds</td><td>HikariCP connection timeout, query timeout</td></tr>
+      <tr><td>Overall request (gateway)</td><td>10–30 seconds</td><td>API Gateway, load balancer</td></tr>
+    </table>
+    <pre><code>// WebClient with timeout — Spring Boot 3
+@Bean
+public WebClient paymentWebClient() {
+    HttpClient httpClient = HttpClient.create()
+        .responseTimeout(Duration.ofSeconds(3))       // max wait for response
+        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000);  // max connect time
+
+    return WebClient.builder()
+        .baseUrl("http://payment-service")
+        .clientConnector(new ReactorClientHttpConnector(httpClient))
+        .build();
+}
+
+// Feign client timeout
+@FeignClient(name = "payment-service", configuration = FeignConfig.class)
+public interface PaymentClient {
+    @PostMapping("/charge")
+    PaymentResponse charge(PaymentRequest req);
+}
+
+// FeignConfig.java
+@Bean
+public Request.Options feignOptions() {
+    return new Request.Options(2000, TimeUnit.MILLISECONDS,   // connect
+                               3000, TimeUnit.MILLISECONDS,   // read
+                               true);
+}
+
+// What happens on timeout:
+// 1. Thread is released immediately (not blocked 30s)
+// 2. Exception thrown → caught by circuit breaker or retry logic
+// 3. User gets 504 Gateway Timeout or 503 with Retry-After</code></pre>
+    <div class="tip-box">
+      <strong>Rule of thumb:</strong> Set client timeout <strong>shorter</strong> than gateway timeout. If gateway waits 30s but your service waits 60s, the gateway kills the request while your thread is still blocked.
+    </div>
+  </article>
+
+  <article>
+    <h3>2. Circuit Breaker — stop hammering a dead service</h3>
+    <span class="tag">Circuit Breaker</span>
+    <p>A <strong>circuit breaker</strong> monitors failure rate to a downstream service. When failures exceed a threshold, it <strong>opens</strong> — all subsequent calls fail immediately without hitting the dead service. After a cooldown, it tries again in <strong>half-open</strong> state.</p>
+    <pre><code>Circuit Breaker States:
+
+  CLOSED (normal)
+    │  All requests pass through to downstream
+    │  Failures are counted in sliding window
+    │
+    ▼  failure rate > threshold (e.g. 50% of last 10 calls)
+  OPEN (tripped)
+    │  All requests fail IMMEDIATELY (fail fast)
+    │  No calls to downstream — gives it time to recover
+    │  waitDurationInOpenState: 30 seconds
+    │
+    ▼  after cooldown
+  HALF-OPEN (testing)
+    │  Allow 1–3 test requests through
+    │
+    ├── success → back to CLOSED
+    └── failure → back to OPEN</code></pre>
+    <pre><code>// Resilience4j Circuit Breaker — Spring Boot
+@Service
+public class PaymentService {
+
+    @CircuitBreaker(name = "paymentService", fallbackMethod = "chargeFallback")
+    public PaymentResponse charge(PaymentRequest req) {
+        return paymentClient.charge(req);  // throws on timeout/5xx
+    }
+
+    // Called automatically when circuit is OPEN or call fails
+    public PaymentResponse chargeFallback(PaymentRequest req, Throwable t) {
+        log.warn("Payment circuit open or failed, returning graceful error", t);
+        return PaymentResponse.failed("Payment temporarily unavailable. Please retry.");
+    }
+}
+
+// application.yml
+resilience4j.circuitbreaker:
+  instances:
+    paymentService:
+      slidingWindowSize: 10              # evaluate last 10 calls
+      failureRateThreshold: 50           # open if 50%+ fail
+      waitDurationInOpenState: 30s       # stay open 30s before half-open
+      permittedNumberOfCallsInHalfOpenState: 3
+      slowCallDurationThreshold: 3s        # slow calls count as failures
+      slowCallRateThreshold: 80</code></pre>
+    <table>
+      <tr><th>State</th><th>Calls to downstream?</th><th>Response to caller</th></tr>
+      <tr><td>CLOSED</td><td>Yes — normal operation</td><td>Actual response or error from downstream</td></tr>
+      <tr><td>OPEN</td><td>No — fail immediately</td><td>Fallback response or 503 Service Unavailable</td></tr>
+      <tr><td>HALF-OPEN</td><td>Limited test calls</td><td>Test if service recovered</td></tr>
+    </table>
+    <div class="highlight-box">
+      <strong>Timeout vs Circuit Breaker:</strong> Timeout protects a <em>single request</em>. Circuit breaker protects the <em>system</em> by stopping all calls during an outage. Use both together.
+    </div>
+  </article>
+
+  <article>
+    <h3>3. Bulkhead — isolate failures by compartment</h3>
+    <span class="tag">Bulkhead</span>
+    <p>A <strong>bulkhead</strong> limits concurrent calls to a dependency using a <strong>separate thread pool or semaphore</strong>. If the payment service is slow and exhausts its pool, the inventory and notification services still have their own pools.</p>
+    <pre><code>Without bulkhead (shared pool of 200 threads):
+  Payment calls:   180 threads blocked (payment service down)
+  Catalog calls:    20 threads left  ← catalog starts failing too!
+
+With bulkhead (separate pools):
+  Payment pool:    50 threads max → all 50 blocked → payment fails fast
+  Catalog pool:    50 threads max → all 50 still available → catalog works fine
+  Notification pool: 20 threads max → unaffected</code></pre>
+    <pre><code>// Resilience4j Bulkhead — limits concurrent calls
+@Service
+public class OrderService {
+
+    @Bulkhead(name = "paymentBulkhead", type = Bulkhead.Type.SEMAPHORE)
+    @CircuitBreaker(name = "paymentService")
+    @TimeLimiter(name = "paymentService")
+    public CompletableFuture&lt;PaymentResponse&gt; processPayment(PaymentRequest req) {
+        return CompletableFuture.supplyAsync(() -> paymentClient.charge(req));
+    }
+
+    @Bulkhead(name = "inventoryBulkhead", type = Bulkhead.Type.SEMAPHORE)
+    public CompletableFuture&lt;Boolean&gt; checkInventory(Long productId) {
+        return CompletableFuture.supplyAsync(() -> inventoryClient.check(productId));
+    }
+}
+
+// application.yml
+resilience4j.bulkhead:
+  instances:
+    paymentBulkhead:
+      maxConcurrentCalls: 25       # max 25 simultaneous payment calls
+      maxWaitDuration: 500ms       # wait 500ms for slot, then reject
+    inventoryBulkhead:
+      maxConcurrentCalls: 50
+
+// Thread-pool bulkhead (for blocking I/O)
+resilience4j.thread-pool-bulkhead:
+  instances:
+    paymentPool:
+      maxThreadPoolSize: 10
+      coreThreadPoolSize: 5
+      queueCapacity: 10</code></pre>
+    <table>
+      <tr><th>Bulkhead type</th><th>How it works</th><th>Best for</th></tr>
+      <tr><td><strong>Semaphore</strong></td><td>Limits concurrent calls on calling thread</td><td>Async/non-blocking services</td></tr>
+      <tr><td><strong>Thread pool</strong></td><td>Dedicated thread pool per dependency</td><td>Blocking HTTP/DB calls</td></tr>
+    </table>
+    <div class="tip-box">
+      <strong>Real-world example:</strong> Netflix Hystrix (predecessor to Resilience4j) named this after ship bulkheads. Amazon uses bulkheads so a failure in Recommendations doesn't take down the Shopping Cart.
+    </div>
+  </article>
+
+  <article>
+    <h3>4. Idempotency Keys — safe retries without duplicate side effects</h3>
+    <span class="tag">Idempotency</span>
+    <p>An <strong>idempotency key</strong> is a unique client-generated ID sent with a request. The server stores the key → response mapping. If the same key arrives again (retry), the server returns the cached response without re-executing the operation.</p>
+    <pre><code>Why retries happen (and why idempotency is essential):
+  1. User clicks Pay → request sent
+  2. Payment succeeds on server
+  3. Network drops before response reaches client
+  4. Client retries (or user clicks Pay again)
+  5. WITHOUT idempotency key → customer charged TWICE
+  6. WITH idempotency key → server returns original receipt, no second charge</code></pre>
+    <pre><code>// Full idempotency flow
+POST /api/payments
+Headers:
+  Idempotency-Key: pay-order-99281-20240630   ← client generates ONCE per action
+Body:
+  { "orderId": "ORD-99281", "amount": 99.99 }
+
+Server flow:
+  Step 1: Check Redis/DB for key "pay-order-99281-20240630"
+  Step 2a: Key EXISTS  → return stored response (HTTP 200, same body)
+  Step 2b: Key MISSING → acquire lock, process payment, store result, return 201
+
+@Service
+public class IdempotentPaymentService {
+
+    public PaymentResponse charge(String idempotencyKey, PaymentRequest req) {
+        String storeKey = "idem:" + idempotencyKey;
+
+        // Already processed?
+        String cached = redis.get(storeKey);
+        if (cached != null) return deserialize(cached);
+
+        // Prevent concurrent duplicate processing
+        if (!redis.setIfAbsent(storeKey + ":lock", "1", Duration.ofSeconds(30))) {
+            throw new ConflictException("Request in progress");
+        }
+        try {
+            PaymentResponse result = paymentGateway.charge(req);
+            redis.set(storeKey, serialize(result), Duration.ofHours(24));
+            return result;
+        } finally {
+            redis.delete(storeKey + ":lock");
+        }
+    }
+}</code></pre>
+    <table>
+      <tr><th>Rule</th><th>Detail</th></tr>
+      <tr><td>Who generates the key?</td><td>Client — UUID or deterministic (userId + action + timestamp)</td></tr>
+      <tr><td>How long to store?</td><td>24–48 hours (cover all retry windows)</td></tr>
+      <tr><td>Same response on retry?</td><td>Yes — same HTTP status + body (don't error on duplicate)</td></tr>
+      <tr><td>Which methods need it?</td><td>POST mainly; PUT/DELETE are naturally idempotent</td></tr>
+      <tr><td>Backup safety net</td><td>DB UNIQUE constraint on business key (orderId + userId)</td></tr>
+    </table>
+  </article>
+
+  <article>
+    <h3>How all four work together — real scenario</h3>
+    <span class="tag">Combined Example</span>
+    <pre><code>User clicks "Pay $100" for Order #99281
+
+Client:
+  Generates Idempotency-Key: "pay-99281-abc123"
+  Sends POST /payments (timeout: 10s)
+
+Order Service (your app):
+  │
+  ├─ Idempotency check → key not seen before, proceed
+  │
+  ├─ Bulkhead (payment pool): slot available? Yes → enter pool
+  │
+  ├─ Circuit Breaker (payment service): state CLOSED → call allowed
+  │
+  ├─ Timeout (3s): call payment-service/charge
+  │     │
+  │     ├─ SUCCESS → store idempotency result, return 201
+  │     │
+  │     └─ TIMEOUT after 3s → thread released
+  │           Circuit breaker records failure
+  │           After 5 failures → circuit OPENS
+  │           Fallback: return 503 "Payment unavailable, retry later"
+  │           Idempotency: key NOT stored (payment didn't complete)
+  │           Client retries with SAME key → safe to retry
+  │
+  └─ Bulkhead: payment pool slot released regardless of outcome
+
+Meanwhile: Catalog API uses its own bulkhead pool → completely unaffected</code></pre>
+  </article>
+
+  <article>
+    <h3>Complete Spring Boot + Resilience4j setup</h3>
+    <span class="tag">Code · Spring Boot 3</span>
+    <pre><code>// pom.xml dependencies
+// io.github.resilience4j:resilience4j-spring-boot3
+// org.springframework.boot:spring-boot-starter-aop
+
+// application.yml — all four patterns configured
+resilience4j:
+  timelimiter:
+    instances:
+      paymentService:
+        timeoutDuration: 3s
+        cancelRunningFuture: true
+
+  circuitbreaker:
+    instances:
+      paymentService:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30s
+        permittedNumberOfCallsInHalfOpenState: 3
+
+  bulkhead:
+    instances:
+      paymentBulkhead:
+        maxConcurrentCalls: 25
+        maxWaitDuration: 500ms
+
+  retry:
+    instances:
+      paymentService:
+        maxAttempts: 3
+        waitDuration: 500ms
+        retryExceptions:
+          - java.net.SocketTimeoutException
+          - org.springframework.web.client.HttpServerErrorException
+        ignoreExceptions:
+          - com.example.PaymentDeclinedException   # don't retry 4xx business errors
+
+// Combined annotation on service method
+@Bulkhead(name = "paymentBulkhead")
+@CircuitBreaker(name = "paymentService", fallbackMethod = "fallback")
+@Retry(name = "paymentService")
+@TimeLimiter(name = "paymentService")
+public CompletableFuture&lt;PaymentResponse&gt; charge(PaymentRequest req) {
+    return CompletableFuture.supplyAsync(() -> paymentClient.charge(req));
+}</code></pre>
+    <div class="interview-script">
+      <div class="script-step">
+        <span class="script-step-label">30-second interview answer</span>
+        <p>"For resilience I use four patterns together. Timeouts prevent threads from blocking on slow dependencies — typically 2–3 seconds. Circuit breakers stop calling a failing service after a threshold, fail fast, and auto-recover via half-open state. Bulkheads isolate thread pools per dependency so one outage doesn't exhaust all resources. Idempotency keys let clients safely retry POST requests without duplicate charges — the server stores key-to-response mapping for 24 hours. In Spring Boot I implement these with Resilience4j annotations combined with Redis for idempotency storage."</p>
+      </div>
+    </div>
+    <p>
+      <a class="cross-link" href="#api-idempotency">→ API Idempotency (deep dive)</a> ·
+      <a class="cross-link" href="#downstream-failure">→ Downstream Service Failure</a> ·
+      <a class="cross-link" href="#api-protection">→ Protect API from Repeated Failures</a>
+    </p>
+  </article>
+</section>
+
+<section id="downstream-failure">
+  <h2 class="section-title">A Downstream Service Is Unavailable — How Does Your Application Handle It Gracefully?</h2>
+
+  <article>
+    <h3>Resilience patterns</h3>
+    <span class="tag">Resilience / Microservices</span>
+    <table>
+      <tr><th>Pattern</th><th>Behavior</th><th>User experience</th></tr>
+      <tr><td><strong>Timeout</strong></td><td>Don't wait forever — fail at 2–5s</td><td>Fast error instead of hung request</td></tr>
+      <tr><td><strong>Circuit breaker</strong></td><td>After N failures, stop calling downstream</td><td>503 with clear message; protect your threads</td></tr>
+      <tr><td><strong>Retry with backoff</strong></td><td>Retry transient failures (503, timeout) — not 4xx</td><td>Transparent recovery on brief blips</td></tr>
+      <tr><td><strong>Fallback</strong></td><td>Return cached/default response</td><td>Degraded but usable (stale product catalog)</td></tr>
+      <tr><td><strong>Bulkhead</strong></td><td>Separate thread pool per dependency</td><td>One slow service doesn't kill entire app</td></tr>
+    </table>
+    <pre><code>// Resilience4j — Spring Boot 3
+@Service
+public class OrderService {
+
+    @CircuitBreaker(name = "inventoryService", fallbackMethod = "inventoryFallback")
+    @Retry(name = "inventoryService")
+    @TimeLimiter(name = "inventoryService")
+    public CompletableFuture&lt;Boolean&gt; checkInventory(Long productId, int qty) {
+        return CompletableFuture.supplyAsync(() ->
+            inventoryClient.checkStock(productId, qty));
+    }
+
+    private CompletableFuture&lt;Boolean&gt; inventoryFallback(Long productId, int qty, Throwable t) {
+        log.warn("Inventory service down, using cached stock for productId={}", productId, t);
+        Boolean cached = stockCache.get(productId);
+        return CompletableFuture.completedFuture(cached != null ? cached : false);
+    }
+}
+
+// application.yml
+resilience4j.circuitbreaker.instances.inventoryService:
+  slidingWindowSize: 10
+  failureRateThreshold: 50
+  waitDurationInOpenState: 30s
+  permittedNumberOfCallsInHalfOpenState: 3
+
+resilience4j.timelimiter.instances.inventoryService:
+  timeoutDuration: 3s</code></pre>
+    <div class="interview-script">
+      <div class="script-step">
+        <span class="script-step-label">Interview answer</span>
+        <p>"I set aggressive timeouts so threads aren't blocked. For transient failures I retry with exponential backoff — only on 503/timeout, never on 400. If failures persist, the circuit breaker opens and we fail fast with a fallback — cached data or a clear 503. Each downstream gets its own thread pool bulkhead so one outage doesn't exhaust all threads. I return meaningful error messages and log the traceId for debugging."</p>
+      </div>
+    </div>
+    <p><a class="cross-link" href="#api-protection">→ See also: Protect API from Repeated Failures</a></p>
+  </article>
+</section>
+
+<section id="api-idempotency">
+  <h2 class="section-title">How Do You Make an API Idempotent?</h2>
+  <p class="section-desc">Calling the same request multiple times produces the same result as calling it once — critical for payments, orders, and retries.</p>
+
+  <article>
+    <h3>Idempotency by HTTP method</h3>
+    <span class="tag">REST / API Design</span>
+    <table>
+      <tr><th>Method</th><th>Naturally idempotent?</th><th>How to ensure</th></tr>
+      <tr><td>GET, PUT, DELETE</td><td>Yes (by HTTP spec)</td><td>PUT replaces same resource; DELETE on missing resource returns 404 (still safe)</td></tr>
+      <tr><td>POST</td><td>No</td><td><strong>Idempotency-Key</strong> header + server-side dedup store</td></tr>
+      <tr><td>PATCH</td><td>Not always</td><td>Use idempotency key or design patch as absolute set operation</td></tr>
+    </table>
+    <pre><code>// Client sends idempotency key (UUID generated once per logical action)
+POST /api/payments
+Headers:
+  Authorization: Bearer ...
+  Idempotency-Key: 550e8400-e29b-41d4-a716-446655440000
+Body:
+  { "amount": 100, "currency": "USD", "orderId": "ORD-99" }
+
+// Server logic
+@PostMapping("/payments")
+public ResponseEntity&lt;PaymentResponse&gt; pay(
+        @RequestHeader("Idempotency-Key") String idempotencyKey,
+        @RequestBody PaymentRequest request) {
+
+    Optional&lt;PaymentResponse&gt; existing = idempotencyStore.find(idempotencyKey);
+    if (existing.isPresent()) {
+        return ResponseEntity.ok(existing.get());  // same response, no double charge
+    }
+
+    PaymentResponse response = paymentService.charge(request);
+    idempotencyStore.save(idempotencyKey, response, Duration.ofHours(24));
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+}
+
+// Idempotency store schema
+CREATE TABLE idempotency_keys (
+    key          VARCHAR(64) PRIMARY KEY,
+    response     JSONB NOT NULL,
+    created_at   TIMESTAMP DEFAULT NOW()
+);</code></pre>
+    <div class="interview-points">
+      <span class="interview-label">Rules for production idempotency</span>
+      <ul>
+        <li>Client generates key once per user action; reuses same key on retry</li>
+        <li>Server stores key → response mapping for 24–48 hours</li>
+        <li>Combine with DB UNIQUE constraint on business key (orderId + userId)</li>
+        <li>Return same HTTP status + body on duplicate (don't error on retry)</li>
+        <li>Stripe, PayPal, and most payment APIs require this pattern</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<section id="prevent-duplicate-requests">
+  <h2 class="section-title">How Do You Prevent Duplicate Data When Multiple Users Submit the Same Request?</h2>
+  <p class="section-desc">Duplicates come from retries, double-clicks, and race conditions — not just "two users."</p>
+
+  <article>
+    <h3>Defense layers</h3>
+    <span class="tag">Concurrency / Idempotency</span>
+    <table>
+      <tr><th>Layer</th><th>Mechanism</th><th>Protects against</th></tr>
+      <tr><td>Frontend</td><td>Disable Submit button after click; debounce</td><td>Accidental double-click</td></tr>
+      <tr><td>API Gateway</td><td>Idempotency-Key header dedup (short TTL window)</td><td>Client retries with same key</td></tr>
+      <tr><td>Application</td><td>Idempotency key stored in Redis/DB</td><td>Network retry, duplicate POST</td></tr>
+      <tr><td>Database</td><td>UNIQUE constraint on business key</td><td>Concurrent inserts (last line of defense)</td></tr>
+      <tr><td>Database</td><td><code>INSERT ... ON CONFLICT DO NOTHING</code> (PostgreSQL)</td><td>Race on same natural key</td></tr>
+    </table>
+    <pre><code>// Redis-based idempotency — same key within 24h returns cached response
+@Service
+public class OrderService {
+
+    @Autowired private StringRedisTemplate redis;
+    @Autowired private OrderRepository orderRepo;
+
+    public OrderResponse createOrder(String idempotencyKey, CreateOrderRequest req) {
+        String cacheKey = "idem:order:" + idempotencyKey;
+
+        // 1. Check if we already processed this request
+        String cached = redis.opsForValue().get(cacheKey);
+        if (cached != null) {
+            return objectMapper.readValue(cached, OrderResponse.class);
+        }
+
+        // 2. Acquire short lock to prevent concurrent duplicate processing
+        Boolean acquired = redis.opsForValue()
+            .setIfAbsent(cacheKey + ":lock", "1", Duration.ofSeconds(30));
+        if (Boolean.FALSE.equals(acquired)) {
+            throw new DuplicateRequestException("Request already in progress");
+        }
+
+        try {
+            // 3. DB unique constraint on (user_id, client_request_id) as safety net
+            Order order = orderRepo.save(new Order(req, idempotencyKey));
+            OrderResponse response = OrderResponse.from(order);
+
+            redis.opsForValue().set(cacheKey, toJson(response), Duration.ofHours(24));
+            return response;
+        } finally {
+            redis.delete(cacheKey + ":lock");
+        }
+    }
+}
+
+-- Database safety net
+ALTER TABLE orders ADD CONSTRAINT uq_user_request UNIQUE (user_id, idempotency_key);</code></pre>
+    <div class="highlight-box">
+      <strong>Key interview point:</strong> Idempotency key + UNIQUE constraint together. Redis can evict keys; DB constraint is the ultimate guard. For payments, never rely on frontend alone.
+    </div>
+  </article>
+</section>
+
+<!-- ============================================================ -->
+<section id="api-protection">
+  <h2 class="section-title">User Repeatedly Hits Failing API — How to Save Your API from Crash?</h2>
+
+  <article>
+    <h3>Defense in depth</h3>
+    <span class="tag">Resilience</span>
+    <table>
+      <tr><th>Mechanism</th><th>What it does</th></tr>
+      <tr><td><strong>Rate limiting</strong></td><td>Cap requests per user/IP (token bucket). Return 429 + Retry-After</td></tr>
+      <tr><td><strong>Circuit breaker</strong></td><td>After N failures, stop calling downstream — fail fast with 503</td></tr>
+      <tr><td><strong>Exponential backoff (client)</strong></td><td>Document that clients should backoff on 429/503</td></tr>
+      <tr><td><strong>Timeout</strong></td><td>Don't let requests hang — release threads/connections</td></tr>
+      <tr><td><strong>Bulkhead</strong></td><td>Isolate thread pools so one failing dependency doesn't exhaust all threads</td></tr>
+      <tr><td><strong>Cache fallback</strong></td><td>Return stale cached data when live source fails</td></tr>
+    </table>
+    <pre><code>// Resilience4j circuit breaker (Spring Boot)
+@CircuitBreaker(name = "paymentService", fallbackMethod = "paymentFallback")
+public PaymentResponse processPayment(PaymentRequest req) {
+    return paymentClient.charge(req);
+}
+
+public PaymentResponse paymentFallback(PaymentRequest req, Exception ex) {
+    return PaymentResponse.failed("Payment service temporarily unavailable");
+}
+
+// Rate limiter at API Gateway: 100 req/min per API key → 429 Too Many Requests</code></pre>
+    <div class="highlight-box">
+      <strong>Interview answer:</strong> "I'd implement rate limiting at the gateway to stop retry storms, add a circuit breaker on the failing downstream so we fail fast instead of queuing threads, set aggressive timeouts, and return a clear 503 with Retry-After so clients back off."
+    </div>
+  </article>
+</section>
+
+<section id="slow-service-root-cause">
+  <h2 class="section-title">A Service Is Responding Slowly — How Do You Find the Root Cause?</h2>
+  <p class="section-desc">Measure first, guess never. Follow the request path from client to database.</p>
+
+  <article>
+    <h3>Systematic investigation flow</h3>
+    <span class="tag">Production / Observability</span>
+    <pre><code>1. Confirm the problem     → Is it all users or one tenant? All endpoints or one API?
+2. Check dashboards        → p50/p95/p99 latency, error rate, throughput, CPU, memory
+3. Correlate with changes  → Recent deploy, config change, traffic spike, batch job?
+4. Trace a slow request    → Distributed trace (trace ID) end-to-end
+5. Narrow the bottleneck   → App CPU? GC pause? Thread pool exhausted? DB? External API?
+6. Deep dive that layer    → Slow query log, connection pool metrics, heap dump if needed
+7. Fix, verify, monitor    → Roll forward or rollback; watch for 30–60 min</code></pre>
+    <table>
+      <tr><th>Symptom</th><th>Likely root cause</th><th>Where to look</th></tr>
+      <tr><td>Latency spike on all APIs</td><td>DB connection pool exhausted, GC pause, thread starvation</td><td>JVM metrics, HikariCP pool stats, thread dump</td></tr>
+      <tr><td>One API slow</td><td>N+1 queries, missing index, unbounded loop</td><td>APM span for that endpoint, EXPLAIN ANALYZE</td></tr>
+      <tr><td>Slow after deploy</td><td>Regression, new dependency call, config typo</td><td>Diff deploy, compare canary vs stable</td></tr>
+      <tr><td>Intermittent slowness</td><td>Downstream timeout, cache miss storm, lock contention</td><td>Traces with high downstream span, Redis hit ratio</td></tr>
+      <tr><td>Slow at peak hours only</td><td>Under-provisioned, no autoscaling, hot key</td><td>RPS vs instance count, DB max connections</td></tr>
+    </table>
+    <div class="interview-script">
+      <div class="script-step">
+        <span class="script-step-label">Interview answer</span>
+        <p>"I'd start with observability — check APM dashboards for p99 latency and error rate, and correlate with recent deploys or traffic spikes. I'd pick a slow trace ID and walk the request: gateway → service → DB → external calls. Most production slowness I've seen is DB-related — missing index, N+1, or connection pool saturation. I'd check slow query logs and pool metrics before scaling infrastructure. Fix the bottleneck layer, deploy, and monitor recovery."</p>
+      </div>
+    </div>
+    <pre><code>// Spring Boot Actuator + Micrometer — expose metrics for dashboards
+management.endpoints.web.exposure.include=health,metrics,prometheus
+management.metrics.tags.application=${spring.application.name}
+
+// Log slow requests with trace correlation
+@Slf4j
+@Aspect
+public class SlowRequestAspect {
+    @Around("@annotation(Timed)")
+    public Object logSlow(ProceedingJoinPoint pjp) throws Throwable {
+        long start = System.currentTimeMillis();
+        try {
+            return pjp.proceed();
+        } finally {
+            long ms = System.currentTimeMillis() - start;
+            if (ms > 500) {
+                log.warn("Slow request: {} took {}ms traceId={}",
+                    pjp.getSignature(), ms, MDC.get("traceId"));
+            }
+        }
+    }
+}</code></pre>
+  </article>
+</section>
+
+<section id="logging-monitoring">
+  <h2 class="section-title">What Logging and Monitoring Strategy Do You Use to Debug Production Issues?</h2>
+
+  <article>
+    <h3>Three pillars + practical setup</h3>
+    <span class="tag">Observability</span>
+    <table>
+      <tr><th>Pillar</th><th>Tool examples</th><th>What you debug with it</th></tr>
+      <tr><td><strong>Metrics</strong></td><td>Prometheus, Grafana, Datadog, CloudWatch</td><td>Latency p99, error rate, RPS, JVM heap, DB pool usage</td></tr>
+      <tr><td><strong>Logs</strong></td><td>ELK (Elasticsearch, Logstash, Kibana), Loki, Splunk</td><td>Error stack traces, business events, audit trail</td></tr>
+      <tr><td><strong>Traces</strong></td><td>Jaeger, Zipkin, OpenTelemetry, AWS X-Ray</td><td>End-to-end request path across microservices</td></tr>
+    </table>
+    <pre><code>// Structured logging with correlation ID — searchable in Kibana/Loki
+@Slf4j
+@RestController
+public class OrderController {
+
+    @PostMapping("/orders")
+    public OrderResponse create(@RequestBody CreateOrderRequest req,
+                                @RequestHeader(value = "X-Request-Id", required = false) String requestId) {
+        String traceId = requestId != null ? requestId : UUID.randomUUID().toString();
+        MDC.put("traceId", traceId);
+        MDC.put("userId",  String.valueOf(getCurrentUserId()));
+        try {
+            log.info("Creating order productId={} qty={}", req.getProductId(), req.getQty());
+            OrderResponse resp = orderService.create(req);
+            log.info("Order created orderId={}", resp.getId());
+            return resp;
+        } catch (Exception e) {
+            log.error("Order creation failed productId={}", req.getProductId(), e);
+            throw e;
+        } finally {
+            MDC.clear();
+        }
+    }
+}
+
+// Key alerts to configure
+Alert 1: error_rate > 1% for 5 min          → P2 page
+Alert 2: p99_latency > 2s for 5 min         → investigate
+Alert 3: db_connection_pool_active > 90%    → scale or fix leak
+Alert 4: disk_usage > 85%                   → infra ticket</code></pre>
+    <div class="highlight-box">
+      <strong>Golden signals (Google SRE):</strong> Latency, Traffic, Errors, Saturation. Log at INFO for business events, WARN for recoverable issues, ERROR for failures. Never log passwords, tokens, or PII in plain text. Use <code>traceId</code> in every log line to correlate across services.
+    </div>
+  </article>
+</section>
+
+<section id="slow-sql-query">
+  <h2 class="section-title">How Would You Optimize a SQL Query That Suddenly Becomes Slow?</h2>
+
+  <article>
+    <h3>Step-by-step tuning process</h3>
+    <span class="tag">SQL / Performance</span>
+    <pre><code>Step 1: Identify the query     → slow query log, APM, pg_stat_statements
+Step 2: EXPLAIN (ANALYZE)      → look for Seq Scan, high rows, nested loops
+Step 3: Check what changed     → data volume grew? stats outdated? plan regression?
+Step 4: Fix root cause         → index, rewrite query, partition, archive old data
+Step 5: Verify                 → compare execution time before/after on prod-like data</code></pre>
+    <pre><code>-- Before: full table scan on 10M rows
+EXPLAIN ANALYZE
+SELECT * FROM orders
+WHERE customer_id = 12345 AND status = 'PENDING'
+ORDER BY created_at DESC;
+
+-- Seq Scan on orders  (cost=0..250000 rows=5000000)  ← BAD
+
+-- Fix 1: composite index matching WHERE + ORDER BY
+CREATE INDEX idx_orders_customer_status_created
+ON orders (customer_id, status, created_at DESC);
+
+-- Fix 2: avoid SELECT * — only fetch needed columns (covering index)
+SELECT id, total, created_at FROM orders
+WHERE customer_id = 12345 AND status = 'PENDING'
+ORDER BY created_at DESC LIMIT 20;
+
+-- Fix 3: update statistics after bulk load
+ANALYZE orders;
+
+-- Fix 4: N+1 in app — replace loop of queries with JOIN or IN clause
+-- BAD:  for each orderId → SELECT * FROM items WHERE order_id = ?
+-- GOOD: SELECT * FROM items WHERE order_id IN (...)</code></pre>
+    <table>
+      <tr><th>EXPLAIN red flag</th><th>Fix</th></tr>
+      <tr><td>Seq Scan on large table</td><td>Add index on filter/join columns</td></tr>
+      <tr><td>Nested Loop with high row count</td><td>Index on join key; consider hash join hint</td></tr>
+      <tr><td>Sort on millions of rows</td><td>Index that includes ORDER BY columns</td></tr>
+      <tr><td>Rows estimate far from actual</td><td>Run ANALYZE; increase statistics target</td></tr>
+      <tr><td>Function on indexed column (<code>WHERE UPPER(email)</code>)</td><td>Functional index or store normalized value</td></tr>
+    </table>
+  </article>
+</section>
+
+<section id="caching-strategy">
+  <h2 class="section-title">Which Caching Strategy Would You Use, and When Would You Invalidate?</h2>
+
+  <article>
+    <h3>Cache patterns &amp; when to use each</h3>
+    <span class="tag">Caching</span>
+    <table>
+      <tr><th>Pattern</th><th>How it works</th><th>Best for</th></tr>
+      <tr><td><strong>Cache-Aside</strong></td><td>App reads cache → miss → read DB → write cache</td><td>Most read-heavy APIs (product catalog, user profile)</td></tr>
+      <tr><td><strong>Read-Through</strong></td><td>Cache layer loads from DB on miss automatically</td><td>When cache library manages loading (Redis with custom loader)</td></tr>
+      <tr><td><strong>Write-Through</strong></td><td>Write goes to cache + DB synchronously</td><td>Strong consistency between cache and DB</td></tr>
+      <tr><td><strong>Write-Behind</strong></td><td>Write to cache first; async flush to DB</td><td>High write throughput, eventual consistency OK (analytics)</td></tr>
+    </table>
+    <pre><code>// Cache-Aside (most common in Spring + Redis)
+@Cacheable(value = "products", key = "#id", unless = "#result == null")
+public Product getProduct(Long id) {
+    return productRepo.findById(id).orElse(null);
+}
+
+@CacheEvict(value = "products", key = "#product.id")
+public Product updateProduct(Product product) {
+    return productRepo.save(product);
+}
+
+@CacheEvict(value = "products", allEntries = true)
+public void refreshCatalog() {
+    // bulk invalidation after admin import
+}</code></pre>
+    <h4 style="margin:1.2rem 0 0.5rem;color:var(--accent);">When to invalidate</h4>
+    <table>
+      <tr><th>Scenario</th><th>Invalidation strategy</th></tr>
+      <tr><td>Single record updated</td><td>Delete specific cache key (<code>@CacheEvict key="#id"</code>)</td></tr>
+      <tr><td>Related data changed</td><td>Invalidate key + dependent keys (user + user's orders list)</td></tr>
+      <tr><td>Bulk admin update</td><td>Flush entire cache namespace or use cache versioning</td></tr>
+      <tr><td>Can't miss stale data</td><td>Short TTL (30–60s) + invalidation on write (belt and suspenders)</td></tr>
+      <tr><td>High read, rare write</td><td>Long TTL (hours) + event-driven invalidation via message queue</td></tr>
+    </table>
+    <pre><code>// Cache versioning — avoid mass delete; rotate version prefix
+String cacheKey = "product:v" + version + ":" + productId;
+
+// Event-driven invalidation
+@KafkaListener(topics = "product-updated")
+public void onProductUpdated(ProductUpdatedEvent event) {
+    redis.delete("product:" + event.getProductId());
+}
+
+// TTL with jitter — prevent cache stampede at same expiry time
+int ttl = 300 + ThreadLocalRandom.current().nextInt(60); // 300–360 sec</code></pre>
+    <div class="tip-box">
+      <strong>Interview line:</strong> "I default to cache-aside with TTL + explicit invalidation on writes. For critical data I keep TTL short even with invalidation. I never cache data that's user-specific and security-sensitive without encryption and short TTL."
+    </div>
+  </article>
+</section>
+
+<section id="concurrent-db-updates">
+  <h2 class="section-title">How Would You Handle Concurrent Updates to the Same Database Record?</h2>
+
+  <article>
+    <h3>Strategies by use case</h3>
+    <span class="tag">Concurrency / Database</span>
+    <table>
+      <tr><th>Strategy</th><th>How</th><th>When</th></tr>
+      <tr><td><strong>Optimistic locking</strong></td><td><code>@Version</code> column; update fails if version changed</td><td>Low contention, read-heavy (user profile edit)</td></tr>
+      <tr><td><strong>Pessimistic locking</strong></td><td><code>SELECT ... FOR UPDATE</code></td><td>High contention, financial inventory deduction</td></tr>
+      <tr><td><strong>Atomic SQL</strong></td><td><code>UPDATE stock SET qty = qty - 1 WHERE qty > 0</code></td><td>Simple counter/inventory without loading entity</td></tr>
+      <tr><td><strong>Distributed lock</strong></td><td>Redis Redisson lock on business key</td><td>Cross-service or long-running critical section</td></tr>
+    </table>
+    <pre><code>// Optimistic locking — JPA @Version
+@Entity
+public class Account {
+    @Id private Long id;
+    private BigDecimal balance;
+
+    @Version
+    private Long version;  // auto-incremented on each update
+}
+
+// Service — retry on OptimisticLockException
+@Retryable(retryFor = OptimisticLockException.class, maxAttempts = 3)
+public void transfer(Long fromId, Long toId, BigDecimal amount) {
+    Account from = accountRepo.findById(fromId).orElseThrow();
+    Account to   = accountRepo.findById(toId).orElseThrow();
+    from.debit(amount);
+    to.credit(amount);
+    accountRepo.save(from);  // throws if version stale
+    accountRepo.save(to);
+}
+
+// Pessimistic lock — inventory reservation
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+@Query("SELECT p FROM Product p WHERE p.id = :id")
+Optional&lt;Product&gt; findByIdForUpdate(@Param("id") Long id);
+
+// Atomic update — no entity load needed
+@Modifying
+@Query("UPDATE Product p SET p.stock = p.stock - :qty WHERE p.id = :id AND p.stock >= :qty")
+int decrementStock(@Param("id") Long id, @Param("qty") int qty);
+if (updated == 0) throw new OutOfStockException();</code></pre>
+    <div class="highlight-box">
+      <strong>Interview tip:</strong> Start with optimistic locking for most cases. Use pessimistic or atomic SQL when lost updates have financial impact. Return <strong>409 Conflict</strong> to client on version mismatch with message "Record was modified, please refresh."
+    </div>
+  </article>
+</section>
+
+<section id="distributed-transactions">
+  <h2 class="section-title">How Do You Ensure Transactional Consistency Across Multiple Microservices?</h2>
+  <p class="section-desc">You cannot use a single 2PC database transaction across services — use distributed patterns instead.</p>
+
+  <article>
+    <h3>Patterns ranked by production usage</h3>
+    <span class="tag">Microservices / Distributed Systems</span>
+    <table>
+      <tr><th>Pattern</th><th>Consistency</th><th>Complexity</th><th>Use when</th></tr>
+      <tr><td><strong>Saga (Orchestration / Choreography)</strong></td><td>Eventual</td><td>Medium</td><td>Multi-step business flows (order → payment → shipping)</td></tr>
+      <tr><td><strong>Outbox pattern</strong></td><td>Eventual</td><td>Medium</td><td>Guarantee event published after DB commit</td></tr>
+      <tr><td><strong>Two-Phase Commit (2PC/XA)</strong></td><td>Strong</td><td>High</td><td>Rarely in microservices — tight coupling, poor availability</td></tr>
+      <tr><td><strong>TCC (Try-Confirm-Cancel)</strong></td><td>Eventual → strong</td><td>High</td><td>Financial systems needing explicit reserve/commit</td></tr>
+    </table>
+    <pre><code>// Saga Orchestrator — Order flow
+Order Saga:
+  1. Create order       (Order Service)     ✓
+  2. Reserve inventory  (Inventory Service) ✓
+  3. Charge payment     (Payment Service)   ✗ FAILS
+  → Compensate:
+     2b. Release inventory
+     1b. Cancel order
+
+// Outbox pattern — atomic DB write + event publish
+@Transactional
+public void createOrder(Order order) {
+    orderRepo.save(order);
+
+    // Same transaction — event stored in outbox table
+    outboxRepo.save(new OutboxEvent("OrderCreated", order.getId(), toJson(order)));
+}
+// Separate poller reads outbox → publishes to Kafka → marks as sent
+// Guarantees: if order exists in DB, event WILL be published (eventually)</code></pre>
+    <div class="interview-script">
+      <div class="script-step">
+        <span class="script-step-label">Interview answer</span>
+        <p>"Cross-service strong ACID isn't practical in microservices. I use Sagas for multi-step flows with compensating transactions — if payment fails, release inventory and cancel the order. For reliable event delivery I use the Outbox pattern: write business data and outbox event in the same local transaction, then a poller publishes to Kafka. Each service owns its data and uses eventual consistency with clear compensation paths."</p>
+      </div>
+    </div>
+    <p><a class="cross-link" href="#saga-flow">→ See also: Multi-Step Flow / Saga Pattern</a></p>
+  </article>
+</section>
+
+<section id="secure-rest-api">
+  <h2 class="section-title">How Do You Secure REST APIs Using Authentication and Authorization?</h2>
+
+  <article>
+    <h3>Security layers</h3>
+    <span class="tag">Security / REST</span>
+    <pre><code>Client Request
+  → HTTPS/TLS              (encrypt in transit)
+  → API Gateway            (rate limit, WAF, IP allowlist)
+  → Authentication         (WHO are you?)
+  → Authorization          (WHAT can you do?)
+  → Input validation       (prevent injection)
+  → Service logic</code></pre>
+    <table>
+      <tr><th>Concern</th><th>Mechanism</th><th>Example</th></tr>
+      <tr><td>Authentication</td><td>JWT, OAuth 2.0, API keys, mTLS</td><td>Bearer token in Authorization header</td></tr>
+      <tr><td>Authorization</td><td>RBAC, ABAC, scope-based</td><td><code>@PreAuthorize("hasRole('ADMIN')")</code></td></tr>
+      <tr><td>Transport</td><td>HTTPS only, TLS 1.2+</td><td>Reject plain HTTP in production</td></tr>
+      <tr><td>Input validation</td><td>Bean Validation, parameterized queries</td><td><code>@Valid @RequestBody</code>; no string concatenation in SQL</td></tr>
+      <tr><td>Rate limiting</td><td>Gateway token bucket</td><td>100 req/min per API key</td></tr>
+    </table>
+    <pre><code>// Spring Security — JWT + role-based authorization
+@Configuration
+@EnableMethodSecurity
+public class SecurityConfig {
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            .csrf(csrf -> csrf.disable())          // disable only for stateless JWT APIs
+            .sessionManagement(s -> s.sessionCreationPolicy(STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated())
+            .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
+            .build();
+    }
+}
+
+@RestController
+@RequestMapping("/api/admin/users")
+public class AdminUserController {
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity&lt;Void&gt; deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// JWT payload example
+{
+  "sub": "user123",
+  "roles": ["USER", "ADMIN"],
+  "scope": "read:orders write:orders",
+  "exp": 1712345678
+}</code></pre>
+    <div class="tip-box">
+      <strong>401 vs 403:</strong> 401 = invalid/missing token (authentication failed). 403 = valid token but insufficient permissions (authorization failed). Never expose stack traces or internal IDs in error responses.
+    </div>
+  </article>
+</section>
+
+<section id="deployment-strategy">
+  <h2 class="section-title">What Is Your Deployment Strategy to Achieve Zero or Minimal Downtime?</h2>
+  <p class="section-desc">Combines infrastructure strategy, application readiness, and safe database migrations.</p>
+
+  <article>
+    <h3>Deployment strategies compared</h3>
+    <span class="tag">DevOps / CI-CD</span>
+    <table>
+      <tr><th>Strategy</th><th>Downtime</th><th>Rollback</th><th>Best for</th></tr>
+      <tr><td><strong>Rolling update</strong></td><td>Zero (if readiness probes configured)</td><td>Roll back deployment</td><td>Kubernetes default; stateless services</td></tr>
+      <tr><td><strong>Blue-Green</strong></td><td>Zero</td><td>Instant (switch LB back)</td><td>Major releases; need instant rollback</td></tr>
+      <tr><td><strong>Canary</strong></td><td>Zero</td><td>Route traffic back</td><td>High-risk changes; validate on 5% traffic first</td></tr>
+      <tr><td><strong>Feature flags</strong></td><td>Zero</td><td>Toggle off instantly</td><td>Decouple deploy from release</td></tr>
+    </table>
+    <pre><code># Kubernetes rolling update — zero downtime requirements
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0    # never drop below desired count
+      maxSurge: 1          # spin up 1 new pod before killing old
+  template:
+    spec:
+      containers:
+      - name: my-app
+        readinessProbe:    # only receive traffic when healthy
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+        lifecycle:
+          preStop:         # graceful shutdown — finish in-flight requests
+            exec:
+              command: ["sh", "-c", "sleep 10"]
+
+# Blue-Green flow
+1. Blue (v1.0) ← 100% traffic
+2. Deploy v2.0 to Green → smoke tests pass
+3. Switch LB: Green ← 100%
+4. Monitor 15 min → decommission Blue OR rollback instantly
+
+# Database — expand-contract pattern (avoid breaking deploys)
+Phase 1 (expand):  Add nullable column `email_v2` — deploy app reading both
+Phase 2 (migrate): Backfill data
+Phase 3 (contract): App writes only to `email_v2`; drop old column</code></pre>
+    <div class="interview-script">
+      <div class="script-step">
+        <span class="script-step-label">Interview answer</span>
+        <p>"For zero downtime I use rolling updates in Kubernetes with readiness probes and graceful shutdown — maxUnavailable=0 ensures old pods stay up until new ones are healthy. For high-risk releases I prefer blue-green or canary: deploy to green, run smoke tests, shift 5% traffic, monitor error rate and p99, then full cutover. I use feature flags to decouple deployment from release. DB migrations follow expand-contract so schema changes never break the running version."</p>
+      </div>
+    </div>
+    <p><a class="cross-link" href="#zero-downtime">→ See also: Deploy Without Downtime</a> · <a class="cross-link" href="#jenkins-blue-green">Jenkins Pipeline Failure (Blue-Green)</a></p>
   </article>
 </section>
 
