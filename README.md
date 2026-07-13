@@ -9,11 +9,17 @@ A curated collection of interview preparation and learning materials for **Softw
 | Folder | Contents |
 |--------|----------|
 | [`html/`](html/) | Interactive Java interview guide — **start at [`html/index.html`](html/index.html)** |
+| [`html/infosys/`](html/infosys/) | Infosys 8-day interview prep + Core Java beginner guide |
+| [`html/Stream/`](html/Stream/) | Top 100 Java Streams problems (interactive) |
+| [`html/System Design/`](html/System%20Design/) | System design interview guide |
 | [`pdfs/`](pdfs/) | PDF notes, cheat sheets, and interview Q&A documents |
 
 **Quick links**
 - **Web guide (main):** [html/index.html](html/index.html)
 - **Topic checklist (100+):** [html/interview-topics-checklist.html](html/interview-topics-checklist.html)
+- **Infosys prep:** [html/infosys/infosys-interview-prep.html](html/infosys/infosys-interview-prep.html)
+- **Java Streams:** [html/Stream/java-streams-prep.html](html/Stream/java-streams-prep.html)
+- **System Design:** [html/System Design/system-design-interview.html](html/System%20Design/system-design-interview.html)
 
 ---
 
