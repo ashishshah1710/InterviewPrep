@@ -9,6 +9,7 @@ A curated collection of interview preparation and learning materials for **Softw
 | Folder | Contents |
 |--------|----------|
 | [`html/`](html/) | Interactive Java interview guide — **start at [`html/index.html`](html/index.html)** |
+| [`html/production-scenarios/`](html/production-scenarios/) | **2026 Production scenarios** — 25 real-world debugging & design questions |
 | [`html/infosys/`](html/infosys/) | Infosys 8-day interview prep + Core Java beginner guide |
 | [`html/Stream/`](html/Stream/) | Top 100 Java Streams problems (interactive) |
 | [`html/System Design/`](html/System%20Design/) | System design interview guide |
@@ -17,6 +18,7 @@ A curated collection of interview preparation and learning materials for **Softw
 **Quick links**
 - **Web guide (main):** [html/index.html](html/index.html)
 - **Topic checklist (100+):** [html/interview-topics-checklist.html](html/interview-topics-checklist.html)
+- **Production scenarios (2026):** [html/production-scenarios/production-scenarios-2026.html](html/production-scenarios/production-scenarios-2026.html)
 - **Infosys prep:** [html/infosys/infosys-interview-prep.html](html/infosys/infosys-interview-prep.html)
 - **Java Streams:** [html/Stream/java-streams-prep.html](html/Stream/java-streams-prep.html)
 - **System Design:** [html/System Design/system-design-interview.html](html/System%20Design/system-design-interview.html)

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java Backend Production Scenarios — Interview Guide 2026</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --sidebar: #161b22;
+      --panel: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --highlight: #1f6feb33;
+      --code-bg: #0d1117;
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .layout { display: flex; height: 100vh; }
+    .sidebar {
+      width: 340px;
+      min-width: 340px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); }
+    .sidebar-header h1 { font-size: 1rem; font-weight: 600; }
+    .sidebar-header p { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+    .search-box { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+    .topic-list { flex: 1; overflow-y: auto; padding: 8px; }
+    .topic-list::-webkit-scrollbar { width: 6px; }
+    .topic-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 12px 14px 4px;
+    }
+    .topic-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 9px 14px;
+      margin-bottom: 2px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      line-height: 1.35;
+    }
+    .topic-item:hover { background: var(--highlight); color: var(--text); }
+    .topic-item.active { background: var(--highlight); color: var(--accent); font-weight: 500; }
+    .content { flex: 1; overflow-y: auto; padding: 36px 44px; }
+    .welcome { text-align: center; padding: 70px 20px; color: var(--muted); }
+    .welcome h2 { font-size: 1.7rem; color: var(--text); margin-bottom: 12px; }
+    .topic-content h2 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .topic-content .subtitle { color: var(--muted); font-size: 0.92rem; margin-bottom: 24px; }
+    .topic-content h3 { font-size: 1.1rem; color: var(--accent); margin: 24px 0 10px; }
+    .topic-content h4 { font-size: 1rem; margin: 16px 0 8px; }
+    .topic-content p { margin-bottom: 12px; color: #c9d1d9; }
+    .topic-content ul, .topic-content ol { margin: 0 0 14px 22px; color: #c9d1d9; }
+    .topic-content li { margin-bottom: 5px; }
+    .topic-content code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: #ff7b72;
+      border: 1px solid var(--border);
+    }
+    .topic-content pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      margin: 12px 0 16px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: #e6edf3;
+    }
+    .topic-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.88rem;
+    }
+    .topic-content th, .topic-content td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .topic-content th { background: var(--panel); color: var(--accent); }
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .tag-blue { background: #1f6feb33; color: var(--accent); border: 1px solid #388bfd55; }
+    .tag-green { background: #23863633; color: var(--success); border: 1px solid #3fb95055; }
+    .tag-yellow { background: #9e6a0333; color: var(--warning); border: 1px solid #d2992255; }
+    .tag-red { background: #da363333; color: var(--danger); border: 1px solid #f8514955; }
+    .simple-box {
+      background: #1f6feb18;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+    .simple-box h4 { color: var(--accent); margin: 0 0 8px; font-size: 0.92rem; }
+    .steps-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+    .steps-box h4 { margin: 0 0 10px; }
+    .steps-box ol { margin: 0 0 0 20px; }
+    .analogy-box {
+      background: #9e6a0318;
+      border-left: 4px solid var(--warning);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+    .analogy-box h4 { color: var(--warning); margin: 0 0 8px; }
+    .mistake-box {
+      background: #da363318;
+      border: 1px solid #da363344;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+    .mistake-box h4 { color: var(--danger); margin: 0 0 8px; }
+    .answer-simple {
+      background: #23863622;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+    }
+    .answer-simple strong { color: var(--success); }
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; max-height: 42vh; }
+      .content { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Production Scenarios 2026</h1>
+        <p>Java Backend · Microservices · 3–8 YOE · When Things Break</p>
+      </div>
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search scenarios..." autocomplete="off">
+      </div>
+      <nav class="topic-list" id="topicList"></nav>
+    </aside>
+    <main class="content" id="contentPanel">
+      <div class="welcome">
+        <h2>Production-Based Interview Guide</h2>
+        <p>Companies no longer ask definitions — they want to know how you think when production breaks.</p>
+        <p style="margin-top:14px;font-size:0.85rem;">25 real-world scenarios with investigation steps, root causes, solutions, code examples, and interview answers.</p>
+        <p style="margin-top:10px;font-size:0.82rem;color:var(--accent);">Select a scenario from the sidebar to begin.</p>
+      </div>
+    </main>
+  </div>
+  <script src="production-scenarios-2026-content.js"></script>
+  <script>
+    const topicList = document.getElementById('topicList');
+    const contentPanel = document.getElementById('contentPanel');
+    const searchInput = document.getElementById('search');
+    let activeId = null;
+
+    const SECTIONS = [
+      { label: 'Start', ids: ['overview'] },
+      { label: 'Performance & Latency', ids: ['q01','q09','q15','q16','q17'] },
+      { label: 'Resilience & Patterns', ids: ['q02','q03'] },
+      { label: 'Database & Connections', ids: ['q04'] },
+      { label: 'Idempotency & Payments', ids: ['q05','q06','q20'] },
+      { label: 'Caching & Redis', ids: ['q07','q08'] },
+      { label: 'Messaging & Files', ids: ['q10','q11','q12','q13'] },
+      { label: 'Kubernetes & Deploy', ids: ['q14','q21','q22'] },
+      { label: 'Scale & Security', ids: ['q23'] },
+      { label: 'Debugging & Transactions', ids: ['q18','q19','q24','q25'] }
+    ];
+
+    function renderSidebar(filter = '') {
+      topicList.innerHTML = '';
+      const q = filter.toLowerCase();
+      SECTIONS.forEach(section => {
+        const visible = section.ids.filter(id => {
+          const t = TOPICS[id];
+          return t && (!q || t.title.toLowerCase().includes(q) || (t.html && t.html.toLowerCase().includes(q)));
+        });
+        if (!visible.length) return;
+        const label = document.createElement('div');
+        label.className = 'section-label';
+        label.textContent = section.label;
+        topicList.appendChild(label);
+        visible.forEach(id => {
+          const btn = document.createElement('button');
+          btn.className = 'topic-item' + (id === activeId ? ' active' : '');
+          btn.textContent = TOPICS[id].title;
+          btn.onclick = () => showTopic(id);
+          topicList.appendChild(btn);
+        });
+      });
+    }
+
+    function showTopic(id) {
+      activeId = id;
+      const topic = TOPICS[id];
+      if (!topic) return;
+      contentPanel.innerHTML = '<div class="topic-content">' + topic.html + '</div>';
+      renderSidebar(searchInput.value);
+      contentPanel.scrollTop = 0;
+      history.replaceState(null, '', '#' + id);
+    }
+
+    searchInput.addEventListener('input', e => renderSidebar(e.target.value));
+    renderSidebar();
+    const hash = location.hash.slice(1);
+    if (hash && TOPICS[hash]) showTopic(hash);
+  </script>
+</body>
+</html>
