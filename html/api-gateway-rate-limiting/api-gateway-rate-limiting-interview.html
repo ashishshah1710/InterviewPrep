@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Gateway &amp; Rate Limiting — Interview Guide (2026)</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --sidebar: #161b22;
+      --panel: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --highlight: #1f6feb33;
+      --code-bg: #0d1117;
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .layout { display: flex; height: 100vh; }
+    .sidebar {
+      width: 340px;
+      min-width: 340px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-header { padding: 18px; border-bottom: 1px solid var(--border); }
+    .sidebar-header h1 { font-size: 0.98rem; font-weight: 600; }
+    .sidebar-header p { font-size: 0.76rem; color: var(--muted); margin-top: 4px; }
+    .search-box { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.84rem;
+      outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+    .topic-list { flex: 1; overflow-y: auto; padding: 6px; }
+    .topic-list::-webkit-scrollbar { width: 6px; }
+    .topic-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 10px 12px 3px;
+    }
+    .topic-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 8px 12px;
+      margin-bottom: 2px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      cursor: pointer;
+      line-height: 1.35;
+    }
+    .topic-item:hover { background: var(--highlight); color: var(--text); }
+    .topic-item.active { background: var(--highlight); color: var(--accent); font-weight: 500; }
+    .content { flex: 1; overflow-y: auto; padding: 34px 42px; max-width: 960px; }
+    .content::-webkit-scrollbar { width: 8px; }
+    .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .welcome { text-align: center; padding: 65px 20px; color: var(--muted); }
+    .welcome h2 { font-size: 1.65rem; color: var(--text); margin-bottom: 10px; }
+    .welcome p { max-width: 560px; margin: 0 auto 8px; }
+    .topic-content h2 {
+      font-size: 1.55rem;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .topic-content .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 22px; }
+    .topic-content h3 { font-size: 1.08rem; color: var(--accent); margin: 22px 0 10px; }
+    .topic-content h4 { font-size: 0.96rem; margin: 14px 0 7px; }
+    .topic-content p { margin-bottom: 11px; color: #c9d1d9; }
+    .topic-content ul, .topic-content ol { margin: 0 0 12px 22px; color: #c9d1d9; }
+    .topic-content li { margin-bottom: 4px; }
+    .topic-content strong { color: var(--text); }
+    .topic-content code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.86em;
+      color: #ff7b72;
+      border: 1px solid var(--border);
+    }
+    .topic-content pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 15px;
+      overflow-x: auto;
+      margin: 11px 0 14px;
+      font-size: 0.8rem;
+      line-height: 1.48;
+      color: #e6edf3;
+    }
+    .topic-content pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #c9d1d9;
+    }
+    .topic-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.86rem;
+    }
+    .topic-content th, .topic-content td {
+      border: 1px solid var(--border);
+      padding: 7px 11px;
+      text-align: left;
+    }
+    .topic-content th { background: var(--panel); color: var(--accent); }
+    .topic-content td { color: #c9d1d9; }
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 12px;
+      font-size: 0.73rem;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+    .tag-blue { background: #1f6feb33; color: var(--accent); border: 1px solid #388bfd55; }
+    .tag-green { background: #23863633; color: var(--success); border: 1px solid #3fb95055; }
+    .tag-yellow { background: #9e6a0333; color: var(--warning); border: 1px solid #d2992255; }
+    .tag-red { background: #da363333; color: var(--danger); border: 1px solid #f8514955; }
+    .simple-box {
+      background: #1f6feb18;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 13px 16px;
+      margin: 12px 0;
+    }
+    .simple-box h4 { color: var(--accent); margin: 0 0 7px; font-size: 0.9rem; }
+    .steps-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin: 12px 0;
+    }
+    .steps-box h4 { margin: 0 0 9px; }
+    .steps-box ol { margin: 0 0 0 20px; }
+    .steps-box li { margin-bottom: 8px; }
+    .analogy-box {
+      background: #9e6a0318;
+      border-left: 4px solid var(--warning);
+      border-radius: 0 8px 8px 0;
+      padding: 13px 16px;
+      margin: 12px 0;
+    }
+    .analogy-box h4 { color: var(--warning); margin: 0 0 7px; }
+    .mistake-box {
+      background: #da363318;
+      border: 1px solid #da363344;
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin: 12px 0;
+    }
+    .mistake-box h4 { color: var(--danger); margin: 0 0 7px; }
+    .answer-simple {
+      background: #23863622;
+      border-radius: 6px;
+      padding: 10px 13px;
+      margin: 11px 0;
+      font-size: 0.88rem;
+    }
+    .answer-simple strong { color: var(--success); }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .card h4 { margin: 0 0 7px; color: var(--accent); font-size: 0.9rem; }
+    .card p { font-size: 0.86rem; margin: 0; color: #c9d1d9; }
+    .diagram {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 14px 0;
+      font-family: 'Courier New', Consolas, monospace;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      overflow-x: auto;
+      white-space: pre;
+      color: #8b949e;
+    }
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; max-height: 42vh; }
+      .content { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>API Gateway &amp; Rate Limiting</h1>
+        <p>Lenskart · Swiggy · JP Morgan · Product Companies · 2026</p>
+      </div>
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search questions..." autocomplete="off">
+      </div>
+      <nav class="topic-list" id="topicList"></nav>
+    </aside>
+    <main class="content" id="contentPanel">
+      <div class="welcome">
+        <h2>API Gateway &amp; Rate Limiting Interview Guide</h2>
+        <p>25 must-know questions for Java Backend, Spring Boot, and Microservices interviews at product companies.</p>
+        <p style="margin-top:12px;font-size:0.84rem;">Each question includes plain-English explanation, diagrams, code samples, 30-second answer, and common mistakes.</p>
+        <p style="margin-top:8px;font-size:0.8rem;color:var(--accent);">Select a question from the sidebar to begin.</p>
+      </div>
+    </main>
+  </div>
+  <script src="api-gateway-rate-limiting-content.js"></script>
+  <script>
+    const topicList = document.getElementById('topicList');
+    const contentPanel = document.getElementById('contentPanel');
+    const searchInput = document.getElementById('search');
+    let activeId = null;
+
+    const SECTIONS = [
+      { label: 'Overview', ids: ['overview'] },
+      { label: 'API Gateway (Q1–Q10)', ids: ['q01','q02','q03','q04','q05','q06','q07','q08','q09','q10'] },
+      { label: 'Rate Limiting (Q11–Q25)', ids: ['q11','q12','q13','q14','q15','q16','q17','q18','q19','q20','q21','q22','q23','q24','q25'] }
+    ];
+
+    function renderSidebar(filter = '') {
+      topicList.innerHTML = '';
+      const q = filter.toLowerCase();
+      SECTIONS.forEach(section => {
+        const visible = section.ids.filter(id => {
+          const t = TOPICS[id];
+          return t && (!q || t.title.toLowerCase().includes(q) || (t.html && t.html.toLowerCase().includes(q)));
+        });
+        if (!visible.length) return;
+        const label = document.createElement('div');
+        label.className = 'section-label';
+        label.textContent = section.label;
+        topicList.appendChild(label);
+        visible.forEach(id => {
+          const btn = document.createElement('button');
+          btn.className = 'topic-item' + (id === activeId ? ' active' : '');
+          btn.textContent = TOPICS[id].title;
+          btn.onclick = () => showTopic(id);
+          topicList.appendChild(btn);
+        });
+      });
+    }
+
+    function showTopic(id) {
+      activeId = id;
+      const topic = TOPICS[id];
+      if (!topic) return;
+      contentPanel.innerHTML = '<div class="topic-content">' + topic.html + '</div>';
+      renderSidebar(searchInput.value);
+      contentPanel.scrollTop = 0;
+      history.replaceState(null, '', '#' + id);
+    }
+
+    searchInput.addEventListener('input', e => renderSidebar(e.target.value));
+    renderSidebar();
+    const hash = location.hash.slice(1);
+    if (hash && TOPICS[hash]) showTopic(hash);
+  </script>
+</body>
+</html>

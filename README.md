@@ -10,6 +10,7 @@ A curated collection of interview preparation and learning materials for **Softw
 |--------|----------|
 | [`html/`](html/) | Interactive Java interview guide — **start at [`html/index.html`](html/index.html)** |
 | [`html/top50/`](html/top50/) | **Top 50 must-prepare** Java Backend questions (3–5 YOE, 2026) |
+| [`html/api-gateway-rate-limiting/`](html/api-gateway-rate-limiting/) | **API Gateway & Rate Limiting** — 25 interview questions (2026) |
 | [`html/production-scenarios/`](html/production-scenarios/) | **2026 Production scenarios** — 25 real-world debugging & design questions |
 | [`html/infosys/`](html/infosys/) | Infosys 8-day interview prep + Core Java beginner guide |
 | [`html/Stream/`](html/Stream/) | Top 100 Java Streams problems (interactive) |
@@ -20,6 +21,7 @@ A curated collection of interview preparation and learning materials for **Softw
 - **Web guide (main):** [html/index.html](html/index.html) · [Open on GitHub Pages](https://ashishshah1710.github.io/InterviewPrep/html/index.html)
 - **Topic checklist (100+):** [html/interview-topics-checklist.html](html/interview-topics-checklist.html)
 - **Top 50 Java Backend (3–5 YOE):** [html/top50/java-backend-top50-2026.html](html/top50/java-backend-top50-2026.html)
+- **API Gateway & Rate Limiting (25 Q):** [html/api-gateway-rate-limiting/api-gateway-rate-limiting-interview.html](html/api-gateway-rate-limiting/api-gateway-rate-limiting-interview.html)
 - **Production scenarios (2026):** [html/production-scenarios/production-scenarios-2026.html](html/production-scenarios/production-scenarios-2026.html)
 - **Infosys prep:** [html/infosys/infosys-interview-prep.html](html/infosys/infosys-interview-prep.html)
 - **Java Streams:** [html/Stream/java-streams-prep.html](html/Stream/java-streams-prep.html)
@@ -45,6 +47,7 @@ A curated collection of interview preparation and learning materials for **Softw
 | Guide | Link |
 |-------|------|
 | **Top 50 Java Backend (3–5 YOE)** | https://ashishshah1710.github.io/InterviewPrep/html/top50/java-backend-top50-2026.html |
+| **API Gateway & Rate Limiting (25 Q)** | https://ashishshah1710.github.io/InterviewPrep/html/api-gateway-rate-limiting/api-gateway-rate-limiting-interview.html |
 | **Production Scenarios (25 Q)** | https://ashishshah1710.github.io/InterviewPrep/html/production-scenarios/production-scenarios-2026.html |
 | **Infosys 8-Day Prep** | https://ashishshah1710.github.io/InterviewPrep/html/infosys/infosys-interview-prep.html |
 | **Core Java Beginner Guide** | https://ashishshah1710.github.io/InterviewPrep/html/infosys/core-java-beginner-guide.html |
