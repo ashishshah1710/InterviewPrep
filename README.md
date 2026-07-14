@@ -17,12 +17,106 @@ A curated collection of interview preparation and learning materials for **Softw
 | [`pdfs/`](pdfs/) | PDF notes, cheat sheets, and interview Q&A documents |
 
 **Quick links**
-- **Web guide (main):** [html/index.html](html/index.html)
+- **Web guide (main):** [html/index.html](html/index.html) · [Open on GitHub Pages](https://ashishshah1710.github.io/InterviewPrep/html/index.html)
 - **Topic checklist (100+):** [html/interview-topics-checklist.html](html/interview-topics-checklist.html)
+- **Top 50 Java Backend (3–5 YOE):** [html/top50/java-backend-top50-2026.html](html/top50/java-backend-top50-2026.html)
 - **Production scenarios (2026):** [html/production-scenarios/production-scenarios-2026.html](html/production-scenarios/production-scenarios-2026.html)
 - **Infosys prep:** [html/infosys/infosys-interview-prep.html](html/infosys/infosys-interview-prep.html)
 - **Java Streams:** [html/Stream/java-streams-prep.html](html/Stream/java-streams-prep.html)
 - **System Design:** [html/System Design/system-design-interview.html](html/System%20Design/system-design-interview.html)
+
+---
+
+## All Guide Links (GitHub Pages) — Easy Access
+
+> **Base URL:** https://ashishshah1710.github.io/InterviewPrep/  
+> Bookmark this section — every interactive guide in one place.
+
+### Main entry points
+
+| Resource | Link |
+|----------|------|
+| **GitHub repo** | https://github.com/ashishshah1710/InterviewPrep |
+| **Home (auto-redirect)** | https://ashishshah1710.github.io/InterviewPrep/ |
+| **Main study roadmap** | https://ashishshah1710.github.io/InterviewPrep/html/index.html |
+
+### Featured guides (2026)
+
+| Guide | Link |
+|-------|------|
+| **Top 50 Java Backend (3–5 YOE)** | https://ashishshah1710.github.io/InterviewPrep/html/top50/java-backend-top50-2026.html |
+| **Production Scenarios (25 Q)** | https://ashishshah1710.github.io/InterviewPrep/html/production-scenarios/production-scenarios-2026.html |
+| **Infosys 8-Day Prep** | https://ashishshah1710.github.io/InterviewPrep/html/infosys/infosys-interview-prep.html |
+| **Core Java Beginner Guide** | https://ashishshah1710.github.io/InterviewPrep/html/infosys/core-java-beginner-guide.html |
+| **Core Java (10-page compact)** | https://ashishshah1710.github.io/InterviewPrep/html/infosys/core-java-beginner-guide-10pg.html |
+| **Java Streams — 100 Problems** | https://ashishshah1710.github.io/InterviewPrep/html/Stream/java-streams-prep.html |
+| **Java Streams (LinkedIn version)** | https://ashishshah1710.github.io/InterviewPrep/html/Stream/java-streams-linkedin.html |
+| **System Design Interview** | https://ashishshah1710.github.io/InterviewPrep/html/System%20Design/system-design-interview.html |
+
+### Start here
+
+| Guide | Link |
+|-------|------|
+| **Java Learning Journey** | https://ashishshah1710.github.io/InterviewPrep/html/java-learning-journey.html |
+| **100+ Topic Checklist** | https://ashishshah1710.github.io/InterviewPrep/html/interview-topics-checklist.html |
+| **Deep Dive Q&A (35 topics)** | https://ashishshah1710.github.io/InterviewPrep/html/interview-questions-deep-dive.html |
+| **How to Answer (4-step script)** | https://ashishshah1710.github.io/InterviewPrep/html/interview-answer-framework.html |
+| **Java + Spring Interview Guide** | https://ashishshah1710.github.io/InterviewPrep/html/java-spring-interview-guide.html |
+
+### Phase 1 — Core Java
+
+| Guide | Link |
+|-------|------|
+| **Java OOP & Constructors** | https://ashishshah1710.github.io/InterviewPrep/html/java-oop.html |
+| **Core Java & Concurrency** | https://ashishshah1710.github.io/InterviewPrep/html/java-concurrency.html |
+| **1-Min Multithreading Cheat Sheet** | https://ashishshah1710.github.io/InterviewPrep/html/multithreading-1min.html |
+| **20 Concurrency Concepts** | https://ashishshah1710.github.io/InterviewPrep/html/concurrency-20.html |
+| **Multithreading (Pro Level)** | https://ashishshah1710.github.io/InterviewPrep/html/multithreading-pro.html |
+| **Additional Topics (18)** | https://ashishshah1710.github.io/InterviewPrep/html/additional-topics.html |
+
+### Phase 2–5 — DSA, Spring, SQL, Design
+
+| Guide | Link |
+|-------|------|
+| **DSA & Coding** | https://ashishshah1710.github.io/InterviewPrep/html/dsa-coding.html |
+| **Spring Boot** | https://ashishshah1710.github.io/InterviewPrep/html/spring-boot.html |
+| **SQL & Database** | https://ashishshah1710.github.io/InterviewPrep/html/sql.html |
+| **Design Patterns** | https://ashishshah1710.github.io/InterviewPrep/html/design-patterns.html |
+| **Low-Level Design** | https://ashishshah1710.github.io/InterviewPrep/html/lld.html |
+
+### Phase 6–8 — Microservices, Production, Interview
+
+| Guide | Link |
+|-------|------|
+| **Microservices & DevOps** | https://ashishshah1710.github.io/InterviewPrep/html/microservices.html |
+| **Microservices 2026 (3–5 YOE)** | https://ashishshah1710.github.io/InterviewPrep/html/microservices-2026.html |
+| **Event-Driven Architecture** | https://ashishshah1710.github.io/InterviewPrep/html/event-driven-architecture.html |
+| **Production Topics** | https://ashishshah1710.github.io/InterviewPrep/html/production-topics.html |
+| **Latency vs Throughput** | https://ashishshah1710.github.io/InterviewPrep/html/latency-throughput.html |
+| **Real Java — 20 Production Q** | https://ashishshah1710.github.io/InterviewPrep/html/real-java-interview.html |
+| **Interview Rounds** | https://ashishshah1710.github.io/InterviewPrep/html/interview-rounds.html |
+| **Top Companies (5+ YOE)** | https://ashishshah1710.github.io/InterviewPrep/html/top-companies.html |
+
+### PDF notes
+
+| Resource | Link |
+|----------|------|
+| **PDF folder (GitHub browse)** | https://github.com/ashishshah1710/InterviewPrep/tree/main/pdfs |
+
+### Quick copy-paste (share with friends)
+
+```
+Java Interview Prep Hub:
+https://ashishshah1710.github.io/InterviewPrep/html/index.html
+
+Top 50 (3-5 YOE): https://ashishshah1710.github.io/InterviewPrep/html/top50/java-backend-top50-2026.html
+Production Scenarios: https://ashishshah1710.github.io/InterviewPrep/html/production-scenarios/production-scenarios-2026.html
+Infosys Prep: https://ashishshah1710.github.io/InterviewPrep/html/infosys/infosys-interview-prep.html
+Java Streams: https://ashishshah1710.github.io/InterviewPrep/html/Stream/java-streams-prep.html
+System Design: https://ashishshah1710.github.io/InterviewPrep/html/System%20Design/system-design-interview.html
+
+Full repo: https://github.com/ashishshah1710/InterviewPrep
+```
 
 ---
 
