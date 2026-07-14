@@ -9,6 +9,7 @@ A curated collection of interview preparation and learning materials for **Softw
 | Folder | Contents |
 |--------|----------|
 | [`html/`](html/) | Interactive Java interview guide — **start at [`html/index.html`](html/index.html)** |
+| [`html/top50/`](html/top50/) | **Top 50 must-prepare** Java Backend questions (3–5 YOE, 2026) |
 | [`html/production-scenarios/`](html/production-scenarios/) | **2026 Production scenarios** — 25 real-world debugging & design questions |
 | [`html/infosys/`](html/infosys/) | Infosys 8-day interview prep + Core Java beginner guide |
 | [`html/Stream/`](html/Stream/) | Top 100 Java Streams problems (interactive) |
