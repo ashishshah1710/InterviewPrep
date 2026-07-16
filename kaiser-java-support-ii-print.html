@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kaiser Java Support II — Print Cheatsheet</title>
+  <style>
+    @page { size: A4; margin: 8mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 7.2pt;
+      line-height: 1.28;
+      color: #111;
+      background: #fff;
+      padding: 0;
+    }
+    h1 {
+      font-size: 13pt;
+      text-align: center;
+      margin-bottom: 2px;
+      color: #006ba6;
+    }
+    .sub {
+      text-align: center;
+      font-size: 7pt;
+      color: #444;
+      margin-bottom: 6px;
+      border-bottom: 1.5px solid #006ba6;
+      padding-bottom: 4px;
+    }
+    h2 {
+      font-size: 8pt;
+      background: #006ba6;
+      color: #fff;
+      padding: 2px 5px;
+      margin: 5px 0 3px;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 7.2pt;
+      color: #006ba6;
+      margin: 3px 0 1px;
+      page-break-after: avoid;
+    }
+    .cols {
+      column-count: 2;
+      column-gap: 10px;
+      column-rule: 1px solid #ddd;
+    }
+    .full { column-span: all; }
+    p { margin-bottom: 2px; }
+    ul, ol { margin: 0 0 3px 12px; }
+    li { margin-bottom: 1px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 6.5pt;
+      margin: 2px 0 4px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #bbb;
+      padding: 2px 3px;
+      vertical-align: top;
+    }
+    th { background: #e8f4fc; font-weight: 600; }
+    pre, code {
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 6.2pt;
+      background: #f4f4f4;
+    }
+    pre {
+      padding: 3px 4px;
+      margin: 2px 0;
+      border: 1px solid #ddd;
+      white-space: pre-wrap;
+      word-break: break-all;
+      page-break-inside: avoid;
+    }
+    code { padding: 0 2px; }
+    .fw { font-weight: 700; }
+    .box {
+      border: 1px solid #006ba6;
+      padding: 3px 5px;
+      margin: 3px 0;
+      background: #f0f8ff;
+      page-break-inside: avoid;
+    }
+    .box strong { color: #006ba6; }
+    .day {
+      display: inline-block;
+      background: #e8f4fc;
+      border: 1px solid #99c;
+      padding: 1px 4px;
+      margin: 1px 2px 1px 0;
+      font-size: 6.5pt;
+    }
+    @media screen {
+      body { max-width: 210mm; margin: 10px auto; padding: 10mm; box-shadow: 0 0 8px #ccc; }
+    }
+    @media print {
+      body { padding: 0; }
+      .cols { column-count: 2; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Java Support II — Interview Cheatsheet</h1>
+<p class="sub">Kaiser Permanente · Mindtel Global · Java · SQL · Kafka · Splunk · JIRA · <strong>Print: 2 pages</strong></p>
+
+<div class="cols">
+
+<div class="full box">
+  <strong>TRIAGE FRAMEWORK:</strong> DETECT → TRIAGE → MITIGATE → RESOLVE → DOCUMENT &nbsp;|&nbsp;
+  <strong>Bridge opener:</strong> "Declaring Sev-2 for [service]. Impact: [X]. Mitigation: [Y]. Next update in 30 min."
+</div>
+
+<h2>5-DAY PLAN</h2>
+<p><span class="day">Day 1</span> Java: jstack, exceptions, thread dumps</p>
+<p><span class="day">Day 2</span> SQL: validation, joins, locks, EXPLAIN</p>
+<p><span class="day">Day 3</span> Kafka: lag, rebalance, poison pill</p>
+<p><span class="day">Day 4</span> Splunk: SPL, correlationId, alerts</p>
+<p><span class="day">Day 5</span> JIRA + 3 scenarios + STAR mock</p>
+
+<h2>1. JAVA — FIRST 5 MINUTES</h2>
+<table>
+  <tr><th>#</th><th>Action</th><th>Look For</th></tr>
+  <tr><td>1</td><td>Blast radius</td><td>Service, env, region, % affected</td></tr>
+  <tr><td>2</td><td>Recent changes</td><td>Deploy, config, DB migration, cert</td></tr>
+  <tr><td>3</td><td>Health</td><td>/actuator/health, readiness vs liveness</td></tr>
+  <tr><td>4</td><td>Metrics</td><td>CPU, heap, threads, GC, error rate, p95</td></tr>
+  <tr><td>5</td><td>Splunk</td><td>ERROR spike, top exception, correlationId</td></tr>
+  <tr><td>6</td><td>Thread dump</td><td>3 dumps 10s apart if CPU/hung</td></tr>
+  <tr><td>7</td><td>Heap dump</td><td>Only if OOM — after thread dump</td></tr>
+</table>
+
+<h3>Commands</h3>
+<pre>jstack &lt;pid&gt;  |  jcmd &lt;pid&gt; Thread.print
+jstat -gcutil &lt;pid&gt; 1000 10
+kubectl exec -it &lt;pod&gt; -- jstack 1
+kubectl top pod -n &lt;ns&gt;
+curl localhost:8080/actuator/health
+curl .../metrics/hikaricp.connections.active</pre>
+
+<h3>Thread Dump Scan Order</h3>
+<ol>
+  <li>BLOCKED on same lock → deadlock/contention</li>
+  <li>RUNNABLE same stack frame → CPU hot loop</li>
+  <li>pool/http-nio WAITING on Hikari → pool exhausted</li>
+  <li>kafka-consumer stuck → slow DB write in handler</li>
+</ol>
+
+<h3>Top Exceptions</h3>
+<table>
+  <tr><th>Exception</th><th>Cause</th><th>Action</th></tr>
+  <tr><td>OOM heap</td><td>Leak, large payload</td><td>Heap dump; -Xmx; Splunk payload</td></tr>
+  <tr><td>CannotGetJdbcConnection</td><td>Pool exhausted</td><td>Hikari metrics; blocking SQL</td></tr>
+  <tr><td>SQLTimeoutException</td><td>Slow query/lock</td><td>pg_stat_activity; EXPLAIN</td></tr>
+  <tr><td>SocketTimeoutException</td><td>Downstream slow</td><td>Trace dependency timeouts</td></tr>
+  <tr><td>RejectedExecutionException</td><td>Thread pool full</td><td>Queue depth; scale/shed load</td></tr>
+  <tr><td>Kafka TimeoutException</td><td>Broker/ISR issue</td><td>Lag; broker health</td></tr>
+</table>
+
+<h2>2. SQL — VALIDATION & TRIAGE</h2>
+<p><strong>Workflow:</strong> Read-only → count → MAX(timestamp) → duplicates/orphans → locks → EXPLAIN</p>
+<pre>-- Row count
+SELECT COUNT(*) FROM member_eligibility WHERE effective_date = CURRENT_DATE;
+-- Duplicates
+SELECT member_id, COUNT(*) FROM claims_staging GROUP BY 1 HAVING COUNT(*)>1;
+-- Orphans
+SELECT c.claim_id FROM claims c LEFT JOIN members m ON c.member_id=m.member_id WHERE m.member_id IS NULL;
+-- Stale feed
+SELECT source_system, MAX(last_updated_ts) FROM eligibility_feed GROUP BY 1;
+-- Blocking (PostgreSQL)
+SELECT pid, NOW()-query_start AS dur, LEFT(query,120) FROM pg_stat_activity WHERE state!='idle' ORDER BY dur DESC;
+-- Latest plan per member (LATERAL)
+SELECT m.member_id, e.plan_code FROM members m JOIN LATERAL (
+  SELECT plan_code FROM member_eligibility e WHERE e.member_id=m.member_id
+  ORDER BY effective_date DESC LIMIT 1) e ON TRUE;</pre>
+
+<h2>3. KAFKA — LAG TRIAGE</h2>
+<p><strong>30-sec answer:</strong> Producers → partitioned topics → consumer groups read offsets. Lag = log end − current offset.</p>
+<pre>kafka-consumer-groups.sh --bootstrap-server &lt;broker&gt;:9092 \
+  --group eligibility-consumer-prod --describe
+kafka-topics.sh --bootstrap-server &lt;broker&gt;:9092 --describe --topic patient-eligibility-events</pre>
+<table>
+  <tr><th>Signal</th><th>Cause</th><th>Action</th></tr>
+  <tr><td>Lag all partitions</td><td>Slow consumer</td><td>Thread dump; DB; scale ≤ partitions</td></tr>
+  <tr><td>Lag one partition</td><td>Hot key</td><td>Identify skewed member_id</td></tr>
+  <tr><td>Rebalance loop</td><td>&gt; max.poll.interval</td><td>Faster handler; smaller batch</td></tr>
+  <tr><td>Poison pill</td><td>Bad message retries</td><td>DLT; skip; replay offset</td></tr>
+</table>
+<p><strong>Healthcare:</strong> No PHI in logs; partition key = member_id; lag = stale eligibility = member impact</p>
+
+<h2>4. SPLUNK — SPL TEMPLATES</h2>
+<p><strong>Fields:</strong> index, sourcetype, level, correlationId, exception, host</p>
+<pre>-- Error spike
+index=kp_apps level=ERROR earliest=-1h | timechart span=5m count
+-- Top exceptions
+index=kp_apps earliest=-30m | rex field=_raw "(?&lt;ex&gt;[a-zA-Z0-9_.]+Exception)"
+| stats count by ex | sort - count
+-- Trace request
+index=kp_apps correlationId="&lt;id&gt;" earliest=-24h | sort _time | table _time host level message
+-- JDBC pool
+index=kp_apps earliest=-2h ("CannotGetJdbcConnection" OR "HikariPool" OR "SQLTimeout")
+| stats count by host, message
+-- Kafka issues
+index=kp_apps earliest=-2h ("rebalance" OR "offset commit" OR "org.apache.kafka")
+| stats count by message
+-- Deploy correlation
+index=kp_deployments OR index=kp_apps earliest=-4h | sort _time
+-- Alert
+index=kp_apps level=ERROR earliest=-5m | stats count as c | where c > 50</pre>
+
+<h2>5. JIRA / SEVERITY</h2>
+<table>
+  <tr><th>Sev</th><th>Definition</th><th>Response</th></tr>
+  <tr><td>1</td><td>Patient care critical, widespread</td><td>Bridge, 15-min updates</td></tr>
+  <tr><td>2</td><td>Major degradation</td><td>War room, hourly updates</td></tr>
+  <tr><td>3</td><td>Limited impact</td><td>Business hours</td></tr>
+</table>
+<p><strong>Prioritize:</strong> Safety/compliance → patient impact → breadth → duration → workaround</p>
+<p><strong>JIRA comment:</strong> Impact | Status | Actions (Splunk/Kafka/SQL evidence) | Next steps | Links</p>
+<p><strong>Roles:</strong> Incident Commander (timeline) · SME (triage) · Scribe (JIRA) · No PHI in tickets</p>
+
+<h2>6. SCENARIO QUICK SCRIPTS</h2>
+<h3>A: Kafka Eligibility Lag +45k</h3>
+<ol>
+  <li>Sev-2; kafka-consumer-groups --describe</li>
+  <li>Splunk: SQLTimeout + lag timechart</li>
+  <li>Thread dump: Hikari WAITING; SQL blocking PID</li>
+  <li>Mitigate: kill blocker (runbook); pause batch; don't scale if at partition count</li>
+</ol>
+<h3>B: High-CPU Java (95%)</h3>
+<ol>
+  <li>3× jstack 10s apart — RUNNABLE same frame = hot loop</li>
+  <li>Splunk: trace correlationId to bad input</li>
+  <li>Mitigate: feature flag off; restart hot pods; engage dev with dumps</li>
+</ol>
+<h3>C: Wrong Eligibility Plan</h3>
+<ol>
+  <li>SQL: member_eligibility vs enrollment source — FULL OUTER JOIN mismatch</li>
+  <li>Check feed MAX(timestamp); Kafka lag may be 0</li>
+  <li>Splunk: JsonMappingException = schema drift; replay from offset</li>
+</ol>
+
+<h2>7. STAR STORIES (YOUR AMDOCS)</h2>
+<p><strong>Incident lead:</strong> USCC go-live Mexico — 15+ incidents, 30-min JIRA updates, Splunk correlation, 3 UAT cycles, on-time sign-off.</p>
+<p><strong>Prioritization:</strong> Kafka lag (broad) first → OOM to teammate → single-account SQL last with rationale in JIRA.</p>
+<p><strong>Coordination:</strong> XL Axiata — unified Splunk dashboard, 45 min → 5 min detection (89%), blameless RCA.</p>
+
+<div class="full box">
+  <strong>ELEVATOR PITCH:</strong> Hands-on Java production support — 4+ yrs Spring Boot microservices, Splunk triage, Kafka pipeline monitoring, SQL data validation, JIRA incident coordination including onsite go-live cutovers (5M+ txn/month).
+</div>
+
+<div class="full box">
+  <strong>DAY-BEFORE 30 MIN:</strong> Thread dump order · 5 SPL queries · kafka-consumer-groups --describe · SQL blocking query · 3 STAR stories · Detect→Triage→Mitigate→Resolve→Document
+</div>
+
+</div>
+</body>
+</html>

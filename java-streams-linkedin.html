@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top 100 Java Stream Interview Problems — LinkedIn Carousel</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --java-orange: #f89820;
+      --java-dark: #5382a1;
+      --java-deep: #2d2d2d;
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #f0f6fc;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --slide-size: 1080px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #1a1a2e;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .toolbar h1 { font-size: 1rem; font-weight: 600; }
+    .toolbar p { font-size: 0.8rem; color: var(--muted); }
+    .toolbar-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--java-orange), #e76f00);
+      border-color: transparent;
+      color: #fff;
+    }
+    .btn-primary:hover { opacity: 0.9; color: #fff; border-color: transparent; }
+    .slide-indicator {
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding: 8px 14px;
+      background: var(--panel);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Viewer ── */
+    .viewer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 20px 60px;
+      gap: 24px;
+    }
+    .slide-wrapper {
+      position: relative;
+    }
+    .slide-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { border-color: var(--java-orange); color: var(--java-orange); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ── Slide (1080×1080 LinkedIn square) ── */
+    .slide {
+      width: var(--slide-size);
+      height: var(--slide-size);
+      background: linear-gradient(145deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+      border-radius: 0;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      transform-origin: top center;
+    }
+
+    /* Scale down for screen preview */
+    @media (max-width: 1120px) {
+      .slide { transform: scale(calc(min(1, (100vw - 40px) / 1080))); margin-bottom: calc(-1 * var(--slide-size) * (1 - min(1, (100vw - 40px) / 1080))); }
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(248,152,32,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .slide::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(83,130,161,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .slide-header {
+      padding: 48px 56px 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(248,152,32,0.15);
+      border: 1px solid rgba(248,152,32,0.4);
+      color: var(--java-orange);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 30px;
+      margin-bottom: 20px;
+    }
+    .slide-title {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .slide-title .highlight {
+      background: linear-gradient(90deg, var(--java-orange), #ffc966);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .slide-subtitle {
+      font-size: 26px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .slide-body {
+      flex: 1;
+      padding: 8px 56px 48px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .question-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .question-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      font-size: 24px;
+      line-height: 1.35;
+      color: #c9d1d9;
+    }
+    .question-list li .num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: rgba(88,166,255,0.15);
+      border: 1px solid rgba(88,166,255,0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+    .question-list.compact li { font-size: 21px; gap: 12px; }
+    .question-list.compact li .num { width: 32px; height: 32px; font-size: 14px; }
+
+    .slide-footer {
+      padding: 20px 56px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    .footer-brand {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .footer-brand span { color: var(--java-orange); }
+    .footer-page {
+      font-size: 20px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* Cover slide special */
+    .slide.cover .slide-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 56px;
+    }
+    .cover-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--java-orange);
+      line-height: 1;
+    }
+    .stat-card .label {
+      font-size: 18px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .cover-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 36px;
+    }
+    .cover-tag {
+      background: rgba(83,130,161,0.15);
+      border: 1px solid rgba(83,130,161,0.3);
+      color: #79c0ff;
+      font-size: 18px;
+      padding: 8px 18px;
+      border-radius: 20px;
+    }
+
+    /* CTA slide */
+    .slide.cta .slide-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 80px;
+    }
+    .cta-icon { font-size: 80px; margin-bottom: 24px; }
+    .cta-title {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .cta-text {
+      font-size: 26px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 36px;
+    }
+    .cta-link {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--java-orange), #e76f00);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 700;
+      padding: 18px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+    }
+    .cta-hashtags {
+      margin-top: 36px;
+      font-size: 20px;
+      color: var(--accent);
+      line-height: 1.8;
+    }
+
+    /* Thumbnail strip */
+    .thumbnails {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1100px;
+      padding: 0 20px;
+    }
+    .thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb:hover { border-color: var(--java-orange); color: var(--java-orange); }
+    .thumb.active { border-color: var(--java-orange); background: rgba(248,152,32,0.15); color: var(--java-orange); }
+
+    .instructions {
+      max-width: 700px;
+      margin: 0 auto 32px;
+      padding: 20px 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .instructions strong { color: var(--text); }
+
+    .hidden-slides {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div>
+    <h1>Top 100 Java Stream Interview Problems</h1>
+    <p>LinkedIn carousel · 1080×1080 px · <a href="java-streams-prep.html" style="color:var(--java-orange)">View all solutions →</a></p>
+  </div>
+  <div class="toolbar-actions">
+    <span class="slide-indicator" id="slideIndicator">Slide 1 / 18</span>
+    <button class="btn" id="prevBtn">← Prev</button>
+    <button class="btn" id="nextBtn">Next →</button>
+    <button class="btn" onclick="location.href='java-streams-prep.html'" style="border-color:var(--java-orange);color:var(--java-orange)">📖 Solutions</button>
+    <button class="btn btn-primary" id="downloadCurrent">⬇ Download Slide</button>
+    <button class="btn btn-primary" id="downloadAll">⬇ Download All (ZIP-style)</button>
+  </div>
+</div>
+
+<div class="instructions">
+  <strong>How to post on LinkedIn:</strong> Open this file in Chrome → click <strong>Download Slide</strong> for each carousel image, or <strong>Download All</strong> to save every slide. On LinkedIn, create a post → click the <strong>Document/Carousel</strong> icon → upload all PNGs in order. <strong>Need solutions?</strong> Open <a href="java-streams-prep.html" style="color:var(--java-orange)">java-streams-prep.html</a> for all 100 Java code answers.
+</div>
+
+<div class="viewer">
+  <div class="slide-nav">
+    <button class="nav-btn" id="prevBtn2">‹</button>
+    <div id="currentSlideContainer"></div>
+    <button class="nav-btn" id="nextBtn2">›</button>
+  </div>
+  <div class="thumbnails" id="thumbnails"></div>
+</div>
+
+<!-- All slides (hidden, used for bulk export) -->
+<div class="hidden-slides" id="allSlides"></div>
+
+<!-- LinkedIn caption helper -->
+<div style="max-width:700px;margin:40px auto;padding:0 20px 60px;">
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;">
+    <h3 style="margin-bottom:12px;font-size:1rem;">Suggested LinkedIn Caption</h3>
+    <p style="font-size:0.88rem;color:var(--muted);line-height:1.7;white-space:pre-wrap;" id="captionText"></p>
+    <button class="btn" style="margin-top:12px;" onclick="navigator.clipboard.writeText(document.getElementById('captionText').textContent);this.textContent='Copied!'">Copy Caption</button>
+  </div>
+</div>
+
+<script>
+const SLIDES = [
+  {
+    type: 'cover',
+    badge: 'Java Interview Prep',
+    title: 'Top <span class="highlight">100</span> Java Stream Problems',
+    subtitle: 'Curated from real interview experiences — master the Stream API before your next coding round.',
+    stats: [
+      { num: '100', label: 'Problems' },
+      { num: '11', label: 'Categories' },
+      { num: 'Java 8+', label: 'Stream API' }
+    ],
+    tags: ['filter · map · reduce', 'collectors · flatMap', 'Optional · parallel streams']
+  },
+  {
+    badge: '⭐ Basics',
+    title: 'Stream Fundamentals',
+    subtitle: 'Questions 1 – 8',
+    questions: [
+      'Calculate the sum of elements in a list',
+      'Calculate average without using average()',
+      'Find min and max values from a list',
+      'Find 2nd highest & 2nd lowest number',
+      'Remove duplicates using streams',
+      'Count elements in a list',
+      'Convert strings to uppercase/lowercase',
+      'Find length of the longest string'
+    ],
+    startNum: 1
+  },
+  {
+    badge: '⭐ Basics',
+    title: 'Stream Fundamentals',
+    subtitle: 'Questions 9 – 15',
+    questions: [
+      'Concatenate strings into comma-separated string',
+      'Filter out null values from a list',
+      'Filter even or odd numbers',
+      'Find square of each number',
+      'Sort list in ascending order',
+      'Sort list in descending order',
+      'Count occurrences of a specific element'
+    ],
+    startNum: 9
+  },
+  {
+    badge: '⭐ Numeric & Mapping',
+    title: 'Numeric Streams',
+    subtitle: 'Questions 16 – 20',
+    questions: [
+      'Convert Stream&lt;Integer&gt; to IntStream and sum',
+      'Convert primitive stream back to boxed list',
+      'Generate first 10 Fibonacci numbers',
+      'Find product of elements using reduce',
+      'map() vs mapToInt() — practical example'
+    ],
+    startNum: 16
+  },
+  {
+    badge: '⭐ String Manipulation',
+    title: 'String Streams',
+    subtitle: 'Questions 21 – 27',
+    questions: [
+      'Count frequency of each character',
+      'Find duplicate characters in string',
+      'First non-repeated character',
+      'Reverse each word in a sentence',
+      'Check anagram using streams',
+      'Count vowels and consonants',
+      'Remove special characters & spaces'
+    ],
+    startNum: 21
+  },
+  {
+    badge: '👥 Employee / Student',
+    title: 'Object Lists — Part 1',
+    subtitle: 'Questions 28 – 35',
+    questions: [
+      'Find employee with highest salary',
+      'Find employee with 2nd highest salary',
+      'Sort employees by salary then name',
+      'Group employees by department',
+      'Count employees in each department',
+      'Average salary in each department',
+      'Partition employees by gender',
+      'Find oldest employee'
+    ],
+    startNum: 28,
+    compact: true
+  },
+  {
+    badge: '👥 Employee / Student',
+    title: 'Object Lists — Part 2',
+    subtitle: 'Questions 36 – 43',
+    questions: [
+      'Find top 3 salaried employees',
+      'Convert List&lt;Employee&gt; to Map&lt;id, emp&gt;',
+      'Handle duplicate keys in toMap()',
+      'Find names starting with "A"',
+      'Join employee names into single string',
+      'Filter employees joined after a year',
+      'Find distinct job titles',
+      'Highest-paid employee per department'
+    ],
+    startNum: 36,
+    compact: true
+  },
+  {
+    badge: '👥 Employee / Student',
+    title: 'Object Lists — Part 3',
+    subtitle: 'Questions 44 – 46',
+    questions: [
+      'Group employees by salary range (&gt;50k, ≤50k)',
+      'Flatten nested department fields',
+      'Group by dept + sort names descending (collectingAndThen)'
+    ],
+    startNum: 44
+  },
+  {
+    badge: '⭐ Optional + Reductions',
+    title: 'Optional & Reduce',
+    subtitle: 'Questions 47 – 50',
+    questions: [
+      'Safely fetch first element using findFirst()',
+      'Use reduce() to compute factorial',
+      'Use reduce() to concatenate strings',
+      'Use reduce() to find longest string'
+    ],
+    startNum: 47
+  },
+  {
+    badge: '⭐ Collectors & Maps',
+    title: 'Collectors Deep Dive',
+    subtitle: 'Questions 51 – 57',
+    questions: [
+      'Sort map by value using streams',
+      'Sort map by key using streams',
+      'Convert Map to Stream and filter entries',
+      'Convert list to EnumMap by condition',
+      'Return frequency map of list elements',
+      'Group list into sub-lists by predicate',
+      'Convert list to immutable collection'
+    ],
+    startNum: 51
+  },
+  {
+    badge: '⭐ Flattening',
+    title: 'flatMap & Transform',
+    subtitle: 'Questions 58 – 61',
+    questions: [
+      'Flatten list of lists into single list',
+      'Flatten map values to single list',
+      'Convert list of arrays using flatMap',
+      'Convert strings to list of all characters'
+    ],
+    startNum: 58
+  },
+  {
+    badge: '⭐ Date & Statistical',
+    title: 'Date, Time & Stats',
+    subtitle: 'Questions 62 – 70',
+    questions: [
+      'Sort employees by LocalDate field',
+      'Group employees by year of joining',
+      'Filter by date range using streams',
+      'Count numbers greater than threshold',
+      'Find numbers starting & ending with digits',
+      'Find frequency of words in sentences',
+      'Most repeated word',
+      'Sort words by frequency',
+      'Remove stop-words from text list'
+    ],
+    startNum: 62,
+    compact: true
+  },
+  {
+    badge: '🧠 Advanced',
+    title: 'Challenging Questions — Part 1',
+    subtitle: 'Questions 71 – 79',
+    questions: [
+      'Parallel stream vs sequential — use case',
+      'Custom collector for summary stats',
+      'Why collect() vs toList()?',
+      'Implement infinite stream using iterate',
+      'Distinguish peek() vs map()',
+      'Why sorted() is stateful?',
+      'Create stream from Iterable & Iterator',
+      'Handle checked exceptions in streams',
+      'Reuse stream using Supplier&lt;Stream&gt;'
+    ],
+    startNum: 71,
+    compact: true
+  },
+  {
+    badge: '🧠 Advanced',
+    title: 'Challenging Questions — Part 2',
+    subtitle: 'Questions 80 – 86',
+    questions: [
+      'Collectors.toCollection(TreeSet) example',
+      'Convert list into priority queue',
+      'Sort and preserve duplicate count',
+      'Drop first N elements using skip()',
+      'Take first N elements using limit()',
+      'Convert array of primitives to boxed List',
+      'Convert String array to CSV using Streams'
+    ],
+    startNum: 80
+  },
+  {
+    badge: '🛠 Practical',
+    title: 'Real-World Problems — Part 1',
+    subtitle: 'Questions 87 – 94',
+    questions: [
+      'Find median of list using streams',
+      'Find mode (most repeated number)',
+      'Spiral flattening of matrix',
+      'Validate list has only unique elements',
+      'Partition into even & odd lists',
+      'Identify palindromes in a list',
+      'Remove first and last elements (streams only)',
+      'Combine two lists and remove duplicates'
+    ],
+    startNum: 87,
+    compact: true
+  },
+  {
+    badge: '🛠 Practical',
+    title: 'Real-World Problems — Part 2',
+    subtitle: 'Questions 95 – 100',
+    questions: [
+      'Group strings by list length',
+      'Distinct words sorted by length',
+      'Sum of digit values of each number',
+      'List&lt;String&gt; → Map&lt;String, Integer(length)&gt;',
+      'Shuffle list using streams (trick question)',
+      'Debug pipeline with peek()',
+      'Sort array ascending + move zeros to end'
+    ],
+    startNum: 95
+  },
+  {
+    type: 'cta',
+    badge: 'Save & Share',
+    title: 'Ready to Practice?',
+    subtitle: '',
+    ctaText: 'Swipe through all 100 problems and start solving them today. Perfect prep for Java backend interviews!',
+    link: 'https://alokratnaparkhi8.medium.com/top-100-java-stream-interview-problems-for-practice-ea2278f492b2',
+    hashtags: '#Java #JavaStreams #InterviewPrep #BackendDeveloper #CodingInterview #Java8 #SoftwareEngineering #100DaysOfCode'
+  }
+];
+
+let currentIndex = 0;
+
+function renderSlide(slide, index, total) {
+  const el = document.createElement('div');
+  el.className = 'slide' + (slide.type === 'cover' ? ' cover' : slide.type === 'cta' ? ' cta' : '');
+  el.dataset.index = index;
+
+  let header = `
+    <div class="slide-header">
+      <div class="slide-badge">${slide.badge}</div>
+      <div class="slide-title">${slide.title}</div>
+      ${slide.subtitle ? `<div class="slide-subtitle">${slide.subtitle}</div>` : ''}
+    </div>`;
+
+  let body = '';
+
+  if (slide.type === 'cover') {
+    body = `<div class="slide-body">
+      <div class="cover-stats">
+        ${slide.stats.map(s => `<div class="stat-card"><div class="num">${s.num}</div><div class="label">${s.label}</div></div>`).join('')}
+      </div>
+      <div class="cover-tags">
+        ${slide.tags.map(t => `<span class="cover-tag">${t}</span>`).join('')}
+      </div>
+    </div>`;
+  } else if (slide.type === 'cta') {
+    body = `<div class="slide-body">
+      <div class="cta-icon">🚀</div>
+      <div class="cta-title">${slide.title}</div>
+      <div class="cta-text">${slide.ctaText}</div>
+      <div class="cta-link">Read Full Article →</div>
+      <div class="cta-hashtags">${slide.hashtags}</div>
+    </div>`;
+  } else {
+    const compact = slide.compact ? ' compact' : '';
+    body = `<div class="slide-body">
+      <ul class="question-list${compact}">
+        ${slide.questions.map((q, i) => `
+          <li><span class="num">${slide.startNum + i}</span><span>${q}</span></li>
+        `).join('')}
+      </ul>
+    </div>`;
+  }
+
+  const footer = `
+    <div class="slide-footer">
+      <div class="footer-brand"><span>Java</span> Stream Interview Prep</div>
+      <div class="footer-page">${index + 1} / ${total}</div>
+    </div>`;
+
+  el.innerHTML = header + body + footer;
+  return el;
+}
+
+function showSlide(index) {
+  currentIndex = Math.max(0, Math.min(index, SLIDES.length - 1));
+  const container = document.getElementById('currentSlideContainer');
+  container.innerHTML = '';
+  container.appendChild(renderSlide(SLIDES[currentIndex], currentIndex, SLIDES.length));
+
+  document.getElementById('slideIndicator').textContent = `Slide ${currentIndex + 1} / ${SLIDES.length}`;
+  document.getElementById('prevBtn').disabled = currentIndex === 0;
+  document.getElementById('nextBtn').disabled = currentIndex === SLIDES.length - 1;
+  document.getElementById('prevBtn2').disabled = currentIndex === 0;
+  document.getElementById('nextBtn2').disabled = currentIndex === SLIDES.length - 1;
+
+  document.querySelectorAll('.thumb').forEach((t, i) => {
+    t.classList.toggle('active', i === currentIndex);
+  });
+}
+
+function initThumbnails() {
+  const container = document.getElementById('thumbnails');
+  SLIDES.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'thumb' + (i === 0 ? ' active' : '');
+    btn.textContent = i + 1;
+    btn.onclick = () => showSlide(i);
+    container.appendChild(btn);
+  });
+}
+
+function initHiddenSlides() {
+  const container = document.getElementById('allSlides');
+  SLIDES.forEach((slide, i) => {
+    container.appendChild(renderSlide(slide, i, SLIDES.length));
+  });
+}
+
+async function downloadSlide(index) {
+  const slides = document.querySelectorAll('#allSlides .slide');
+  const slide = slides[index];
+  const canvas = await html2canvas(slide, {
+    scale: 1,
+    width: 1080,
+    height: 1080,
+    useCORS: true,
+    backgroundColor: '#0d1117'
+  });
+  const link = document.createElement('a');
+  link.download = `java-streams-slide-${String(index + 1).padStart(2, '0')}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+document.getElementById('downloadCurrent').onclick = () => downloadSlide(currentIndex);
+
+document.getElementById('downloadAll').onclick = async () => {
+  const btn = document.getElementById('downloadAll');
+  btn.textContent = 'Downloading...';
+  btn.disabled = true;
+  for (let i = 0; i < SLIDES.length; i++) {
+    await downloadSlide(i);
+    await new Promise(r => setTimeout(r, 400));
+  }
+  btn.textContent = '⬇ Download All (ZIP-style)';
+  btn.disabled = false;
+};
+
+document.getElementById('prevBtn').onclick = () => showSlide(currentIndex - 1);
+document.getElementById('nextBtn').onclick = () => showSlide(currentIndex + 1);
+document.getElementById('prevBtn2').onclick = () => showSlide(currentIndex - 1);
+document.getElementById('nextBtn2').onclick = () => showSlide(currentIndex + 1);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') showSlide(currentIndex - 1);
+  if (e.key === 'ArrowRight') showSlide(currentIndex + 1);
+});
+
+document.getElementById('captionText').textContent = `🚀 Top 100 Java Stream Interview Problems — Save this carousel!
+
+When the interviewer says "Do this using streams only..." — will you be ready?
+
+I've curated 100 real-world Java Stream API problems covering:
+
+⭐ Basics — sum, filter, sort, dedupe
+⭐ Numeric & String manipulation
+👥 Employee/Student object operations
+⭐ Collectors, flatMap, Optional & reduce
+🧠 Advanced — parallel streams, peek vs map, custom collectors
+🛠 Practical — median, mode, palindromes & more
+
+Perfect for Java backend interview prep. Swipe through all slides 👉
+
+Which problem tripped you up in your last interview? Drop it in the comments 👇
+
+Credit: Inspired by Alok Ratnaparkhi's excellent collection
+🔗 https://alokratnaparkhi8.medium.com/top-100-java-stream-interview-problems-for-practice-ea2278f492b2
+
+#Java #JavaStreams #InterviewPrep #BackendDeveloper #CodingInterview #Java8 #SoftwareEngineering #100DaysOfCode`;
+
+initThumbnails();
+initHiddenSlides();
+showSlide(0);
+</script>
+</body>
+</html>

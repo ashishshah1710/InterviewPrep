@@ -1,0 +1,175 @@
+\documentclass[10pt, letterpaper]{article}
+
+\usepackage[
+    ignoreheadfoot,
+    top=0.9 cm,
+    bottom=1.0 cm,
+    left=1.4 cm,
+    right=1.4 cm,
+    footskip=0.8 cm,
+]{geometry}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primaryColor}{RGB}{0, 79, 144}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage[
+    pdftitle={Ashish Shah Resume},
+    pdfauthor={Ashish Shah},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref}
+\usepackage{changepage}
+\usepackage{paracol}
+\usepackage{ifthen}
+\usepackage{needspace}
+\usepackage{iftex}
+
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0cm}
+
+\titleformat{\section}{\needspace{2\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+\titlespacing{\section}{-1pt}{0.10 cm}{0.08 cm}
+
+\renewcommand\labelitemi{\textcolor{black}{$\bullet$}}
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.02 cm,
+        parsep=0.02 cm,
+        partopsep=0pt,
+        itemsep=0.02 cm,
+        leftmargin=1.35cm
+    ]
+}{
+    \end{itemize}
+}
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{0.2 cm}{0.2 cm}
+}{
+    \end{adjustwidth}
+}
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+    \setlength{\parskip}{0pt}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \end{onecolentry}
+}
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\linespread{1.4}
+}{
+    \par\kern\topsep
+}
+
+\let\hrefWithoutArrow\href
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+\hyphenation{PostgreSQL Postgres}
+
+\begin{document}
+
+    \begin{header}
+        \textbf{\fontsize{24 pt}{24 pt}\selectfont Ashish Shah}
+        \vspace{0.04cm}
+
+        {\footnotesize\faMapMarker* \hspace{0.13cm}Pune, India (Open to Remote)} \quad
+        {\footnotesize\faEnvelope[regular] \hspace{0.13cm}\href{mailto:ashishshah171097@gmail.com}{ashishshah171097@gmail.com}} \quad
+        {\footnotesize\faPhone* \hspace{0.13cm}\href{tel:+91-8878482241}{8878482241}} \quad
+        {\footnotesize\faLinkedinIn \hspace{0.13cm}\href{https://www.linkedin.com/in/ashishshah1710}{Ashish Shah}} \quad
+        {\footnotesize\faGithub \hspace{0.13cm}\href{https://github.com/ashishshah1710}{GitHub}}
+    \end{header}
+
+    \section{Summary}
+        \begin{onecolentry}
+            Hands-on Java Developer with 4+ years building Spring Boot microservices, SQL-backed REST APIs, and Apache Kafka pipelines for enterprise billing and integration platforms. Strong analytical and troubleshooting skills with Splunk-based production debugging, JIRA-driven Agile delivery, and cross-functional team coordination. Currently at Amdocs, Pune, processing 5M+ transactions/month.
+        \end{onecolentry}
+
+    \section{Technical Skills}
+        \begin{onecolentry}
+            \begin{itemize}[topsep=0pt, parsep=0.02cm, itemsep=0.02cm, partopsep=0pt, leftmargin=1.35cm]
+                \item \textbf{Programming:} Java, Spring Boot, Spring Data, Spring Security, Microservices, REST APIs, Hibernate, Maven
+                \item \textbf{SQL \& Databases:} PostgreSQL, MySQL; query writing, tuning, schema design, JPA/Hibernate ORM
+                \item \textbf{Messaging:} Apache Kafka (producers/consumers, event-driven billing \& catalog workflows)
+                \item \textbf{Tools:} Splunk, JIRA, Git, GitLab CI/CD, Docker, Kubernetes, Agile/Scrum
+            \end{itemize}
+        \end{onecolentry}
+
+    \section{Experience}
+
+        \begin{onecolentry}
+            \textbf{Amdocs Development Center India} \hfill Pune, India
+        \end{onecolentry}
+
+        \begin{twocolentry}{
+        \text{Jul 2024 -- Present}}
+            \textbf{Software Developer -- Experienced}
+        \end{twocolentry}
+        \begin{onecolentry}
+            \begin{highlights}
+            \item \textit{USCC Integration (T-Mobile):} Built 2+ Java microservices with 15+ REST/SOAP endpoints; designed SQL-backed integration flows in JIRA-tracked Agile sprints.
+            \item Troubleshot production defects via Splunk log analysis and RCA across distributed services; automated 4+ GitLab CI/CD pipelines.
+            \item \textit{XL Axiata Jakarta:} Coordinated service upgrade across 8+ microservices, cutting incident detection from 45 min to under 5 min (89\% reduction).
+            \end{highlights}
+        \end{onecolentry}
+
+        \begin{twocolentry}{
+        \text{Apr 2026 -- May 2026}\\
+        \text{Guadalajara, Mexico}}
+            \textbf{Software Developer -- Onsite}
+        \end{twocolentry}
+        \begin{onecolentry}
+            \begin{highlights}
+            \item \textit{USCC Go-Live:} Led 2-month cutover; debugged and stabilized 2+ microservices, resolving 15+ production incidents under tight deadlines.
+            \item Coordinated 3 UAT cycles with cross-functional teams; validated REST API behavior and SQL data flows for migration sign-off.
+            \end{highlights}
+        \end{onecolentry}
+
+        \begin{twocolentry}{
+        \text{Jul 2022 -- Jun 2024}}
+            \textbf{Software Developer}
+        \end{twocolentry}
+        \begin{onecolentry}
+            \begin{highlights}
+            \item \textit{Turbo Charging:} Developed Spring Boot microservices with PostgreSQL, processing 5M+ transactions/month at 99.9\% uptime.
+            \item Delivered 8+ REST APIs with SQL persistence on Apache Kafka pipelines; investigated production issues via Splunk and JIRA defect tracking.
+            \item Migrated from weekly manual deploys to daily GitLab CI/CD in Agile sprints.
+            \end{highlights}
+        \end{onecolentry}
+
+    \section{Education}
+        \begin{twocolentry}{\text{Jul 2019 -- Jun 2022}}
+            \textbf{National Institute of Technology, Warangal}\\[2pt]
+            Master of Computer Applications -- CGPA: 7.89/10
+        \end{twocolentry}
+        \begin{twocolentry}{\text{Jun 2016 -- Jul 2019}}
+            \textbf{Devi Ahilya Vishwavidyalaya, Indore}\\[2pt]
+            Bachelor of Computer Science -- 69\%
+        \end{twocolentry}
+
+    \section{Certifications}
+        \begin{onecolentry}
+            \textbf{Java (Intermediate) Certificate} -- HackerRank \hfill \href{https://www.hackerrank.com/certificates/937796B79A73}{Verify}
+        \end{onecolentry}
+
+\end{document}

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Production Scenarios — LinkedIn Carousel 2026</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --accent: #f85149;
+      --accent2: #58a6ff;
+      --java-orange: #f89820;
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #f0f6fc;
+      --muted: #8b949e;
+      --slide-size: 1080px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1a2e; color: var(--text); min-height: 100vh; }
+    .toolbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,17,23,0.95); border-bottom: 1px solid var(--border);
+      padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .toolbar h1 { font-size: 1rem; }
+    .toolbar p { font-size: 0.8rem; color: var(--muted); }
+    .toolbar-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--panel); color: var(--text); font-size: 0.85rem; cursor: pointer;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), #da3633); border: none; color: #fff; }
+    .viewer { display: flex; flex-direction: column; align-items: center; padding: 32px 20px 60px; gap: 24px; }
+    .slide-nav { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .nav-btn {
+      width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--panel); color: var(--text); font-size: 1.2rem; cursor: pointer;
+    }
+    .slide {
+      width: var(--slide-size); height: var(--slide-size);
+      background: linear-gradient(145deg, #0d1117 0%, #1a1218 45%, #0d1117 100%);
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+    @media (max-width: 1120px) {
+      .slide { transform: scale(calc(min(1, (100vw - 40px) / 1080))); margin-bottom: calc(-1 * var(--slide-size) * (1 - min(1, (100vw - 40px) / 1080))); }
+    }
+    .slide::before {
+      content: ''; position: absolute; top: -100px; right: -100px; width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(248,81,73,0.14) 0%, transparent 70%); pointer-events: none;
+    }
+    .slide-header { padding: 44px 52px 20px; position: relative; z-index: 1; }
+    .slide-badge {
+      display: inline-block; background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.45);
+      color: #ff7b72; font-size: 20px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 8px 18px; border-radius: 30px; margin-bottom: 16px;
+    }
+    .slide-title { font-size: 46px; font-weight: 800; line-height: 1.12; margin-bottom: 10px; }
+    .slide-title .hl {
+      background: linear-gradient(90deg, #ff7b72, var(--java-orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .slide-subtitle { font-size: 24px; color: var(--muted); line-height: 1.35; }
+    .slide-body { flex: 1; padding: 4px 52px 40px; position: relative; z-index: 1; }
+    .question-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .question-list li {
+      display: flex; align-items: flex-start; gap: 14px; font-size: 21px; line-height: 1.32; color: #c9d1d9;
+    }
+    .question-list li .num {
+      flex-shrink: 0; width: 34px; height: 34px; background: rgba(88,166,255,0.12);
+      border: 1px solid rgba(88,166,255,0.28); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: var(--accent2); margin-top: 2px;
+    }
+    .question-list.compact li { font-size: 18.5px; gap: 10px; }
+    .question-list.compact li .num { width: 30px; height: 30px; font-size: 13px; }
+    .slide-footer {
+      padding: 18px 52px 32px; display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border); z-index: 1;
+    }
+    .footer-brand { font-size: 19px; font-weight: 600; color: var(--muted); }
+    .footer-brand span { color: #ff7b72; }
+    .footer-page { font-size: 19px; color: var(--muted); }
+    .slide.cover .slide-body { display: flex; flex-direction: column; justify-content: center; padding: 0 52px; }
+    .cover-hook {
+      font-size: 28px; color: #c9d1d9; line-height: 1.45; margin-top: 28px;
+      border-left: 4px solid var(--accent); padding-left: 20px;
+    }
+    .cover-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 36px; }
+    .stat-card {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 14px;
+      padding: 24px 16px; text-align: center;
+    }
+    .stat-card .n { font-size: 44px; font-weight: 800; color: #ff7b72; }
+    .stat-card .l { font-size: 16px; color: var(--muted); margin-top: 6px; }
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .cover-tag {
+      background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.28);
+      color: #79c0ff; font-size: 17px; padding: 7px 16px; border-radius: 20px;
+    }
+    .slide.cta .slide-body {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 0 72px;
+    }
+    .cta-icon { font-size: 72px; margin-bottom: 20px; }
+    .cta-title { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+    .cta-text { font-size: 26px; color: var(--muted); line-height: 1.45; margin-bottom: 28px; }
+    .cta-link {
+      font-size: 22px; color: var(--accent2); background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.3); padding: 14px 28px; border-radius: 12px; margin-bottom: 24px;
+    }
+    .cta-hashtags { font-size: 17px; color: var(--muted); line-height: 1.6; }
+    #allSlides { position: absolute; left: -9999px; top: 0; }
+    .thumbs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 1080px; }
+    .thumb {
+      width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--panel); color: var(--muted); cursor: pointer; font-size: 13px;
+    }
+    .thumb.active { border-color: var(--accent); color: #ff7b72; }
+    .caption-box {
+      max-width: 1080px; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 24px; font-size: 0.85rem; color: var(--muted); line-height: 1.6;
+    }
+    .caption-box h3 { color: var(--text); font-size: 0.95rem; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div>
+      <h1>LinkedIn Carousel — Production Scenarios 2026</h1>
+      <p>1080×1080 · 8 slides · PNGs in <code>linkedin-slides/production-scenarios-2026/</code></p>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn" id="downloadCurrent">⬇ Current Slide PNG</button>
+      <button class="btn btn-primary" id="downloadAll">⬇ Download All Slides</button>
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="slide-nav">
+      <button class="nav-btn" id="prevBtn">‹</button>
+      <span id="slideIndicator" style="color:var(--muted);font-size:0.9rem;">Slide 1 / 8</span>
+      <button class="nav-btn" id="nextBtn">›</button>
+    </div>
+    <div id="currentSlideContainer"></div>
+    <div class="slide-nav">
+      <button class="nav-btn" id="prevBtn2">‹</button>
+      <div class="thumbs" id="thumbnails"></div>
+      <button class="nav-btn" id="nextBtn2">›</button>
+    </div>
+    <div class="caption-box">
+      <h3>📋 Copy this LinkedIn caption</h3>
+      <div id="captionText"></div>
+    </div>
+  </div>
+
+  <div id="allSlides"></div>
+
+<script>
+const SLIDES = [
+  {
+    type: 'cover',
+    badge: '2026 Edition · 3–8 YOE',
+    title: 'When Production <span class="hl">Breaks</span>',
+    subtitle: '25 Java Backend scenarios interviewers ask instead of definitions',
+    hook: 'API latency spikes. Kafka replays. Pool exhausted. Duplicate payments. Can you debug under pressure?',
+    stats: [
+      { n: '25', l: 'Real Scenarios' },
+      { n: '6', l: 'Categories' },
+      { n: '3–8', l: 'Years Exp' }
+    ],
+    tags: ['Spring Boot', 'Kafka', 'K8s', 'Microservices', 'SQL', 'Redis']
+  },
+  {
+    type: 'list', badge: 'Performance & Latency', title: 'Can You Investigate This?',
+    subtitle: 'What they ask when things get slow',
+    startNum: 1, compact: true,
+    questions: [
+      'API response jumps from 200ms → 5 seconds — how do you investigate?',
+      'API works for 100 users but fails at 10,000 concurrent — what do you check first?',
+      'CPU looks normal but latency is very high — what is happening?',
+      'How do you find the bottleneck: app, DB, network, or downstream?',
+      'SQL runs fast in dev but takes 10s in production — why?'
+    ]
+  },
+  {
+    type: 'list', badge: 'Resilience & Database', title: 'Stop the Cascade',
+    subtitle: 'Patterns that save production',
+    startNum: 6, compact: true,
+    questions: [
+      'Downstream service is slow — how do you protect the whole system?',
+      'Circuit Breaker vs Retry vs Timeout vs Bulkhead — when to use each?',
+      'Database connection pool exhausted — root causes?',
+      'Handle duplicate payment from retries or double-clicks',
+      'Store idempotency key + handle concurrent requests'
+    ]
+  },
+  {
+    type: 'list', badge: 'Caching & Scale', title: 'Redis & Traffic Spikes',
+    subtitle: 'Design for failure, not perfection',
+    startNum: 11, compact: true,
+    questions: [
+      'Redis goes down — should your app fail? Design fallback',
+      'Cache invalidation across multiple service instances',
+      'Process a 5 GB CSV without OutOfMemoryError',
+      'Sync vs async communication — when to choose each?',
+      'App receives 10× traffic suddenly — your response?'
+    ]
+  },
+  {
+    type: 'list', badge: 'Kafka & Messaging', title: 'Message Guarantees',
+    subtitle: 'At-least-once is not good enough',
+    startNum: 16, compact: true,
+    questions: [
+      'Consumer processes message but crashes before commit — what happens?',
+      'Ensure the same Kafka event is not processed twice',
+      'Kafka ordering guarantees — what is actually guaranteed?',
+      'Distributed transactions across microservices — how?',
+      'Saga Pattern + dealing with compensation failures'
+    ]
+  },
+  {
+    type: 'list', badge: 'Kubernetes & Debugging', title: 'Ship & Debug in Prod',
+    subtitle: 'Zero downtime + war stories',
+    startNum: 21, compact: true,
+    questions: [
+      'K8s pod keeps restarting — no obvious error in logs',
+      'Deploy Spring Boot with zero downtime',
+      'Graceful shutdown — what happens to in-flight requests?',
+      'Memory keeps growing → crash after days — investigate leak',
+      'Bug only under heavy traffic — debugging approach'
+    ]
+  },
+  {
+    type: 'doc',
+    badge: 'My Personal Doc',
+    title: 'Full Interactive <span class="hl">Guide</span>',
+    subtitle: 'Investigation steps · code · interview answers',
+    url: 'ashishshah1710.github.io/InterviewPrep/html/production-scenarios/production-scenarios-2026.html',
+    checks: ['Performance & Latency debugging', 'Resilience & idempotency patterns', 'Kafka, Redis, K8s production traps']
+  },
+  {
+    type: 'cta',
+    title: 'Save & Share',
+    ctaText: 'Bookmark the guide. Comment which scenario you faced in production.',
+    link: 'ashishshah1710.github.io/InterviewPrep/html/production-scenarios/production-scenarios-2026.html',
+    hashtags: '#Java #SpringBoot #Microservices #Kafka #Kubernetes #InterviewPrep #ProductionEngineering'
+  }
+];
+
+let currentIndex = 0;
+
+function renderSlide(slide, index, total) {
+  const el = document.createElement('div');
+  el.className = 'slide' + (slide.type === 'cover' ? ' cover' : slide.type === 'cta' ? ' cta' : '');
+
+  const header = `<div class="slide-header">
+    <div class="slide-badge">${slide.badge || 'InterviewPrep'}</div>
+    <div class="slide-title">${slide.title}</div>
+    ${slide.subtitle ? `<div class="slide-subtitle">${slide.subtitle}</div>` : ''}
+  </div>`;
+
+  let body = '';
+  if (slide.type === 'cover') {
+    body = `<div class="slide-body">
+      <div class="cover-hook">${slide.hook}</div>
+      <div class="cover-stats">
+        ${slide.stats.map(s => `<div class="stat-card"><div class="n">${s.n}</div><div class="l">${s.l}</div></div>`).join('')}
+      </div>
+      <div class="cover-tags">${slide.tags.map(t => `<span class="cover-tag">${t}</span>`).join('')}</div>
+    </div>`;
+  } else if (slide.type === 'doc') {
+    body = `<div class="slide-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 64px;text-align:center;">
+      <div style="font-size:64px;margin-bottom:16px;">📘</div>
+      <div class="slide-title" style="font-size:36px;">${slide.title}</div>
+      <div class="slide-subtitle" style="margin-bottom:16px;">${slide.subtitle}</div>
+      <div style="background:rgba(255,255,255,0.04);border:2px solid rgba(88,166,255,0.35);border-radius:20px;padding:32px 36px;width:100%;text-align:left;">
+        ${slide.checks.map(c => `<div style="font-size:18px;color:#c9d1d9;margin:8px 0;"><span style="color:#3fb950;font-weight:700;">✓ </span>${c}</div>`).join('')}
+        <div style="font-size:17px;color:#79c0ff;margin-top:16px;word-break:break-all;">https://${slide.url}</div>
+      </div>
+    </div>`;
+  } else if (slide.type === 'cta') {
+    body = `<div class="slide-body">
+      <div class="cta-icon">🔥</div>
+      <div class="cta-title">${slide.title}</div>
+      <div class="cta-text">${slide.ctaText}</div>
+      <div class="cta-link">🔗 ${slide.link}</div>
+      <div class="cta-hashtags">${slide.hashtags}</div>
+    </div>`;
+  } else {
+    body = `<div class="slide-body"><ul class="question-list${slide.compact ? ' compact' : ''}">
+      ${slide.questions.map((q, i) => `<li><span class="num">${slide.startNum + i}</span><span>${q}</span></li>`).join('')}
+    </ul></div>`;
+  }
+
+  const footer = `<div class="slide-footer">
+    <div class="footer-brand"><span>Production</span> Scenarios · Java Backend</div>
+    <div class="footer-page">${index + 1} / ${total}</div>
+  </div>`;
+
+  el.innerHTML = header + body + footer;
+  return el;
+}
+
+function showSlide(i) {
+  currentIndex = Math.max(0, Math.min(i, SLIDES.length - 1));
+  const c = document.getElementById('currentSlideContainer');
+  c.innerHTML = '';
+  c.appendChild(renderSlide(SLIDES[currentIndex], currentIndex, SLIDES.length));
+  document.getElementById('slideIndicator').textContent = `Slide ${currentIndex + 1} / ${SLIDES.length}`;
+  ['prevBtn','prevBtn2'].forEach(id => document.getElementById(id).disabled = currentIndex === 0);
+  ['nextBtn','nextBtn2'].forEach(id => document.getElementById(id).disabled = currentIndex === SLIDES.length - 1);
+  document.querySelectorAll('.thumb').forEach((t, j) => t.classList.toggle('active', j === currentIndex));
+}
+
+async function downloadSlide(index) {
+  const slide = document.querySelectorAll('#allSlides .slide')[index];
+  const canvas = await html2canvas(slide, { scale: 1, width: 1080, height: 1080, useCORS: true, backgroundColor: '#0d1117' });
+  const link = document.createElement('a');
+  link.download = `production-scenarios-slide-${String(index + 1).padStart(2, '0')}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+document.getElementById('downloadCurrent').onclick = () => downloadSlide(currentIndex);
+document.getElementById('downloadAll').onclick = async () => {
+  const btn = document.getElementById('downloadAll');
+  btn.textContent = 'Downloading...'; btn.disabled = true;
+  for (let i = 0; i < SLIDES.length; i++) { await downloadSlide(i); await new Promise(r => setTimeout(r, 500)); }
+  btn.textContent = '⬇ Download All Slides'; btn.disabled = false;
+};
+document.getElementById('prevBtn').onclick = () => showSlide(currentIndex - 1);
+document.getElementById('nextBtn').onclick = () => showSlide(currentIndex + 1);
+document.getElementById('prevBtn2').onclick = () => showSlide(currentIndex - 1);
+document.getElementById('nextBtn2').onclick = () => showSlide(currentIndex + 1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') showSlide(currentIndex - 1);
+  if (e.key === 'ArrowRight') showSlide(currentIndex + 1);
+});
+
+document.getElementById('captionText').textContent = `🔥 Java Backend interviews in 2026 are NOT about definitions.
+
+They want to know: what do you do when production breaks?
+
+I compiled 25 real production scenarios every Java Backend developer (3–8 YOE) should practice:
+
+⚡ Latency spikes & bottleneck hunting
+🛡️ Circuit breaker, retry, timeout, bulkhead
+💳 Duplicate payments & idempotency
+📦 Redis fallback & cache invalidation
+📩 Kafka offset crashes & exactly-once
+☸️ K8s pod restarts & graceful shutdown
+🧠 Memory leaks & heavy-traffic-only bugs
+
+Swipe through all slides 👉 Save for your next interview.
+
+Which scenario have you faced in production? Comment below 👇
+
+🔗 Full free guide:
+https://ashishshah1710.github.io/InterviewPrep/html/production-scenarios/production-scenarios-2026.html
+
+#Java #SpringBoot #Microservices #Kafka #Kubernetes #BackendDeveloper #InterviewPrep #ProductionEngineering`;
+
+const thumbs = document.getElementById('thumbnails');
+SLIDES.forEach((_, i) => {
+  const b = document.createElement('button');
+  b.className = 'thumb' + (i === 0 ? ' active' : '');
+  b.textContent = i + 1;
+  b.onclick = () => showSlide(i);
+  thumbs.appendChild(b);
+});
+const all = document.getElementById('allSlides');
+SLIDES.forEach((s, i) => all.appendChild(renderSlide(s, i, SLIDES.length)));
+showSlide(0);
+</script>
+</body>
+</html>

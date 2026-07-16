@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kaiser Java Support II — Interview Answer Guide (5-8 Pages)</title>
+  <style>
+    @page { size: A4; margin: 9mm 11mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 8.8pt;
+      line-height: 1.38;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    .cover {
+      text-align: center;
+      padding: 12px 0 14px;
+      border-bottom: 2px solid #006ba6;
+      margin-bottom: 12px;
+    }
+    .cover h1 { font-size: 16pt; color: #006ba6; margin-bottom: 4px; }
+    .cover .meta { font-size: 10pt; color: #555; }
+    .cover .meta2 { font-size: 9pt; color: #777; margin-top: 10px; }
+    h2 {
+      font-size: 10.5pt;
+      color: #fff;
+      background: #006ba6;
+      padding: 4px 8px;
+      margin: 10px 0 7px;
+      page-break-after: avoid;
+    }
+    h2.section-start { page-break-before: auto; margin-top: 8px; }
+    h2.page-break { page-break-before: always; margin-top: 0; }
+    h3 {
+      font-size: 9.5pt;
+      color: #006ba6;
+      margin: 8px 0 4px;
+      page-break-after: avoid;
+    }
+    h4 { font-size: 8.8pt; margin: 6px 0 3px; color: #333; }
+    p { margin-bottom: 5px; }
+    ul, ol { margin: 0 0 7px 18px; }
+    li { margin-bottom: 2px; }
+    .q {
+      background: #e8f4fc;
+      border-left: 3px solid #006ba6;
+      padding: 5px 9px;
+      margin: 7px 0 5px;
+      font-weight: 600;
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+    .a30 {
+      background: #f0faf0;
+      border: 1px solid #8c8;
+      padding: 5px 9px;
+      margin: 4px 0 7px;
+      font-size: 8.3pt;
+      page-break-inside: avoid;
+    }
+    .a30 strong { color: #2a7a2a; }
+    .afull {
+      background: #fafafa;
+      border: 1px solid #ccc;
+      padding: 7px 10px;
+      margin: 4px 0 9px;
+      font-size: 8.5pt;
+    }
+    .afull strong { color: #006ba6; }
+    .tip {
+      background: #fff8e6;
+      border: 1px solid #e6c200;
+      padding: 6px 10px;
+      margin: 8px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+    .tip strong { color: #9a7b00; }
+    .avoid {
+      background: #fff0f0;
+      border: 1px solid #e88;
+      padding: 6px 10px;
+      margin: 8px 0;
+      font-size: 8.5pt;
+    }
+    pre, code {
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 8pt;
+      background: #f4f4f4;
+    }
+    pre {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      margin: 6px 0 10px;
+      white-space: pre-wrap;
+      page-break-inside: avoid;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      margin: 8px 0 12px;
+    }
+    th, td { border: 1px solid #bbb; padding: 5px 7px; vertical-align: top; }
+    th { background: #e8f4fc; }
+    .star { margin: 8px 0; }
+    .star b { color: #006ba6; }
+    hr { border: none; border-top: 1px solid #ddd; margin: 14px 0; }
+    @media screen {
+      body { max-width: 210mm; margin: 15px auto; padding: 15mm; box-shadow: 0 0 10px #ccc; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>How to Answer Interview Questions</h1>
+  <p class="meta"><strong>Java Support II</strong> — Kaiser Permanente (Mindtel Global)</p>
+  <p class="meta2">Production triage · Java · SQL · Kafka · Splunk · JIRA · STAR behavioral</p>
+  <p class="meta2" style="margin-top:20px;">Read the <strong>30-second</strong> answer first in the interview.<br>
+  Expand to the <strong>full answer</strong> only if they ask "tell me more" or "walk me through step by step."</p>
+</div>
+
+<!-- PAGE 2: FRAMEWORK -->
+<h2 class="page-break">1. Master Answer Framework</h2>
+
+<h3>How Every Technical Answer Should Flow</h3>
+<p>Interviewers at Support II level are not testing if you memorized docs. They test if you can <strong>run an incident calmly</strong>. Use this structure for every technical question:</p>
+<ol>
+  <li><strong>Clarify impact</strong> — "First I'd confirm blast radius: which service, environment, and how many members or transactions are affected."</li>
+  <li><strong>Gather evidence</strong> — Name the tool: Splunk, thread dump, Kafka CLI, SQL read-only query.</li>
+  <li><strong>Hypothesize</strong> — State 1–2 likely causes based on evidence, not guesses.</li>
+  <li><strong>Mitigate</strong> — What stabilizes users <em>now</em> (scale, rollback, kill blocker, DLT poison message).</li>
+  <li><strong>Resolve + document</strong> — Root cause fix and JIRA timeline with saved Splunk searches.</li>
+</ol>
+
+<div class="a30"><strong>30-Second Universal Opener:</strong> "I follow Detect, Triage, Mitigate, Resolve, Document. I never restart blindly — I correlate logs, metrics, and recent changes first, then stabilize production, then fix root cause and document everything in JIRA."</div>
+
+<h3>Opening: "Tell Me About Yourself"</h3>
+<div class="q">Walk me through your background.</div>
+<div class="a30"><strong>30 sec:</strong> "I'm a Java production support engineer with 4+ years at Amdocs building and triaging Spring Boot microservices. I work daily with SQL data validation, Kafka event pipelines, Splunk log analysis, and JIRA incident coordination — including a 2-month onsite go-live where I resolved 15+ production incidents. I'm looking to bring that hands-on triage experience to Kaiser Permanente's healthcare platform."</div>
+<div class="afull">
+  <strong>Full answer (2 min):</strong> Start with role fit, not biography. "I'm a backend engineer who moved into production support because I prefer solving real outages over writing features from scratch. At Amdocs I support billing and integration microservices processing 5M+ transactions a month. My typical day is Splunk investigation, thread dump analysis when CPU spikes, Kafka consumer lag checks, and SQL validation when APIs return wrong data. On the USCC T-Mobile migration I was onsite in Mexico for go-live — I led triage on 15+ incidents, ran UAT cycles with cross-functional teams, and kept JIRA updated every 30 minutes for stakeholders. Before that on Turbo Charging I built Kafka-backed REST APIs and learned to correlate deploy timing with Splunk error spikes. I hold a Java HackerRank certification and I'm comfortable on bridge calls — I focus on clear member impact statements and evidence-based mitigation."
+</div>
+
+<div class="tip"><strong>Tip:</strong> Say "member impact" even for Amdocs examples — then add "similar to how eligibility delays would affect Kaiser members." This bridges your experience to healthcare.</div>
+
+<h3>Why Kaiser / Why This Role?</h3>
+<div class="q">Why do you want to work at Kaiser Permanente in a Support role?</div>
+<div class="afull">
+  "Kaiser operates at a scale where production reliability directly affects patient and member care — that's meaningful to me. Support II is where I've done my best work: diagnosing Java services under pressure, not greenfield coding. I want to apply my Splunk, Kafka, and SQL triage skills in a healthcare context where accuracy and HIPAA-aware communication matter. The integrated care model also means cross-team coordination — which I've done during go-live cutovers — and that's the part of the job I excel at."
+</div>
+
+<!-- PAGE 3: JAVA -->
+<h2 class="page-break">2. Java Production Support — How to Answer</h2>
+
+<div class="q">Q1: A Java microservice in production has high CPU but traffic is normal. How do you investigate?</div>
+<div class="a30"><strong>30 sec:</strong> "I'd capture three thread dumps 10 seconds apart and look for many RUNNABLE threads stuck at the same stack frame — that indicates a hot loop, not pool exhaustion. I'd parallel-check Splunk for WARN/ERROR and confirm no recent deploy. Mitigation depends on findings: feature flag off, restart hot pods as temporary relief, engage dev with dumps attached."</div>
+<div class="afull">
+  <strong>Full step-by-step answer:</strong><br><br>
+  <strong>Step 1 — Triage (2 min):</strong> Confirm which pods, which region, when CPU started. Check Grafana or kubectl top pod. Ask: any deploy in last 2 hours? Any batch job?<br><br>
+  <strong>Step 2 — Evidence:</strong> Run <code>jstack</code> or <code>kubectl exec ... jstack 1</code> three times, 10 seconds apart. If the same method appears in RUNNABLE state across dumps — e.g. <code>PlanMatcher.evaluateRules()</code> — that's your CPU burner. If threads are WAITING on HikariPool — that's DB pool issue, not CPU loop.<br><br>
+  <strong>Step 3 — Splunk:</strong> Search for slow requests and correlationIds. Find a sample request that triggers the hot path. Check if specific input (plan code, member type) triggers it.<br><br>
+  <strong>Step 4 — Mitigate:</strong> Short-term: restart affected pods OR disable feature flag for bad code path. Do NOT restart all pods without evidence — you lose thread dumps.<br><br>
+  <strong>Step 5 — Document:</strong> JIRA with dump files, Splunk saved search URL, timeline. RCA: code fix for infinite loop or rules engine regression.<br><br>
+  <strong>What NOT to say:</strong> "I'd restart the server." That sounds Level I.
+</div>
+
+<div class="q">Q2: You see OutOfMemoryError: Java heap space in logs. What do you do?</div>
+<div class="a30"><strong>30 sec:</strong> "First I check if pods are OOMKilled in kubectl describe. I capture a thread dump before heap dump. I check -Xmx settings and Splunk for payload size spikes or cache growth. Mitigation: temporary restart with approval; resolution: heap analysis for leak or increase heap if legitimate growth."</div>
+<div class="afull">
+  <strong>Full answer:</strong> OOM means the JVM ran out of heap. I check: (1) Is it one pod or all? One pod = possible leak in that instance. All pods = config or traffic pattern. (2) Splunk: did message sizes grow? Did a cache clear job fail? (3) <code>jcmd &lt;pid&gt; GC.heap_info</code> for quick view. (4) If recurring: heap dump with <code>-XX:+HeapDumpOnOutOfMemoryError</code> or manual jcmd — analyze in Eclipse MAT or VisualVM for leak suspects. (5) Common causes: unbounded cache, collection never cleared, large HTTP payloads deserialized into memory. I document heap size, GC logs, and leak suspect class in JIRA for dev handoff.
+</div>
+
+<div class="q">Q3: CannotGetJdbcConnectionException — API returning 500s. Walk me through.</div>
+<div class="afull">
+  "This means HikariCP (or the connection pool) cannot get a DB connection within timeout. My chain: <strong>Splunk</strong> — when did errors start? Correlate with Kafka consumer surge or batch job. <strong>Actuator</strong> — <code>hikaricp.connections.active</code> vs max pool size. If active = max, pool is exhausted. <strong>Thread dump</strong> — many http-nio threads WAITING on <code>HikariPool.getConnection</code> confirms it. <strong>SQL</strong> — run <code>pg_stat_activity</code>: is a long-running query or blocking session holding connections? <strong>Mitigate:</strong> kill blocking session per DBA runbook; temporarily increase pool only as band-aid. <strong>Root cause:</strong> missing index, N+1 query introduced in last deploy, or batch job competing with OLTP. I never only 'increase pool size' without finding why connections aren't returned."
+</div>
+
+<div class="q">Q4: How do you read a thread dump under time pressure?</div>
+<div class="afull">
+  "I scan in fixed order — takes about 3 minutes: (1) Search for <code>deadlock</code> — if found, stop and report immediately. (2) Count BLOCKED threads — same lock object repeated = contention. (3) Look at thread pool names: http-nio, kafka-consumer, pool-N — which pool is exhausted? (4) For CPU issues: find RUNNABLE threads and compare stack tops across dumps. (5) Note TIMED_WAITING on sockets — slow external API. I attach the dump to JIRA and highlight the 5–10 lines that matter — interviewers respect that you don't pretend to read 400 threads line by line."
+</div>
+
+<!-- PAGE 4: SQL + KAFKA -->
+<h2 class="page-break">3. SQL — How to Answer</h2>
+
+<div class="q">Q5: Members report wrong health plan in the portal. API looks fine. Where do you start?</div>
+<div class="a30"><strong>30 sec:</strong> "I validate data before blaming Java. Read-only SQL: check member's latest eligibility row, compare MAX(updated_at) on feed tables, and FULL OUTER JOIN enrollment source vs eligibility DB for mismatches. Then check Kafka lag — sync may be behind or consumer may have failed silently."</div>
+<div class="afull">
+  <strong>Full answer:</strong> Wrong data in UI usually means stale DB, not broken REST layer. I get internal member ID — never SSN in ticket. I run: latest rows from <code>member_eligibility</code> ordered by effective_date. I check <code>eligibility_feed</code> MAX(last_updated_ts) per source — if 2 days stale, ETL or consumer is broken. I FULL OUTER JOIN enrollment system vs eligibility DB on member_id — find rows where plan_code differs. If enrollment has Premium but DB has Basic, sync failed. Splunk: search eligibility-consumer for JsonMappingException or deserialization errors — schema drift can cause silent skip. Kafka: <code>consumer-groups --describe</code> — lag zero but data wrong means consumer processed but failed per-message. Fix: replay from offset after schema fix. I document all queries in JIRA — reproducible evidence.
+</div>
+
+<div class="q">Q6: API is slow. How do you determine if it's Java or the database?</div>
+<div class="afull">
+  "I split the latency chain. <strong>Splunk access logs:</strong> which endpoint, p95 latency, when started. <strong>Actuator:</strong> Hikari active connections — if maxed, app waits for DB. <strong>Thread dump:</strong> threads in socket read or JDBC wait. <strong>SQL:</strong> <code>pg_stat_activity</code> for queries running &gt; 30s; blocking PIDs. <strong>EXPLAIN ANALYZE</strong> on the exact query from the stack trace. If plan shows Seq Scan on large table — index issue. If one blocking PID holds 200 connections — lock issue. I say clearly: 'API slowness is a symptom; I trace to the slowest hop — usually DB lock or pool exhaustion in my experience.'"
+</div>
+
+<div class="q">Q7: Explain how you'd use a JOIN to debug a data issue.</div>
+<div class="afull">
+  "INNER JOIN when both sides must exist — e.g. claim must have valid provider; if INNER returns zero rows, provider is missing. LEFT JOIN to keep all members even if eligibility is null — finds members with no plan row. LATERAL JOIN for latest eligibility per member without duplicate rows. FULL OUTER JOIN to find mismatches between two source systems — the most powerful support query when two feeds disagree. I'd explain with a concrete example: enrollment feed says HMO Premium, eligibility DB says HMO Basic — FULL OUTER JOIN on member_id surfaces that row immediately."
+</div>
+
+<h3>Kafka — How to Answer</h3>
+<div class="q">Q8: Consumer lag is growing on a patient eligibility topic. What do you do?</div>
+<div class="a30"><strong>30 sec:</strong> "kafka-consumer-groups --describe to see lag per partition. If all partitions lag equally and consumer count equals partition count, it's slow processing — not under-scaling. I check Splunk for SQLTimeout in consumer, thread dump for Hikari wait, and DB blocking. Mitigate: fix blocker, send poison message to DLT, scale only if consumers &lt; partitions."</div>
+<div class="afull">
+  <strong>Full answer:</strong> Growing lag = consumers cannot keep up with produce rate. Step 1: CLI describe — lag per partition. All partitions = systemic slow handler. One partition = hot key skew. Step 2: Splunk — rebalance loops? Deserialization errors? Processing time logs. Step 3: Consumer is often DB-bound — each message does INSERT/UPDATE. Check blocking sessions. Step 4: Poison pill — one bad message retries forever, lag grows on that partition. Skip to DLT after N retries. Step 5: Mitigation: don't blindly add consumers beyond partition count — useless. Pause non-critical batch competing for DB locks. Step 6: Healthcare angle: "Lag means members may see stale eligibility — I declare Sev-2 and give member impact in bridge opener." Document offset, lag graph, and root cause in JIRA.
+</div>
+
+<div class="q">Q9: Explain Kafka architecture for a non-developer on the bridge call.</div>
+<div class="afull">
+  "Think of Kafka as a secure message tube between systems. Producers drop enrollment events into labeled tubes called topics. Each tube has multiple lanes — partitions — so parallel processing is possible. Consumer services read from their lane and track how far they've read using a bookmark called an offset. Lag is how far behind the reader is. Right now our eligibility reader is 45,000 messages behind — that's why member data is stale. We're fixing the database bottleneck that's slowing the reader."
+</div>
+
+<div class="q">Q10: What is a poison pill message and how do you handle it?</div>
+<div class="afull">
+  "A poison pill is a message that crashes the consumer handler every time it's processed — malformed JSON, unexpected null, or bad foreign key. Because Kafka is at-least-once, the consumer retries, never commits offset, and lag grows forever on that partition. I identify it by: lag on one partition only, same exception in Splunk repeated every few seconds, same offset in logs. Mitigation: move message to Dead Letter Topic after 3 retries, skip offset manually per runbook, fix data or schema, replay from offset. Long-term: idempotent consumer with dedup table and schema validation in CI."
+</div>
+
+<!-- PAGE 5: SPLUNK + JIRA -->
+<h2 class="page-break">4. Splunk & JIRA — How to Answer</h2>
+
+<div class="q">Q11: How do you use Splunk during a production incident?</div>
+<div class="a30"><strong>30 sec:</strong> "I bound time with earliest=-1h, start with ERROR timechart to find when spike began, rex to count top exceptions, then trace correlationId for a failing request. I save the search and paste URL in JIRA so anyone can reproduce my findings."</div>
+<div class="afull">
+  <strong>Full answer — my Splunk workflow:</strong><br>
+  (1) <strong>When:</strong> <code>level=ERROR earliest=-2h | timechart span=5m count</code> — pinpoints start time. Correlate with deploy index.<br>
+  (2) <strong>What:</strong> <code>rex ... Exception | stats count by exception_class</code> — top exception classes.<br>
+  (3) <strong>Where:</strong> <code>stats count by host, service</code> — blast radius.<br>
+  (4) <strong>Trace:</strong> Pick correlationId from ERROR row → <code>correlationId="..." | sort _time | table _time host level message</code> — full request path.<br>
+  (5) <strong>Specialized:</strong> JDBC errors, Kafka rebalance, p95 latency on access logs.<br>
+  (6) <strong>Document:</strong> Saved search → JIRA. HIPAA: never search by SSN; use internal correlation ID only.<br><br>
+  <strong>Interview demo line:</strong> "If you give me index name and sourcetype, I can write the SPL live — but in prod I always bound time first to control cost and noise."
+</div>
+
+<div class="q">Q12: Write / explain an SPL query to find connection pool errors.</div>
+<pre>index=kp_apps earliest=-2h
+("CannotGetJdbcConnectionException" OR "SQLTimeoutException"
+ OR "HikariPool" OR "Connection is not available")
+| stats count by host, message
+| sort - count</pre>
+<div class="afull">
+  "This searches the app index for the last 2 hours filtering known pool-related strings. stats count by host shows which pods are worst affected. sort - count surfaces the noisiest first. If I see spike at 09:12 on hosts x, y, z — I correlate with Kafka lag or batch job start at 09:10. I'd then pivot to thread dump on top host."
+</div>
+
+<div class="q">Q13: How would you set up a Splunk alert?</div>
+<div class="afull">
+  "Saved search on ERROR count in 5-minute window. Threshold: baseline + 3 sigma or fixed &gt; 50 for critical services. Alert action: PagerDuty for on-call, auto-create JIRA Sev-2 with search URL in description. Tuning: avoid paging on single timeout — require 2 consecutive breaches. Review false positives monthly. On bridge I reference alert trigger time as official incident start time."
+</div>
+
+<h3>JIRA, Severity & Team Coordination</h3>
+
+<div class="q">Q14: Three P1 tickets land at once — Kafka lag, Java OOM, one wrong report. How do you prioritize?</div>
+<div class="afull">
+  "I use impact framework: safety, patient/member breadth, duration, workaround. <strong>Kafka lag first</strong> — affects all new eligibility updates, broad member impact, no workaround. I start consumer-groups and Splunk. <strong>OOM second</strong> — I assign a teammate to heap analysis while I drive Kafka; K8s may auto-restart giving brief relief. <strong>Single wrong report third</strong> — isolated, finance can use manual correction short-term; I schedule SQL validation after stabilization. I post prioritization rationale in each JIRA ticket so stakeholders understand sequencing — that's Support II behavior, not silent queue hopping."
+</div>
+
+<div class="q">Q15: How do you communicate on an incident bridge call?</div>
+<div class="afull">
+  <strong>Opening (declare):</strong> "I'm declaring Sev-2 for eligibility-enrollment-api in prod-west. Member impact: approximately 12% of enrollment requests returning 502. Started 09:12 UTC per Splunk alert. I'm leading technical triage."<br><br>
+  <strong>Update (every 30 min):</strong> "Current status: investigating DB pool exhaustion correlated with Kafka lag +45k. Actions taken: thread dump captured, DBA engaged on blocking PID 28491, scaled consumers 4 to 8. Next: monitor lag 30 minutes. Next update 10:00 UTC or sooner if resolved."<br><br>
+  <strong>Close:</strong> "Service stabilized 09:47 UTC. Lag under 1000. Root cause: batch job lock contention. RCA ticket INC-12346 created. No further bridge updates unless regression."<br><br>
+  <strong>Rules:</strong> No PHI on bridge. Use internal service names. Have Splunk URL ready. Don't speculate — say "investigating" if unsure.
+</div>
+
+<div class="q">Q16: Tell me about leading a production incident. (STAR)</div>
+<div class="star">
+  <p><b>S — Situation:</b> USCC-to-T-Mobile onsite go-live in Guadalajara — 2-month cutover, 2+ microservices, 15+ production incidents in first 48 hours, stakeholders in US and Mexico time zones.</p>
+  <p><b>T — Task:</b> Technical triage on integration services — stabilize, debug, keep migration on track for UAT sign-off.</p>
+  <p><b>A — Action:</b> Established 30-minute JIRA update rhythm with Splunk links. Prioritized migration blockers over cosmetic defects. Correlated ERROR spikes to specific REST endpoints and SQL failures. Coordinated 3 UAT cycles with cross-functional teams. Escalated blockers to bridge; documented playbooks for offshore handoff.</p>
+  <p><b>R — Result:</b> All 15+ incidents resolved within cutover window. Migration sign-off on schedule. Repeat incidents dropped because playbooks were in JIRA. Manager cited communication quality on post-go-live review.</p>
+</div>
+
+<div class="q">Q17: Tell me about improving incident detection time. (STAR)</div>
+<div class="star">
+  <p><b>S:</b> XL Axiata Jakarta — 8+ microservices, incident detection averaging 45 minutes, fragmented monitoring across teams.</p>
+  <p><b>T:</b> Reduce detection time and coordinate upgrade validation across app, infra, and QA.</p>
+  <p><b>A:</b> Built unified Splunk dashboard — ERROR rate and dependency health for all 8 services. Weekly JIRA defect triage with clear severity. Created Detect→Triage→Mitigate runbook with named roles. Ran blameless RCAs with owned action items.</p>
+  <p><b>R:</b> Detection dropped from 45 minutes to under 5 minutes — 89% reduction. Runbook adopted by adjacent teams.</p>
+</div>
+
+<!-- PAGE 6-7: SCENARIOS -->
+<h2 class="page-break">5. Full Scenario Answers (Say Out Loud)</h2>
+
+<h3>Scenario A: Kafka Eligibility Lag +45,000</h3>
+<div class="q">Interviewer: "It's 9 AM Monday. PagerDuty fires: eligibility consumer lag exceeded 45k. Help desk reports stale plan data. Walk me through."</div>
+<div class="afull">
+  "I'd open with impact and severity. <strong>Sev-2</strong> — not Sev-1 unless authorizations are blocked for urgent care, but 45k lag with stale plan data is broad member impact. I open JIRA INC, join the bridge, confirm topic <code>patient-eligibility-events</code>, consumer group <code>eligibility-consumer-prod</code>, environment prod-west.<br><br>
+  First 5 minutes: Splunk — <code>timechart lag and ERROR count</code>. I see errors started ~09:00, top exception SQLTimeoutException. Kafka CLI — lag spread evenly across all 6 partitions, consumer count is 6 — already at partition limit, so scaling consumers won't help without adding partitions.<br><br>
+  Thread dump on consumer pod: kafka-consumer threads WAITING on HikariPool.getConnection. SQL read-only: blocking session on member_eligibility INSERT, PID 28491, started 08:55 — matches a batch replay job in change log.<br><br>
+  Mitigate: DBA kills blocking session per runbook. Pause non-critical batch replay. Monitor lag — should drop over 20–30 minutes.<br><br>
+  Communicate: 'Root cause appears batch lock contention with real-time consumer writes. Mitigation in progress. Next update 09:45.'<br><br>
+  Post-incident: RCA — separate batch window from real-time consumer path. Add Splunk alert on lag + JDBC errors combined."
+</div>
+
+<h3>Scenario B: Java API CPU 95%, Timeouts</h3>
+<div class="afull">
+  "Four of eight enrollment-api pods at 95% CPU, p95 latency 12 seconds, normal traffic, no recent deploy — I'd rule out traffic surge first.<br><br>
+  Three thread dumps 10 seconds apart via kubectl exec jstack. Finding: 120 threads RUNNABLE at PlanMatcher.evaluateRules() — same frame all three dumps. That's an infinite loop or catastrophic rules backtracking, not deadlock or pool wait.<br><br>
+  Splunk: trace slow requests — correlationIds point to plan_code MA-PPO-2026-Q3. Hypothesis: new plan rules config triggers pathological evaluation.<br><br>
+  Mitigate: disable feature flag for new rules path if available; drain traffic from hottest pods; restart as temp relief; page dev SME with dumps and sample payload.<br><br>
+  I emphasize I did NOT mass-restart without evidence — dumps proved the hot frame. That's the difference between Support I and II."
+</div>
+
+<h3>Scenario C: Wrong Plan — Data Not Code</h3>
+<div class="afull">
+  "47 tickets since 06:00 — systemic, not one member. I get internal ID 7XK-9912. SQL: enrollment source shows HMO Premium, eligibility DB shows HMO Basic. MAX(last_updated_ts) on feed B is 2 days old. Kafka lag is zero — consumer is 'caught up' but data is wrong.<br><br>
+  Splunk on eligibility-writer: JsonMappingException at 05:45 — enrollment service deployed 05:30 with new JSON field consumer doesn't understand. Messages published but never persisted — silent data loss.<br><br>
+  Fix: rollback enrollment deploy OR patch consumer schema. Replay Kafka from 05:30 offset. Re-run FULL OUTER JOIN — mismatch count should go to zero.<br><br>
+  Lesson I state in interview: 'API returned 200 but data was wrong — I validated SQL before opening Java debugger. In healthcare, wrong plan is a compliance and member trust issue, not just a bug ticket.'"
+</div>
+
+<!-- PAGE 8: WRAP UP -->
+<h2 class="page-break">6. Closing Questions, Do's & Don'ts</h2>
+
+<h3>Questions You Should Ask Them</h3>
+<ul>
+  <li>"What does the on-call rotation look like for Support II — follow-the-sun or regional?"</li>
+  <li>"Which Splunk indexes and sourcetypes do your core Java services log to?"</li>
+  <li>"How are Kafka consumer lag alerts configured today — threshold or rate of change?"</li>
+  <li>"What's the split between break-fix JIRA incidents and planned Rally work in a typical sprint?"</li>
+  <li>"What does success look like in the first 90 days for this role?"</li>
+</ul>
+
+<table>
+  <tr><th>Do</th><th>Don't</th></tr>
+  <tr><td>Lead with member/patient impact</td><td>Say "I'd just restart"</td></tr>
+  <tr><td>Name tools: Splunk, jstack, kafka-consumer-groups</td><td>Give LeetCode / algorithm answers</td></tr>
+  <tr><td>Say "read-only SQL first"</td><td>Put PHI in examples (use internal IDs)</td></tr>
+  <tr><td>Use Detect→Triage→Mitigate→Resolve→Document</td><td>Blame another team on bridge</td></tr>
+  <tr><td>30-sec answer first, expand if asked</td><td>Memorize jargon without explaining plain English</td></tr>
+  <tr><td>Reference your Amdocs go-live, 5M txn, 89% detection improvement</td><td>Claim you know Kaiser systems you haven't used</td></tr>
+</table>
+
+<div class="a30"><strong>Final 30-Second Close:</strong> "I'm a calm, evidence-based production engineer. I triage with Splunk and thread dumps, validate with SQL, monitor Kafka lag, and communicate clearly in JIRA and bridge calls. I've done this at scale during go-live cutovers, and I'm ready to do it for Kaiser members."</div>
+
+<div class="tip"><strong>Practice method:</strong> Read each <strong>30 sec</strong> answer aloud once. Pick 3 <strong>full answers</strong> and record 2-min videos. Day before interview: run Scenario A out loud in under 5 minutes.</div>
+
+<p style="text-align:center;margin-top:20px;font-size:8.5pt;color:#888;">Kaiser Permanente Java Support II · Interview Answer Guide · Ashish Shah</p>
+
+</body>
+</html>

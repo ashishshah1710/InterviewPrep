@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Senior Backend Interview Masterclass — Compact Edition</title>
+  <style>
+    @page { size: A4 portrait; margin: 6mm 8mm 7mm 8mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+      font-size: 7.75pt;
+      line-height: 1.28;
+      color: #1e293b;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Compact cover + TOC on one page */
+    .front-page {
+      page-break-after: always;
+      padding: 2mm 0 4mm;
+    }
+    .front-page h1 { font-size: 18pt; color: #0f172a; margin: 0 0 4px; text-align: center; }
+    .front-page .subtitle { font-size: 9.5pt; color: #475569; margin: 2px 0; text-align: center; }
+    .front-page .badges { text-align: center; margin: 8px 0 10px; }
+    .badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 7.5pt;
+      margin: 2px;
+    }
+    .framework-compact {
+      font-size: 7.5pt;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 6px 10px;
+      margin: 8px 0 12px;
+      columns: 2;
+      column-gap: 14px;
+    }
+    .framework-compact strong { display: block; margin-bottom: 4px; column-span: all; }
+    .framework-compact ol { margin: 0; padding-left: 16px; }
+    .framework-compact li { margin-bottom: 2px; }
+
+    .toc-block h2 {
+      font-size: 11pt;
+      color: #0f172a;
+      border-bottom: 1px solid #2563eb;
+      padding-bottom: 3px;
+      margin: 0 0 6px;
+    }
+    .toc-cat { font-weight: 700; color: #1e40af; margin: 6px 0 2px; font-size: 8pt; }
+    .toc-list {
+      margin: 0 0 4px;
+      padding-left: 14px;
+      columns: 4;
+      column-gap: 10px;
+      font-size: 7pt;
+    }
+    .toc-list li { margin-bottom: 1px; }
+
+    .category-header {
+      font-size: 11pt;
+      color: #fff;
+      background: #1e40af;
+      padding: 5px 10px;
+      margin: 10px 0 6px;
+      border-radius: 3px;
+      page-break-after: avoid;
+    }
+    .topic {
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .topic-title {
+      font-size: 10pt;
+      color: #0f172a;
+      margin: 0 0 4px;
+      page-break-after: avoid;
+    }
+    .meta-inline { font-size: 7.5pt; color: #64748b; font-weight: normal; }
+
+    .section { margin: 4px 0; }
+    .section-head {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 3px;
+      padding: 3px 7px;
+      border-radius: 2px;
+      page-break-after: avoid;
+    }
+    .sec-why .section-head { background: #2563eb; }
+    .sec-production .section-head { background: #7c3aed; }
+    .sec-executive .section-head { background: #059669; }
+    .sec-tradeoffs .section-head { background: #d97706; }
+    .sec-followups .section-head { background: #dc2626; }
+    .section-body p { margin: 2px 0; text-align: justify; }
+    .scenario-label { font-size: 8pt; margin: 2px 0 3px; }
+    .executive-script { font-style: italic; color: #065f46; }
+
+    pre {
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 6.4pt;
+      line-height: 1.22;
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 5px 7px;
+      border-radius: 3px;
+      margin: 3px 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    pre.diagram {
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      font-size: 6.5pt;
+    }
+
+    .followup-compact {
+      margin: 2px 0 4px 14px;
+      padding: 0;
+      font-size: 7.8pt;
+    }
+    .followup-compact li { margin-bottom: 3px; }
+    .followup-compact em { font-style: normal; color: #059669; font-weight: 600; }
+
+    .footer {
+      text-align: center;
+      font-size: 7pt;
+      color: #94a3b8;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="print-bar no-print" style="background:#ecfdf5;border:1px solid #86efac;padding:10px;margin:10px;font-size:9pt;">
+  <strong>Compact PDF:</strong> Ctrl+P → Save as PDF → Enable <strong>Background graphics</strong> → Margins: <strong>Minimum</strong>
+</div>
+
+<div class="front-page">
+  <h1>Senior Backend Interview Masterclass</h1>
+  <p class="subtitle">41 Trending Topics · Principal Architect Framework · Compact Edition</p>
+  <div class="badges">
+    <span class="badge">Senior Level</span>
+    <span class="badge">Java 17+</span>
+    <span class="badge">Spring Boot 3+</span>
+  </div>
+  <div class="framework-compact">
+    <strong>5-section framework per topic:</strong>
+    <ol>
+      <li>Why &amp; Core Architecture</li>
+      <li>Production Example</li>
+      <li>Executive Answer (2 min)</li>
+      <li>Trade-offs</li>
+      <li>Follow-ups &amp; Traps</li>
+    </ol>
+  </div>
+  <div class="toc-block">
+    <h2>Table of Contents</h2>
+    <div id="toc"></div>
+  </div>
+</div>
+
+<div id="content"></div>
+
+<div class="footer">Senior Backend Interview Masterclass · Compact Edition · InterviewPrep</div>
+
+<script src="trending-interview-answers-content.js"></script>
+<script src="trending-interview-render.js"></script>
+<script>
+(function () {
+  var toc = document.getElementById('toc');
+  var content = document.getElementById('content');
+  var currentCat = '';
+  var tocLists = {};
+  var renderOpts = { compact: true };
+
+  TOPICS.forEach(function (t, i) {
+    if (t.category !== currentCat) {
+      currentCat = t.category;
+      var catEl = document.createElement('div');
+      catEl.className = 'category-header';
+      catEl.textContent = currentCat;
+      content.appendChild(catEl);
+
+      var catToc = document.createElement('div');
+      catToc.className = 'toc-cat';
+      catToc.textContent = currentCat;
+      toc.appendChild(catToc);
+      var ul = document.createElement('ul');
+      ul.className = 'toc-list';
+      toc.appendChild(ul);
+      tocLists[currentCat] = ul;
+    }
+
+    var li = document.createElement('li');
+    li.textContent = (i + 1) + '. ' + t.title;
+    tocLists[currentCat].appendChild(li);
+
+    var div = document.createElement('div');
+    div.className = 'topic';
+    div.innerHTML = renderTopicHtml(t, renderOpts);
+    content.appendChild(div);
+  });
+})();
+</script>
+</body>
+</html>
