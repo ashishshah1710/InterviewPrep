@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Patterns — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html" class="nav-active">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="design-patterns">
+      <h2 class="section-title">Design Patterns</h2>
+      <p class="section-desc">Gang of Four patterns frequently asked in Java Spring Boot interviews at 2–3 YOE level.</p>
+
+      <article>
+        <h3>Explain the Factory Design Pattern</h3>
+        <span class="tag">Creational</span>
+        <p>Factory Pattern delegates object creation to a dedicated factory class/method instead of calling <code>new</code> directly in client code. Client depends on an interface, not concrete classes — supports Open/Closed Principle.</p>
+        <pre><code>// Product interface
+interface Notification {
+    void send(String message);
+}
+
+class EmailNotification implements Notification {
+    public void send(String msg) { /* send email */ }
+}
+class SmsNotification implements Notification {
+    public void send(String msg) { /* send SMS */ }
+}
+
+// Simple Factory
+class NotificationFactory {
+    static Notification create(String type) {
+        return switch (type) {
+            case "EMAIL" -> new EmailNotification();
+            case "SMS"   -> new SmsNotification();
+            default -> throw new IllegalArgumentException(type);
+        };
+    }
+}
+
+// Usage in Spring — often replaced by @Bean + @Qualifier or Map injection
+Notification n = NotificationFactory.create("EMAIL");
+n.send("Order confirmed");</code></pre>
+        <p><strong>Variants:</strong> Simple Factory (static method), Factory Method (subclasses decide type), Abstract Factory (families of related objects). In Spring Boot, <code>@Configuration</code> + <code>@Bean</code> methods are a built-in factory mechanism.</p>
+      </article>
+
+      <article>
+        <h3>Explain the Observer Design Pattern</h3>
+        <span class="tag">Behavioral</span>
+        <p>Observer defines a one-to-many dependency: when one object (subject) changes state, all dependent objects (observers) are notified automatically.</p>
+        <pre><code>// Subject
+interface OrderSubject {
+    void subscribe(OrderObserver observer);
+    void unsubscribe(OrderObserver observer);
+    void notifyObservers(OrderEvent event);
+}
+
+// Observer
+interface OrderObserver {
+    void onOrderEvent(OrderEvent event);
+}
+
+class OrderService implements OrderSubject {
+    private final List&lt;OrderObserver&gt; observers = new CopyOnWriteArrayList&lt;&gt;();
+
+    public void placeOrder(Order order) {
+        // business logic
+        notifyObservers(new OrderEvent("CREATED", order));
+    }
+    // subscribe, unsubscribe, notifyObservers...
+}
+
+class EmailNotifier implements OrderObserver {
+    public void onOrderEvent(OrderEvent e) { /* send email */ }
+}</code></pre>
+        <p><strong>In Spring Boot:</strong> <code>ApplicationEventPublisher</code> + <code>@EventListener</code> is the framework-native Observer pattern. Kafka/RabbitMQ extend this to distributed observers across microservices.</p>
+      </article>
+
+      <article>
+        <h3>Have you worked on Low-Level Design (LLD)?</h3>
+        <span class="tag">Behavioral</span>
+        <span class="tag">LLD</span>
+        <p>This is both a experience question and a design skill check. Structure your answer using a real or hypothetical example:</p>
+        <ul class="detail-list">
+          <li><strong>Problem:</strong> "I designed a notification module / parking lot / rate limiter for..."</li>
+          <li><strong>Requirements:</strong> Functional (what it must do) + non-functional (thread safety, extensibility, scale)</li>
+          <li><strong>Entities:</strong> Classes and relationships (UML or verbal: User, Order, NotificationChannel)</li>
+          <li><strong>Patterns:</strong> Factory (channel creation), Strategy (payment/fee algorithm), Observer (event notification)</li>
+          <li><strong>APIs:</strong> Public interfaces and method signatures</li>
+          <li><strong>Concurrency:</strong> How you handle shared state (locks, immutable objects, concurrent collections)</li>
+        </ul>
+        <div class="highlight-box">
+          <strong>Sample one-liner:</strong> "Yes — for our order service I designed pluggable notification channels using Strategy + Factory, with Spring's event publisher as Observer so email and SMS handlers stay decoupled from order placement logic."
+        </div>
+        <p>See the <a href="lld.html" style="color: var(--accent);">Low-Level Design</a> section for full system designs (Parking Lot, Vending Machine, Rate Limiter, etc.).</p>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

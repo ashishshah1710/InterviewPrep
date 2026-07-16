@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Core Java & Concurrency — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html" class="nav-active">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="java-concurrency">
+      <h2 class="section-title">Core Java and Concurrency</h2>
+      <p class="section-desc">Fundamental Java concepts covering collections, JVM memory, thread safety, and concurrent programming primitives.</p>
+
+      <article>
+        <h3>What is the internal difference between HashMap and ConcurrentHashMap?</h3>
+        <span class="tag">Collections</span>
+        <span class="tag">Thread Safety</span>
+        <p><strong>HashMap</strong> is a non-thread-safe hash table implementation. Internally it maintains an array of buckets. When you call <code>put(key, value)</code>, the key's hash code is computed, mapped to a bucket index, and the entry is stored in a linked list (or red-black tree if the bucket exceeds 8 nodes in Java 8+). HashMap allows one <code>null</code> key and multiple <code>null</code> values. Its iterator is <em>fail-fast</em> — it throws <code>ConcurrentModificationException</code> if the map is structurally modified during iteration.</p>
+        <p><strong>ConcurrentHashMap</strong> is designed for concurrent access without locking the entire map. In Java 8+, it uses a combination of:</p>
+        <ul class="detail-list">
+          <li><strong>CAS (Compare-And-Swap)</strong> for lock-free reads and some writes</li>
+          <li><strong>Synchronized blocks on individual bucket heads</strong> for write operations</li>
+          <li><strong>Volatile reads</strong> to ensure visibility across threads</li>
+        </ul>
+        <p>It does <strong>not</strong> allow null keys or values (to avoid ambiguity in concurrent scenarios). Its iterator is <em>weakly consistent</em> — it reflects the state at some point during iteration and never throws <code>ConcurrentModificationException</code>.</p>
+        <table>
+          <tr><th>Feature</th><th>HashMap</th><th>ConcurrentHashMap</th></tr>
+          <tr><td>Thread safety</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Locking granularity</td><td>None</td><td>Per-bucket (Java 8+)</td></tr>
+          <tr><td>Null key/value</td><td>Allowed</td><td>Not allowed</td></tr>
+          <tr><td>Iterator behavior</td><td>Fail-fast</td><td>Weakly consistent</td></tr>
+          <tr><td>Performance under contention</td><td>Can corrupt data</td><td>Scales well</td></tr>
+        </table>
+      </article>
+
+      <article>
+        <h3>Explain the JVM Memory Model: Heap, Stack, and Metaspace</h3>
+        <span class="tag">JVM</span>
+        <span class="tag">Memory</span>
+        <div class="diagram">┌─────────────────────────────────────────┐
+│  Metaspace (Java 8+)                    │  Class metadata, static vars
+├─────────────────────────────────────────┤
+│  Heap (shared across all threads)       │
+│  ├─ Young Generation                    │
+│  │   ├─ Eden Space                      │  New objects allocated here
+│  │   └─ Survivor Spaces (S0, S1)       │  Objects surviving minor GC
+│  └─ Old Generation (Tenured)            │  Long-lived objects
+├─────────────────────────────────────────┤
+│  Stack (per thread)                     │  Method frames, local variables
+├─────────────────────────────────────────┤
+│  PC Register + Native Method Stack      │
+└─────────────────────────────────────────┘</div>
+        <p><strong>Stack:</strong> Each thread gets its own stack. When a method is called, a new stack frame is pushed containing local variables, operand stack, and reference to the calling frame. Primitive types and object references (not the objects themselves) live here. Memory is automatically reclaimed when the method returns. Stack overflow occurs with deep recursion.</p>
+        <p><strong>Heap:</strong> Shared memory region where all Java object instances and arrays are allocated. Managed by the Garbage Collector. Divided into Young Gen (Eden + Survivor spaces for short-lived objects) and Old Gen (long-lived objects promoted after surviving multiple GC cycles). OutOfMemoryError occurs when the heap is exhausted.</p>
+        <p><strong>Metaspace:</strong> Replaced PermGen in Java 8. Stores class metadata — class definitions, method bytecode, constant pools, static variables. Grows dynamically based on application needs (unlike the fixed-size PermGen). Class unloading is possible when ClassLoaders are garbage collected.</p>
+      </article>
+
+      <article>
+        <h3>What are Atomic Variables, and where are they commonly used?</h3>
+        <span class="tag">Concurrency</span>
+        <span class="tag">CAS</span>
+        <p>Atomic variables (<code>AtomicInteger</code>, <code>AtomicLong</code>, <code>AtomicReference</code>, <code>AtomicBoolean</code>, etc.) live in <code>java.util.concurrent.atomic</code>. They provide thread-safe operations on a single variable without using <code>synchronized</code>, leveraging hardware-level <strong>CAS (Compare-And-Swap)</strong> instructions.</p>
+        <p>CAS works by: read current value → compute new value → atomically swap only if current value hasn't changed → retry if it has. This is lock-free and avoids thread blocking.</p>
+        <pre><code>AtomicInteger requestCount = new AtomicInteger(0);
+
+// Thread-safe increment without synchronized
+requestCount.incrementAndGet();
+
+// Compare-and-set: set to 10 only if current value is 5
+requestCount.compareAndSet(5, 10);</code></pre>
+        <p><strong>Common use cases:</strong></p>
+        <ul class="detail-list">
+          <li>Metrics counters and statistics in high-throughput systems</li>
+          <li>Status flags and state machines (e.g., shutdown signals)</li>
+          <li>Building lock-free data structures (<code>ConcurrentLinkedQueue</code>)</li>
+          <li>Sequence generators (unique ID generation without locks)</li>
+          <li>Implementing spin locks and non-blocking algorithms</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What is the difference between volatile and synchronized?</h3>
+        <span class="tag">Visibility</span>
+        <span class="tag">Atomicity</span>
+        <table>
+          <tr><th>Aspect</th><th>volatile</th><th>synchronized</th></tr>
+          <tr><td>Visibility guarantee</td><td>Yes — reads/writes go directly to main memory</td><td>Yes — same visibility guarantee</td></tr>
+          <tr><td>Atomicity</td><td>Only for single read/write of the variable</td><td>Entire block is atomic</td></tr>
+          <tr><td>Mutual exclusion</td><td>No — multiple threads can read/write simultaneously</td><td>Yes — only one thread at a time</td></tr>
+          <tr><td>Blocking</td><td>Non-blocking</td><td>Can block threads waiting for the lock</td></tr>
+          <tr><td>Performance</td><td>Lightweight</td><td>Heavier due to lock acquisition/release</td></tr>
+        </table>
+        <div class="warn-box">
+          <strong>Important:</strong> <code>volatile</code> does NOT make compound operations like <code>count++</code> atomic. <code>count++</code> is read-modify-write (three steps) and can race between threads even with volatile.
+        </div>
+        <p><strong>Use volatile when:</strong> A single variable is written by one thread and read by many (status flags, configuration toggles). <strong>Use synchronized when:</strong> You need to protect a critical section with multiple statements or compound operations.</p>
+      </article>
+
+      <article>
+        <h3>How do you mitigate performance bottlenecks caused by synchronization?</h3>
+        <span class="tag">Performance</span>
+        <ul class="detail-list">
+          <li><strong>Minimize lock scope:</strong> Lock only the critical section, not the entire method. Hold locks for the shortest time possible.</li>
+          <li><strong>Finer-grained locking:</strong> Use <code>ConcurrentHashMap</code> instead of wrapping HashMap with <code>synchronized</code>. Lock per bucket/segment rather than the whole structure.</li>
+          <li><strong>Lock-free alternatives:</strong> Replace locks with <code>Atomic*</code> variables and CAS operations for simple counters and flags.</li>
+          <li><strong>ReadWriteLock:</strong> Allow multiple concurrent readers but exclusive writers — ideal for read-heavy workloads.</li>
+          <li><strong>Immutable objects:</strong> If data doesn't change after creation, no synchronization is needed. Use <code>final</code> fields and defensive copies.</li>
+          <li><strong>ThreadLocal:</strong> Give each thread its own copy of mutable state to eliminate sharing entirely.</li>
+          <li><strong>Striped locking:</strong> Partition data into independent segments, each with its own lock (e.g., Guava's Striped).</li>
+          <li><strong>Async/message passing:</strong> Use <code>BlockingQueue</code> or actor patterns to avoid shared mutable state.</li>
+          <li><strong>Lock ordering:</strong> Always acquire locks in a consistent order to prevent deadlocks that cause threads to block indefinitely.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>What is ThreadLocal, and how can it lead to memory leaks?</h3>
+        <span class="tag">ThreadLocal</span>
+        <span class="tag">Memory Leak</span>
+        <p><code>ThreadLocal</code> provides thread-local variables — each thread accessing the variable gets its own independently initialized copy. Internally, each thread holds a <code>ThreadLocalMap</code> where keys are ThreadLocal instances and values are the stored objects.</p>
+        <pre><code>private static final ThreadLocal&lt;UserContext&gt; context =
+    ThreadLocal.withInitial(UserContext::new);
+
+// Set at request start
+context.set(new UserContext(userId, roles));
+
+// Get anywhere in the same thread
+UserContext ctx = context.get();
+
+// MUST clean up
+context.remove();</code></pre>
+        <div class="warn-box">
+          <strong>Memory leak mechanism:</strong> In thread pools (Tomcat, ExecutorService), threads are reused indefinitely. If you call <code>set()</code> with a large object (e.g., a UserContext with DB connections) and never call <code>remove()</code>, that object remains referenced by the thread's ThreadLocalMap forever — even after the request completes. Over time, this causes heap exhaustion.
+        </div>
+        <p><strong>Prevention:</strong> Always call <code>threadLocal.remove()</code> in a <code>finally</code> block, especially in servlet filters, interceptors, and thread-pool task wrappers.</p>
+      </article>
+
+      <article>
+        <h3>What is a BlockingQueue, and where is it used in real-world applications?</h3>
+        <span class="tag">Producer-Consumer</span>
+        <p>A <code>BlockingQueue</code> is a thread-safe queue that blocks the calling thread when:</p>
+        <ul class="detail-list">
+          <li><code>put(element)</code> is called on a full queue (bounded queues)</li>
+          <li><code>take()</code> is called on an empty queue</li>
+        </ul>
+        <p>This blocking behavior makes it ideal for coordinating producer-consumer workflows without busy-waiting or manual wait/notify.</p>
+        <p><strong>Implementations:</strong></p>
+        <ul class="detail-list">
+          <li><code>ArrayBlockingQueue</code> — bounded, array-backed, single lock</li>
+          <li><code>LinkedBlockingQueue</code> — optionally bounded, linked nodes, two-lock design</li>
+          <li><code>PriorityBlockingQueue</code> — unbounded, priority-ordered</li>
+          <li><code>DelayQueue</code> — elements available only after a delay period</li>
+          <li><code>SynchronousQueue</code> — zero capacity, direct handoff</li>
+        </ul>
+        <p><strong>Real-world uses:</strong> Thread pool work queues (<code>ThreadPoolExecutor</code> uses one internally), log aggregation pipelines, order processing systems, backpressure in streaming data pipelines, and decoupling API request handling from background processing.</p>
+      </article>
+
+      <article>
+        <h3>What are the different approaches to achieving thread safety in Java?</h3>
+        <span class="tag">Thread Safety</span>
+        <table>
+          <tr><th>Approach</th><th>Mechanism</th><th>Best For</th></tr>
+          <tr><td>Synchronization</td><td><code>synchronized</code>, <code>ReentrantLock</code></td><td>Critical sections, compound operations</td></tr>
+          <tr><td>Immutable objects</td><td><code>final</code> fields, no setters</td><td>Shared read-only data (DTOs, config)</td></tr>
+          <tr><td>Thread confinement</td><td>Object accessed by only one thread</td><td>Local variables, stack-only data</td></tr>
+          <tr><td>Atomic variables</td><td>CAS operations</td><td>Counters, flags, lock-free algorithms</td></tr>
+          <tr><td>Concurrent collections</td><td>Built-in thread-safe collections</td><td>Shared maps, lists, queues</td></tr>
+          <tr><td>Volatile</td><td>Memory visibility guarantee</td><td>Single-writer status flags</td></tr>
+          <tr><td>ThreadLocal</td><td>Per-thread copies</td><td>Request context, SimpleDateFormat</td></tr>
+          <tr><td>Message passing</td><td>BlockingQueue, actors</td><td>Decoupled services, no shared state</td></tr>
+        </table>
+      </article>
+
+      <article>
+        <h3>What is a Functional Interface?</h3>
+        <span class="tag">Java 8+</span>
+        <span class="tag">Lambda</span>
+        <p>A functional interface has exactly <strong>one abstract method</strong> (SAM — Single Abstract Method). Annotated with <code>@FunctionalInterface</code> (optional but recommended — compiler validates the rule).</p>
+        <pre><code>@FunctionalInterface
+interface Calculator {
+    int operate(int a, int b);
+}
+
+Calculator add = (a, b) -> a + b;
+Calculator multiply = (a, b) -> a * b;
+
+// Built-in examples: Runnable, Callable, Comparator,
+// Predicate, Function, Consumer, Supplier</code></pre>
+        <p>Functional interfaces enable lambda expressions and method references. Java 8 added <code>java.util.function</code> package with common patterns for streams and optional composition.</p>
+      </article>
+
+      <article>
+        <h3>Difference between Process and Thread?</h3>
+        <span class="tag">OS</span>
+        <span class="tag">Concurrency</span>
+        <table>
+          <tr><th>Aspect</th><th>Process</th><th>Thread</th></tr>
+          <tr><td>Definition</td><td>Independent program in execution with its own memory space</td><td>Lightweight unit of execution within a process</td></tr>
+          <tr><td>Memory</td><td>Separate heap, stack, code, data segments</td><td>Shares process heap; each thread has its own stack</td></tr>
+          <tr><td>Communication</td><td>IPC (pipes, sockets, shared memory) — heavier</td><td>Shared memory within the process — faster</td></tr>
+          <tr><td>Creation cost</td><td>Heavy (fork, exec)</td><td>Lightweight</td></tr>
+          <tr><td>Failure isolation</td><td>One process crash doesn't kill others</td><td>One uncaught exception can affect the whole JVM process</td></tr>
+          <tr><td>Example</td><td>Running two Java applications</td><td>Tomcat handling 200 HTTP requests concurrently</td></tr>
+        </table>
+      </article>
+
+      <article>
+        <h3>Different ways to create a Thread and implement using Runnable</h3>
+        <span class="tag">Thread</span>
+        <pre><code>// 1. Extend Thread class
+class MyThread extends Thread {
+    public void run() { System.out.println("Running"); }
+}
+new MyThread().start();
+
+// 2. Implement Runnable (preferred over extending Thread)
+class MyTask implements Runnable {
+    public void run() { System.out.println("Task"); }
+}
+new Thread(new MyTask()).start();
+
+// 3. Lambda (Runnable is a functional interface)
+new Thread(() -> System.out.println("Lambda")).start();
+
+// 4. Callable + Future (returns a result)
+ExecutorService pool = Executors.newSingleThreadExecutor();
+Future&lt;String&gt; future = pool.submit(() -> "result");
+
+// 5. ExecutorService (production approach — see below)
+Executors.newFixedThreadPool(4).submit(() -> doWork());</code></pre>
+        <p>Always call <code>start()</code>, not <code>run()</code> directly — <code>start()</code> creates a new thread; <code>run()</code> executes in the current thread.</p>
+      </article>
+
+      <article>
+        <h3>Pros and cons: extending Thread vs Runnable vs ExecutorService</h3>
+        <span class="tag">Thread</span>
+        <table>
+          <tr><th>Approach</th><th>Pros</th><th>Cons</th></tr>
+          <tr>
+            <td>Extend <code>Thread</code></td>
+            <td>Simple for demos; direct access to Thread methods</td>
+            <td>Java single inheritance — can't extend another class; couples task logic with thread mechanism; poor reuse</td>
+          </tr>
+          <tr>
+            <td>Implement <code>Runnable</code></td>
+            <td>Separates task from thread; can pass same task to multiple threads; works with inheritance</td>
+            <td>No return value (use Callable instead); manual thread lifecycle management; no built-in pool</td>
+          </tr>
+          <tr>
+            <td><code>ExecutorService</code></td>
+            <td>Thread pool reuse; queue management; submit Callable/Future; graceful shutdown; production-ready</td>
+            <td>More setup; must configure pool size; must call <code>shutdown()</code> to avoid JVM hang</td>
+          </tr>
+        </table>
+        <div class="highlight-box">
+          <strong>Interview answer:</strong> Prefer Runnable/Callable + ExecutorService in real applications. Never extend Thread in Spring Boot services.
+        </div>
+      </article>
+
+      <article>
+        <h3>What is ExecutorService?</h3>
+        <span class="tag">Thread Pool</span>
+        <p><code>ExecutorService</code> is a higher-level API from <code>java.util.concurrent</code> that manages a pool of worker threads, a task queue, and thread lifecycle — so you submit work instead of creating raw threads.</p>
+        <pre><code>ExecutorService executor = Executors.newFixedThreadPool(4);
+
+// Runnable — no return value
+executor.submit(() -> sendEmail(orderId));
+
+// Callable — returns Future
+Future&lt;BigDecimal&gt; future = executor.submit(() -> calculateTotal(orderId));
+BigDecimal total = future.get(5, TimeUnit.SECONDS);
+
+// Graceful shutdown
+executor.shutdown();
+executor.awaitTermination(30, TimeUnit.SECONDS);</code></pre>
+        <p><strong>Common pool types:</strong> <code>newFixedThreadPool(n)</code>, <code>newCachedThreadPool()</code>, <code>newSingleThreadExecutor()</code>, <code>newScheduledThreadPool(n)</code>. In Spring Boot, prefer <code>@Async</code> with a configured <code>TaskExecutor</code> bean over raw ExecutorService in business code.</p>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

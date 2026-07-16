@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latency vs Throughput — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html" class="nav-active">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="latency-throughput">
+      <h2 class="section-title">Common Interview Questions — Latency &amp; Throughput</h2>
+      <p class="section-desc">Performance fundamentals every backend engineer must explain clearly — bandwidth, caching, scaling, and real-world trade-offs.</p>
+
+      <div class="section-banner">
+        <span class="trend-badge">PERFORMANCE · SYSTEM DESIGN</span>
+        <h3>Latency vs Throughput vs Bandwidth</h3>
+        <p>10 frequently asked questions — with simple explanations and interview talking points.</p>
+      </div>
+
+      <div class="perf-compare">
+        <div><strong>Latency</strong>Time for <em>one</em> request to complete (ms). "How long does one call take?"</div>
+        <div><strong>Throughput</strong>How <em>many</em> requests complete per second (req/s, Mbps). "How much work per unit time?"</div>
+      </div>
+
+      <span class="cat-label-perf">Common Interview Questions</span>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 01</span><h3>What is the difference between latency and throughput?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Latency = delay for a single operation (e.g. API responds in 200 ms). Throughput = total work done over time (e.g. 5,000 requests/sec). A fast single request (low latency) doesn't automatically mean the system handles many requests (high throughput).</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Latency measured in ms; throughput in ops/sec or Mbps.</li>
+          <li>Example: one DB query = 5 ms latency; connection pool with 100 threads might achieve 20,000 queries/sec throughput.</li>
+          <li>Often a trade-off: batching increases throughput but adds latency per item.</li>
+          <li>SLIs: p50/p99 latency for user experience; throughput for capacity planning.</li>
+        </ul></div></div>
+        <pre><code>// Low latency: respond immediately with cached data
+// High throughput: process 10K Kafka messages/sec with parallel consumers</code></pre></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 02</span><h3>Can a system have high bandwidth but low throughput?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Yes. Bandwidth is the maximum capacity of the link (pipe width). Throughput is what you actually use. A 1 Gbps link with a slow server, CPU bottleneck, or packet loss may only deliver 100 Mbps of real throughput.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Bandwidth = theoretical max; throughput = actual delivered data.</li>
+          <li>Bottlenecks: CPU-bound app, disk I/O, TCP retransmits, single-threaded processing.</li>
+          <li>Analogy: 8-lane highway (bandwidth) but accident causes traffic jam (low throughput).</li>
+          <li>Fix throughput by removing bottleneck — not always by upgrading the link.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 03</span><h3>Why can a network with 100 Mbps bandwidth achieve only 60 Mbps throughput?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>The link can carry 100 Mbps max, but real-world factors eat into it — protocol overhead, congestion, retransmissions, Wi-Fi interference, and limits on the sending/receiving devices.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>TCP/IP headers + ACKs reduce usable payload (~5–15% overhead).</li>
+          <li>Packet loss → retransmits; congestion control throttles speed.</li>
+          <li>Shared link: other users/apps consume part of the 100 Mbps.</li>
+          <li>Server disk/CPU can't read/send fast enough; old NIC or Wi-Fi half-duplex.</li>
+          <li>Measure with iperf — compare to ISP rated speed to isolate layer.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 04</span><h3>How does caching impact latency?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Cache hit = data from Redis/memory in ~1 ms instead of DB in ~50 ms — latency drops sharply. Cache miss = extra hop to cache + DB, so latency can be slightly worse unless cache is well-designed.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Cache hit: skip DB/network round trip — major latency win.</li>
+          <li>CDN edge cache: serve static assets closer to user — cuts geographic latency.</li>
+          <li>Cache-aside: app checks Redis → on miss, load DB and populate cache.</li>
+          <li>Stale cache TTL vs consistency trade-off; warm cache on deploy.</li>
+          <li>Project example: "Product API p99 dropped from 120 ms to 8 ms with Redis."</li>
+        </ul></div></div>
+        <pre><code>// Cache hit:  ~1 ms   (Redis local)
+// Cache miss: ~55 ms  (Redis miss + PostgreSQL query + cache write)
+// No cache:   ~50 ms  (PostgreSQL every time)</code></pre></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 05</span><h3>How does horizontal scaling impact throughput?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Add more identical service instances behind a load balancer — each handles requests in parallel, so total throughput increases roughly linearly (until DB or Kafka becomes the bottleneck).</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>3 pods × 2,000 req/s each ≈ 6,000 req/s system throughput.</li>
+          <li>Requires stateless services — session in Redis, not in-memory on one pod.</li>
+          <li>Doesn't fix slow single-request latency if code/DB query is the problem.</li>
+          <li>Downstream limits: DB connection pool, Kafka partition count cap parallelism.</li>
+          <li>K8s HPA scales on CPU or custom metric (queue depth, req/s).</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 06</span><h3>What factors contribute to network latency?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Every hop adds delay: distance (speed of light), router/firewall processing, packet size, queueing during congestion, DNS lookup, and TLS handshake.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>Propagation:</strong> Mumbai → US East ≈ 200 ms RTT (physics).</li>
+          <li><strong>Transmission:</strong> larger packets take longer on a given link speed.</li>
+          <li><strong>Processing:</strong> load balancer, API Gateway, WAF inspect each packet.</li>
+          <li><strong>Queuing:</strong> congestion at peak — packets wait in buffers.</li>
+          <li><strong>Application:</strong> DNS (~20–100 ms), TLS 1.3 handshake (~1 RTT).</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 07</span><h3>Why does increasing bandwidth not always reduce latency?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Bandwidth and latency measure different things. Bandwidth = how much data fits at once (wider pipe). Latency = how long one bit takes to travel (pipe length). A wider pipe doesn't make light travel faster.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Upgrading 100 Mbps → 1 Gbps helps when link is saturated (throughput bound).</li>
+          <li>If latency is 200 ms due to geography, more bandwidth won't change RTT.</li>
+          <li>Serial request chains (A→B→C→D) add latencies — bandwidth doesn't parallelize that.</li>
+          <li>Fix latency: reduce hops, cache, CDN, async, co-locate services.</li>
+          <li>Fix throughput: more bandwidth, batching, horizontal scale, partitioning.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 08</span><h3>What matters more for online gaming: latency or throughput?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Latency (ping). Games send tiny packets frequently — you need low RTT (&lt;50 ms ideal) so actions register instantly. High Mbps download speed doesn't help if ping is 200 ms.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Throughput needs are low (KB/s) — latency is the bottleneck.</li>
+          <li>UDP often preferred over TCP for real-time (less retransmit delay).</li>
+          <li>Game servers deployed in regional zones close to players.</li>
+          <li>Jitter (latency variation) also matters for smooth gameplay.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 09</span><h3>What matters more for video streaming: latency or bandwidth?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Bandwidth (mostly). HD needs ~5 Mbps, 4K needs ~25 Mbps sustained throughput. A few seconds of buffer absorbs latency — users care about quality, not instant frame delivery (except live sports).</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>On-demand Netflix: buffer 10–30 sec ahead — latency less critical.</li>
+          <li>Live streaming / video calls: latency becomes important again.</li>
+          <li>Adaptive bitrate switches quality based on available bandwidth.</li>
+          <li>CDN delivers high throughput by caching video segments at edge.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-perf"><span class="block-num">PERF 10</span><h3>How would you reduce latency in a distributed system?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Cut round trips: cache hot data, co-locate services, use connection pooling, CDN for static assets, async for non-critical paths, and deploy closer to users geographically.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>Cache:</strong> Redis for reads; CDN for static/API at edge.</li>
+          <li><strong>Fewer hops:</strong> merge microservices or use BFF to avoid chatty REST chains.</li>
+          <li><strong>Async:</strong> return 202 + poll/WebSocket instead of sync wait on 3 services.</li>
+          <li><strong>DB:</strong> indexes, read replicas, avoid N+1; connection pool tuning.</li>
+          <li><strong>Network:</strong> gRPC + HTTP/2 multiplexing internally; keep-alive; regional deployment.</li>
+          <li><strong>Observe:</strong> distributed tracing (Jaeger) to find slowest span in the chain.</li>
+        </ul></div></div>
+        <pre><code>// Before: Client → Gateway → Order → Inventory → Payment → DB  (4 hops, 400 ms)
+// After:  Client → Gateway → Order (cache inventory, async payment)  (~80 ms)
+//         + Redis cache hit on product catalog</code></pre>
+        <p><a class="cross-link" href="event-driven-architecture.html">→ Event-driven async pattern</a> · <a class="cross-link" href="production-topics.html">→ Production topics</a></p></div>
+
+      <div class="tip-box">
+        <strong>Interview one-liner:</strong> "Bandwidth is how wide the road is; throughput is how many cars actually pass; latency is how long one car's trip takes. I optimize each depending on whether the system is user-facing (latency) or batch/streaming (throughput)."
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

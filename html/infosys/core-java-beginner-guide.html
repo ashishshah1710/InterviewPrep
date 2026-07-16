@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Core &amp; Advanced Java — Complete Beginner Guide</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 14mm 16mm 16mm 16mm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: #1e293b;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Cover */
+    .cover-page {
+      page-break-after: always;
+      min-height: 260mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20mm;
+      border-bottom: 4px solid #2563eb;
+    }
+    .cover-page h1 {
+      font-size: 28pt;
+      color: #1e40af;
+      margin: 0 0 12px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .cover-page .subtitle { font-size: 14pt; color: #475569; margin: 6px 0; }
+    .cover-page .badge-row { margin-top: 30px; }
+    .badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 9.5pt;
+      margin: 4px;
+    }
+
+    /* TOC */
+    .toc-page { page-break-after: always; padding: 8mm 0; }
+    .toc-page h2 { font-size: 18pt; color: #1e40af; border-bottom: 2px solid #2563eb; padding-bottom: 8px; }
+    .toc-list { columns: 2; column-gap: 24px; margin-top: 16px; }
+    .toc-list li { margin-bottom: 8px; font-size: 10.5pt; }
+
+    /* Topic sections */
+    .topic {
+      page-break-before: always;
+      padding-top: 4mm;
+    }
+    .topic:first-of-type { page-break-before: auto; }
+
+    h2.topic-title {
+      font-size: 17pt;
+      color: #fff;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      padding: 10px 16px;
+      margin: 0 0 16px;
+      border-radius: 6px;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 12pt;
+      color: #1e40af;
+      margin: 18px 0 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e2e8f0;
+      page-break-after: avoid;
+    }
+    h4 {
+      font-size: 10.5pt;
+      color: #334155;
+      margin: 14px 0 6px;
+      page-break-after: avoid;
+    }
+    p { margin: 8px 0; text-align: justify; }
+
+    /* Info boxes */
+    .simple-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: 12px 16px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+      page-break-inside: avoid;
+    }
+    .simple-box h4 {
+      color: #1d4ed8;
+      margin: 0 0 6px;
+      font-size: 10.5pt;
+    }
+    .analogy-box {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+      page-break-inside: avoid;
+    }
+    .analogy-box h4 { color: #b45309; margin: 0 0 6px; }
+    .warn-box {
+      background: #fef2f2;
+      border-left: 4px solid #ef4444;
+      padding: 12px 16px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+      page-break-inside: avoid;
+    }
+    .warn-box h4 { color: #dc2626; margin: 0 0 6px; }
+    .tip-box {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 12px 16px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+      page-break-inside: avoid;
+    }
+    .tip-box h4 { color: #16a34a; margin: 0 0 6px; }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f1f5f9;
+      color: #1e40af;
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    /* Code */
+    code {
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 9.5pt;
+      background: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #be123c;
+    }
+    pre {
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 9pt;
+      line-height: 1.45;
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 14px 16px;
+      border-radius: 6px;
+      margin: 12px 0;
+      overflow-x: auto;
+      page-break-inside: avoid;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+
+    /* Diagrams */
+    .diagram {
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 16px 18px;
+      margin: 14px 0;
+      white-space: pre;
+      overflow-x: auto;
+      page-break-inside: avoid;
+      color: #334155;
+    }
+
+    /* Interview Q&A */
+    .interview-q {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #2563eb;
+      padding: 12px 16px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+      page-break-inside: avoid;
+    }
+    .interview-q .q {
+      font-weight: 600;
+      color: #1e40af;
+      margin-bottom: 8px;
+      font-size: 10.5pt;
+    }
+    .answer-simple {
+      background: #ecfdf5;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      font-size: 9.5pt;
+    }
+    .answer-simple strong { color: #059669; }
+    .answer-detail { font-size: 9.5pt; color: #475569; }
+
+    ul, ol { margin: 8px 0 12px 22px; }
+    li { margin-bottom: 5px; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 12px 0;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 8.5pt;
+      color: #94a3b8;
+      margin-top: 24px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .no-print { display: none; }
+    }
+
+    .print-bar {
+      background: #ecfdf5;
+      border: 1px solid #86efac;
+      padding: 12px 16px;
+      margin: 12px;
+      border-radius: 6px;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <strong>Save as PDF:</strong> Press Ctrl+P → Select "Save as PDF" → Enable <strong>Background graphics</strong> → Margins: Default → Save.
+</div>
+
+<!-- COVER -->
+<div class="cover-page">
+  <h1>Core &amp; Advanced Java</h1>
+  <p class="subtitle">Complete Beginner Guide with Examples &amp; Diagrams</p>
+  <p class="subtitle">Interview Preparation for Java Backend Developer Roles</p>
+  <div class="badge-row">
+    <span class="badge">Java 8+</span>
+    <span class="badge">Collections</span>
+    <span class="badge">Concurrency</span>
+    <span class="badge">JVM Memory</span>
+    <span class="badge">Infosys Ready</span>
+  </div>
+  <p style="margin-top:40px;font-size:10pt;color:#64748b;">15 Topics · Detailed Explanations · Code Examples · Interview Q&amp;A</p>
+</div>
+
+<!-- TOC -->
+<div class="toc-page">
+  <h2>Table of Contents</h2>
+  <ol class="toc-list">
+    <li>== vs equals()</li>
+    <li>hashCode() and equals() Consistency</li>
+    <li>String vs StringBuilder vs StringBuffer</li>
+    <li>Immutability</li>
+    <li>Abstract Class vs Interface</li>
+    <li>Overloading vs Overriding</li>
+    <li>HashMap Internals</li>
+    <li>ArrayList vs LinkedList</li>
+    <li>volatile Keyword</li>
+    <li>synchronized Keyword</li>
+    <li>Deadlock</li>
+    <li>Java Memory Model</li>
+    <li>Heap vs Stack vs Metaspace</li>
+    <li>Garbage Collection</li>
+    <li>LRU Cache Design</li>
+    <li>Quick Revision Cheat Sheet</li>
+  </ol>
+</div>
+
+<!-- TOPIC 1 -->
+<div class="topic">
+<h2 class="topic-title">1. == vs equals()</h2>
+
+<div class="simple-box">
+  <h4>In Simple Terms</h4>
+  <p><strong><code>==</code></strong> checks whether two variables point to the <strong>same object in memory</strong> (same address). <strong><code>equals()</code></strong> checks whether two objects have the <strong>same content or meaning</strong> — but only when the class has overridden <code>equals()</code>. For objects, <code>==</code> almost always gives the wrong answer when you want to compare values.</p>
+</div>
+
+<h3>Visual Diagram</h3>
+<div class="diagram">Memory Layout:
+
+  variable a ──►  [ String object: "Hello" ]     address: 0x100
+  variable b ──►  [ String object: "Hello" ]     address: 0x200  (different object, same text)
+  variable c ──►  same as a (address 0x100)
+
+  a == c        →  TRUE   (both point to same memory address)
+  a == b        →  FALSE  (different memory addresses)
+  a.equals(b)   →  TRUE   (same character content — String overrides equals())</div>
+
+<h3>Detailed Explanation</h3>
+<p>When you write <code>new String("Hello")</code> twice, Java creates <strong>two separate objects</strong> on the heap, even if the text is identical. The <code>==</code> operator compares references (memory addresses), so it returns <code>false</code>.</p>
+<p>The <code>String</code> class overrides <code>equals()</code> to compare characters one by one. That is why <code>a.equals(b)</code> returns <code>true</code> when both contain "Hello".</p>
+<p>For <strong>primitive types</strong> (<code>int</code>, <code>boolean</code>, <code>char</code>, <code>double</code>), there is no <code>equals()</code> method. The <code>==</code> operator compares actual values directly — and that is the correct way to compare primitives.</p>
+
+<h3>Special Case: Integer Caching</h3>
+<p>Java caches <code>Integer</code> objects from <strong>-128 to 127</strong>. So <code>Integer a = 100; Integer b = 100; a == b</code> is <code>true</code> because both reference the same cached object. But <code>Integer x = 200; Integer y = 200; x == y</code> is <code>false</code> because 200 is outside the cache range and two new objects are created.</p>
+
+<h3>Code Example</h3>
+<pre><code>String a = new String("Hello");
+String b = new String("Hello");
+String c = a;
+
+System.out.println(a == b);        // false — different objects in memory
+System.out.println(a.equals(b));   // true  — same text content
+System.out.println(a == c);        // true  — c points to same object as a
+
+// Primitives — == compares values directly
+int x = 10, y = 10;
+System.out.println(x == y);        // true
+
+// Integer caching trap
+Integer p = 100, q = 100;
+System.out.println(p == q);        // true  (cached range -128 to 127)
+
+Integer m = 200, n = 200;
+System.out.println(m == n);        // false (outside cache — new objects)</code></pre>
+
+<table>
+  <tr><th>Type</th><th>Use == for</th><th>Use equals() for</th></tr>
+  <tr><td>Objects (String, Employee, etc.)</td><td>Checking if same reference only</td><td>Comparing logical/value equality</td></tr>
+  <tr><td>Primitives (int, boolean, etc.)</td><td>Comparing values</td><td>Not applicable</td></tr>
+</table>
+
+<div class="interview-q">
+  <div class="q">Interview Question: What is the difference between == and equals()?</div>
+  <div class="answer-simple"><strong>30-second answer:</strong> == compares memory references (same object?). equals() compares content (same value?). For objects always use equals() unless you specifically need to check if two variables point to the exact same object.</div>
+  <div class="answer-detail"><strong>Detailed answer:</strong> == is an operator that compares references for objects and values for primitives. equals() is a method defined in Object class that compares content — but many classes like String override it. Default Object.equals() actually behaves like ==. Always override equals() in your custom classes when logical equality matters.</div>
+</div>
+</div>
+
+<!-- TOPIC 2 -->
+<div class="topic">
+<h2 class="topic-title">2. hashCode() and equals() Consistency</h2>
+
+<div class="simple-box">
+  <h4>The Contract — Must Memorize</h4>
+  <ol>
+    <li>If <code>a.equals(b)</code> is <strong>true</strong>, then <code>a.hashCode() == b.hashCode()</code> <strong>MUST</strong> be true.</li>
+    <li>If two objects have the same hashCode, <code>equals()</code> does <strong>not</strong> have to be true (hash collision is allowed).</li>
+    <li>If you override <code>equals()</code>, you <strong>must</strong> override <code>hashCode()</code> too.</li>
+  </ol>
+</div>
+
+<div class="analogy-box">
+  <h4>Real-Life Analogy</h4>
+  <p>Think of a library with numbered shelves. <code>hashCode()</code> tells you the shelf number. <code>equals()</code> checks if the book on that shelf is the exact one you want. If two books are the same (equals), they MUST be on the same shelf (same hashCode). If you put equal books on different shelves, you will never find them — that is the bug that happens in HashMap when you break this contract.</p>
+</div>
+
+<h3>Why It Matters for HashMap and HashSet</h3>
+<div class="diagram">HashMap lookup process:
+
+  Step 1:  key.hashCode()  →  calculate bucket index (which shelf?)
+  Step 2:  Go to that bucket
+  Step 3:  Compare each key in bucket using equals()
+
+  If equals() says two objects are equal BUT hashCode() differs:
+    → HashMap looks in the WRONG bucket
+    → get() returns null even though the data EXISTS
+    → Silent, extremely hard-to-debug production bug!</div>
+
+<h3>Code Example — Correct Implementation</h3>
+<pre><code>class Employee {
+    private int id;
+    private String name;
+
+    public Employee(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee e)) return false;
+        return id == e.id;  // same id means same employee
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);  // MUST use same field as equals()!
+    }
+}
+
+// Usage in HashSet
+Set&lt;Employee&gt; employees = new HashSet&lt;&gt;();
+employees.add(new Employee(101, "Ashish"));
+System.out.println(employees.contains(new Employee(101, "Ravi"))); // true — same id</code></pre>
+
+<div class="warn-box">
+  <h4>Common Mistakes to Avoid</h4>
+  <ul>
+    <li>Overriding <code>equals()</code> but forgetting <code>hashCode()</code></li>
+    <li>Using <code>id</code> in <code>equals()</code> but <code>name</code> in <code>hashCode()</code> — they must use the same fields</li>
+    <li>Changing a field used in <code>hashCode()</code> after putting the object in a HashMap — the object becomes "lost"</li>
+    <li>Not handling null in equals() — always check <code>instanceof</code> first</li>
+  </ul>
+</div>
+
+<div class="interview-q">
+  <div class="q">Interview Question: Why must hashCode() be consistent with equals()?</div>
+  <div class="answer-simple"><strong>30-second answer:</strong> HashMap uses hashCode to find the bucket and equals to find the exact key. If equal objects have different hash codes, HashMap looks in the wrong bucket and returns null — data appears lost.</div>
+</div>
+</div>
+
+<!-- TOPIC 3 -->
+<div class="topic">
+<h2 class="topic-title">3. String vs StringBuilder vs StringBuffer</h2>
+
+<table>
+  <tr><th>Feature</th><th>String</th><th>StringBuilder</th><th>StringBuffer</th></tr>
+  <tr><td>Mutable?</td><td><strong>No</strong> — immutable</td><td><strong>Yes</strong> — mutable</td><td><strong>Yes</strong> — mutable</td></tr>
+  <tr><td>Thread-safe?</td><td>Yes (because immutable)</td><td>No</td><td>Yes (synchronized methods)</td></tr>
+  <tr><td>Speed</td><td>Slow for many concatenations</td><td>Fast</td><td>Slower than StringBuilder</td></tr>
+  <tr><td>Introduced</td><td>Java 1.0</td><td>Java 5</td><td>Java 1.0</td></tr>
+  <tr><td>When to use</td><td>Constants, keys, sharing between threads</td><td>Building strings in loops (single thread)</td><td>Multi-thread string building (rare today)</td></tr>
+</table>
+
+<div class="analogy-box">
+  <h4>Analogy</h4>
+  <p><strong>String</strong> = writing on stone. To change it, you must carve a new stone. <strong>StringBuilder</strong> = writing on a whiteboard. You can erase and rewrite on the same board. <strong>StringBuffer</strong> = a whiteboard with a lock — only one person can write at a time.</p>
+</div>
+
+<h3>Why String Concatenation in Loops is Slow</h3>
+<div class="diagram">String concatenation in a loop (BAD):
+
+  s = ""
+  s = s + "A"  →  creates NEW String object "A"     (old "" discarded)
+  s = s + "B"  →  creates NEW String object "AB"    (old "A" discarded)
+  s = s + "C"  →  creates NEW String object "ABC"   (old "AB" discarded)
+
+  10,000 iterations = 10,000 String objects created → slow + memory pressure + GC overhead
+
+StringBuilder in a loop (GOOD):
+
+  sb = [ empty buffer ]
+  sb.append("A")  →  modifies SAME buffer: "A"
+  sb.append("B")  →  same buffer: "AB"
+  sb.append("C")  →  same buffer: "ABC"
+
+  10,000 iterations = 1 object modified → fast and efficient</div>
+
+<h3>Code Example</h3>
+<pre><code>// BAD — creates thousands of String objects
+String result = "";
+for (int i = 0; i &lt; 10000; i++) {
+    result = result + i;
+}
+
+// GOOD — one mutable buffer, very fast
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i &lt; 10000; i++) {
+    sb.append(i);
+}
+String result = sb.toString();
+
+// StringBuffer — same API, but thread-safe (synchronized)
+StringBuffer sbf = new StringBuffer("Hello");
+sbf.append(" World");</code></pre>
+
+<div class="tip-box">
+  <h4>Interview Tip</h4>
+  <p>In 95% of real projects, use <strong>StringBuilder</strong> for string building. StringBuffer is rarely needed because each thread typically has its own StringBuilder. String is perfect for constants, configuration keys, and HashMap keys.</p>
+</div>
+</div>
+
+<!-- TOPIC 4 -->
+<div class="topic">
+<h2 class="topic-title">4. Immutability</h2>
+
+<div class="simple-box">
+  <h4>In Simple Terms</h4>
+  <p>An <strong>immutable object</strong> cannot be changed after it is created. Any operation that appears to modify it actually creates a <strong>brand new object</strong>. The original object remains completely untouched. Java's <code>String</code>, <code>Integer</code>, and <code>LocalDate</code> are all immutable.</p>
+</div>
+
+<h3>Diagram — How String Immutability Works</h3>
+<div class="diagram">String name = "Ashish"
+
+  name ──►  [ A | s | h | i | s | h ]   (fixed in memory, cannot change)
+
+  name.concat(" Shah")
+              │
+              └──►  Creates NEW object: [ A | s | h | i | s | h |   | S | h | a | h ]
+                   (original "Ashish" object still exists unchanged)
+
+  System.out.println(name);   // still prints "Ashish"
+  // name still points to original object!</div>
+
+<h3>Why Immutability Matters</h3>
+<ul>
+  <li><strong>Thread-safe</strong> — no thread can modify it, so no synchronization needed</li>
+  <li><strong>Safe as HashMap keys</strong> — hashCode never changes because the object never changes</li>
+  <li><strong>Predictable</strong> — easier to debug; you know the value will not change unexpectedly</li>
+  <li><strong>Security</strong> — sensitive data like passwords cannot be altered after creation</li>
+  <li><strong>Can be cached/shared</strong> — safe to share between threads without copying</li>
+</ul>
+
+<h3>How to Create Your Own Immutable Class</h3>
+<pre><code>// Four rules for immutability:
+public final class ImmutablePerson {           // 1. final class — cannot subclass
+
+    private final String name;                 // 2. private final fields
+    private final List&lt;String&gt; hobbies;
+
+    public ImmutablePerson(String name, List&lt;String&gt; hobbies) {
+        this.name = name;
+        this.hobbies = List.copyOf(hobbies);   // 3. defensive copy of mutable inputs
+    }
+
+    public String getName() { return name; }
+    public List&lt;String&gt; getHobbies() { return hobbies; }  // unmodifiable
+    // 4. NO setters — no way to change state after construction
+}
+
+// Java 17 Record — immutable by design (auto-generates constructor, equals, hashCode)
+public record User(Long id, String email) {}</code></pre>
+</div>
+
+<!-- TOPIC 5 -->
+<div class="topic">
+<h2 class="topic-title">5. Abstract Class vs Interface</h2>
+
+<table>
+  <tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
+  <tr><td>What is it?</td><td>An incomplete class — can have both abstract and concrete methods</td><td>A contract that defines what a class must do</td></tr>
+  <tr><td>Inheritance</td><td><code>extends</code> — only <strong>ONE</strong> class allowed</td><td><code>implements</code> — <strong>MANY</strong> interfaces allowed</td></tr>
+  <tr><td>Fields</td><td>Can have any instance fields and constructors</td><td>Only <code>public static final</code> constants (before Java 8)</td></tr>
+  <tr><td>Constructor</td><td>Yes — can have constructors</td><td>No — interfaces are not instantiated</td></tr>
+  <tr><td>Methods</td><td>Abstract methods + concrete methods with body</td><td>Abstract + default/static methods (Java 8+)</td></tr>
+  <tr><td>When to use</td><td>Shared code + strong "is-a" relationship (Dog IS AN Animal)</td><td>Capability or role ("can fly", "can swim")</td></tr>
+</table>
+
+<div class="analogy-box">
+  <h4>Analogy</h4>
+  <p><strong>Abstract class</strong> = a partially built house with some rooms finished. Child classes complete the remaining rooms but inherit the finished ones. <strong>Interface</strong> = a job description listing skills required. A person can have multiple job descriptions (implement multiple interfaces) but can only live in one house (extend one class).</p>
+</div>
+
+<h3>Diagram</h3>
+<div class="diagram">                    Animal (abstract class)
+                   /         |              \
+          abstract sound()   breathe() { concrete code shared by all }
+               /                          \
+         Dog extends Animal           Cat extends Animal
+
+         Flyable (interface)         Swimmable (interface)
+               \                          /
+                Duck implements Flyable, Swimmable
+                (one class + multiple interfaces)</div>
+
+<h3>Code Example</h3>
+<pre><code>abstract class Animal {
+    protected String name;
+    Animal(String name) { this.name = name; }
+    abstract void sound();                              // child MUST implement
+    void sleep() { System.out.println(name + " sleeping"); }  // shared concrete code
+}
+
+class Dog extends Animal {
+    Dog(String name) { super(name); }
+    @Override void sound() { System.out.println("Bark"); }
+}
+
+interface Flyable {
+    void fly();
+    default void land() { System.out.println("Landing..."); }  // Java 8+ default method
+}
+
+class Bird extends Animal implements Flyable {
+    Bird(String name) { super(name); }
+    @Override void sound() { System.out.println("Chirp"); }
+    @Override public void fly() { System.out.println("Flying high"); }
+}</code></pre>
+</div>
+
+<!-- TOPIC 6 -->
+<div class="topic">
+<h2 class="topic-title">6. Overloading vs Overriding</h2>
+
+<table>
+  <tr><th>Feature</th><th>Overloading</th><th>Overriding</th></tr>
+  <tr><td>Also called</td><td>Compile-time polymorphism</td><td>Runtime polymorphism</td></tr>
+  <tr><td>Where</td><td>Same class, same method name, <strong>different parameters</strong></td><td>Subclass, <strong>same method signature</strong> as parent</td></tr>
+  <tr><td>Return type</td><td>Can be different</td><td>Must be same or covariant (subtype)</td></tr>
+  <tr><td>Access modifier</td><td>Can be different</td><td>Cannot be more restrictive than parent</td></tr>
+  <tr><td>Who decides which method runs?</td><td><strong>Compiler</strong> at compile time</td><td><strong>JVM</strong> at runtime based on actual object type</td></tr>
+</table>
+
+<div class="diagram">OVERLOADING — same class, different parameter lists:
+  print(int x)            ─┐
+  print(String s)         ─┼─ Compiler picks the right one based on argument types
+  print(int x, int y)     ─┘
+
+OVERRIDING — child class replaces parent's method:
+  Animal.speak()  ──────►  Dog.speak()  (replaces at runtime)
+
+  Animal animal = new Dog();
+  animal.speak();   // prints "Bark" — JVM uses Dog's version, not Animal's</div>
+
+<h3>Code Example</h3>
+<pre><code>// OVERLOADING — same class, different parameters
+class Calculator {
+    int add(int a, int b) { return a + b; }
+    double add(double a, double b) { return a + b; }
+    int add(int a, int b, int c) { return a + b + c; }
+}
+
+// OVERRIDING — child replaces parent method
+class Animal {
+    void speak() { System.out.println("Some sound"); }
+}
+class Dog extends Animal {
+    @Override
+    void speak() { System.out.println("Bark"); }  // replaces parent's speak()
+}
+
+Animal animal = new Dog();
+animal.speak();  // Output: "Bark" — runtime decision by JVM</code></pre>
+
+<div class="tip-box">
+  <h4>Key Interview Point</h4>
+  <p>Always use <code>@Override</code> annotation when overriding. It causes a compile error if the parent method does not exist — preventing typos. Overloading requires no annotation.</p>
+</div>
+</div>
+
+<!-- TOPIC 7 -->
+<div class="topic">
+<h2 class="topic-title">7. HashMap Internals</h2>
+
+<div class="simple-box">
+  <h4>In Simple Terms</h4>
+  <p>A HashMap is like a <strong>building with numbered mailboxes</strong>. When you store a key-value pair, Java calculates a mailbox number from the key's hash code and puts the value there. When you look up a key, it goes directly to that mailbox — very fast on average (O(1)).</p>
+</div>
+
+<h3>Internal Structure Diagram</h3>
+<div class="diagram">HashMap Internal Structure (Java 8+):
+
+  Node&lt;K,V&gt;[] table;    (array of buckets — default size 16, always power of 2)
+
+  table[0]  →  null
+  table[1]  →  (Banana → value1)
+  table[2]  →  null
+  table[3]  →  (Apple → val) ──► (Apricot → val)    ← collision: linked list
+  table[4]  →  ...
+  ...
+  table[15]
+
+  When linked list in a bucket grows beyond 8 entries AND table length ≥ 64:
+    → converts to Red-Black Tree (faster search within that bucket)
+
+  Load Factor = 0.75 (default)
+  When size &gt; capacity × 0.75  →  array DOUBLES in size, all entries rehashed</div>
+
+<h3>put(key, value) — Step by Step</h3>
+<ol>
+  <li>Calculate <code>hash</code> from <code>key.hashCode()</code> with bit spreading to reduce collisions</li>
+  <li>Find bucket index: <code>index = (table.length - 1) &amp; hash</code></li>
+  <li>If bucket is empty → insert new Node directly</li>
+  <li>If bucket has entries → traverse linked list/tree, compare keys with <code>equals()</code></li>
+  <li>If key exists → update value. If new key → add to list/tree</li>
+  <li>If total size exceeds threshold → resize (double capacity) and rehash all entries</li>
+</ol>
+
+<h3>get(key) — Step by Step</h3>
+<ol>
+  <li>Calculate hash of the key (same formula as put)</li>
+  <li>Go to the bucket at the computed index</li>
+  <li>Traverse the linked list or tree in that bucket</li>
+  <li>Compare each key using <code>equals()</code></li>
+  <li>Return the value if found, or <code>null</code> if not found</li>
+</ol>
+
+<h3>Code Example</h3>
+<pre><code>Map&lt;String, Integer&gt; fruitPrices = new HashMap&lt;&gt;();
+fruitPrices.put("Apple", 80);    // hash("Apple") → bucket → store
+fruitPrices.put("Banana", 40);
+fruitPrices.get("Apple");        // hash → bucket → equals("Apple") → returns 80
+
+// NOT thread-safe — use ConcurrentHashMap in multi-threaded code
+Map&lt;String, Integer&gt; safeMap = new ConcurrentHashMap&lt;&gt;();</code></pre>
+
+<div class="warn-box">
+  <h4>Important Interview Points</h4>
+  <ul>
+    <li>HashMap is <strong>not thread-safe</strong> — use ConcurrentHashMap for shared access</li>
+    <li>Keys should be <strong>immutable</strong> (like String) — if a key changes, its hash changes and you lose the entry</li>
+    <li>Allows one <code>null</code> key and multiple <code>null</code> values</li>
+    <li>Default initial capacity: 16. Default load factor: 0.75</li>
+    <li>Average time complexity: O(1). Worst case with trees: O(log n)</li>
+  </ul>
+</div>
+</div>
+
+<!-- TOPIC 8 -->
+<div class="topic">
+<h2 class="topic-title">8. ArrayList vs LinkedList</h2>
+
+<table>
+  <tr><th>Operation</th><th>ArrayList</th><th>LinkedList</th><th>Winner</th></tr>
+  <tr><td>Internal structure</td><td>Dynamic array (resizable)</td><td>Doubly linked list of nodes</td><td>—</td></tr>
+  <tr><td>get(index) — random access</td><td>O(1) — direct array index</td><td>O(n) — must traverse from head</td><td>ArrayList</td></tr>
+  <tr><td>add at end</td><td>O(1) amortized</td><td>O(1)</td><td>Tie</td></tr>
+  <tr><td>add/remove in middle</td><td>O(n) — must shift elements</td><td>O(1) if you have node reference</td><td>LinkedList</td></tr>
+  <tr><td>Memory usage</td><td>Less overhead</td><td>More — each node stores data + 2 pointers</td><td>ArrayList</td></tr>
+  <tr><td>Cache performance</td><td>Better — contiguous memory</td><td>Worse — nodes scattered in memory</td><td>ArrayList</td></tr>
+  <tr><td>Real-world usage</td><td>~95% of all cases</td><td>Rare (specialized queues)</td><td>ArrayList</td></tr>
+</table>
+
+<div class="diagram">ArrayList (dynamic array):
+  Index:   [ 0 ]   [ 1 ]   [ 2 ]   [ 3 ]   [ 4 ]
+  Value:   [ 10  |  20  |  30  |  40  |  __  ]
+            ↑
+  get(2) → returns 30 instantly (direct memory access)
+
+LinkedList (doubly linked nodes):
+  null ◄── [prev| 10 |next] ◄──► [prev| 20 |next] ◄──► [prev| 30 |next] ──► null
+            ↑
+  get(2) → must walk: head → node1 → node2 (slow for large lists)</div>
+
+<div class="tip-box">
+  <h4>Beginner Rule</h4>
+  <p>Unless you have a specific reason to use LinkedList (like implementing a Deque/Queue), always use <strong>ArrayList</strong>. It is faster for reading, uses less memory, and performs better with modern CPU caches.</p>
+</div>
+</div>
+
+<!-- TOPIC 9 & 10 -->
+<div class="topic">
+<h2 class="topic-title">9. volatile &nbsp;|&nbsp; 10. synchronized</h2>
+
+<div class="two-col">
+  <div>
+    <h3>9. volatile Keyword</h3>
+    <div class="simple-box">
+      <p>When one thread changes a <code>volatile</code> variable, <strong>all other threads immediately see the new value</strong>. It fixes the <strong>visibility</strong> problem. It does <strong>NOT</strong> make operations like <code>count++</code> atomic.</p>
+    </div>
+    <div class="diagram">WITHOUT volatile:
+  Thread 1: running = false  (writes to CPU cache)
+  Thread 2: reads running    → still sees TRUE (stale!)
+
+WITH volatile:
+  Thread 1: running = false  (flushed to main memory)
+  Thread 2: reads running    → sees FALSE correctly</div>
+    <pre><code>class Worker implements Runnable {
+    private volatile boolean shutdown = false;
+
+    public void run() {
+        while (!shutdown) { /* work */ }
+    }
+    public void stop() {
+        shutdown = true; // all threads see this
+    }
+}
+
+// volatile does NOT fix this:
+volatile int count = 0;
+count++;  // NOT atomic — use AtomicInteger!</code></pre>
+  </div>
+  <div>
+    <h3>10. synchronized Keyword</h3>
+    <div class="simple-box">
+      <p><code>synchronized</code> ensures only <strong>one thread at a time</strong> can execute a block or method. Other threads wait in a queue. Provides both <strong>mutual exclusion</strong> and <strong>visibility</strong>.</p>
+    </div>
+    <div class="diagram">Shared bank account balance = 1000
+
+Thread 1: synchronized withdraw(600)
+  → acquires LOCK → reads 1000 → writes 400 → releases LOCK
+
+Thread 2: synchronized withdraw(600)
+  → tries LOCK → WAITS until Thread 1 releases
+  → acquires LOCK → reads 400 → insufficient funds → safe!</div>
+    <pre><code>class Counter {
+    private int count = 0;
+    public synchronized void increment() {
+        count++;  // now safe — only one thread at a time
+    }
+}
+// Synchronized block — finer control
+synchronized (lockObject) {
+    // critical section — only one thread enters
+}</code></pre>
+  </div>
+</div>
+
+<table>
+  <tr><th>Feature</th><th>volatile</th><th>synchronized</th><th>AtomicInteger</th></tr>
+  <tr><td>Visibility</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Atomicity for count++</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Blocks other threads</td><td>No</td><td>Yes</td><td>No (uses CAS)</td></tr>
+  <tr><td>Best for</td><td>Status flags, on/off switches</td><td>Critical sections with multiple operations</td><td>Simple counters and metrics</td></tr>
+</table>
+</div>
+
+<!-- TOPIC 11 & 12 -->
+<div class="topic">
+<h2 class="topic-title">11. Deadlock &nbsp;|&nbsp; 12. Java Memory Model</h2>
+
+<h3>11. Deadlock</h3>
+<div class="simple-box">
+  <p>Deadlock occurs when two or more threads are <strong>stuck waiting for each other forever</strong>. Each thread holds a lock the other needs. Nobody can proceed — like two people in a narrow hallway, each refusing to step back.</p>
+</div>
+
+<div class="diagram">Thread 1                          Thread 2
+   │                                   │
+   ├─ locks Object A  ✓                ├─ locks Object B  ✓
+   ├─ wants Object B  ──► WAITING     ├─ wants Object A  ──► WAITING
+   │                                   │
+   └──────────── DEADLOCK ─────────────┘
+
+Four Coffman Conditions (ALL four required for deadlock):
+  1. Mutual exclusion    — only one thread can hold a lock
+  2. Hold and wait       — thread holds one lock while waiting for another
+  3. No preemption       — locks cannot be forcibly taken away
+  4. Circular wait       — A waits for B, B waits for A</div>
+
+<h4>How to Prevent Deadlock</h4>
+<ol>
+  <li><strong>Lock ordering</strong> — always acquire locks in the same global order (always A before B everywhere)</li>
+  <li><strong>tryLock with timeout</strong> — don't wait forever; back off and retry</li>
+  <li><strong>Minimize lock scope</strong> — hold locks for the shortest time possible</li>
+  <li><strong>Detection</strong> — use <code>jstack &lt;pid&gt;</code> thread dump; shows "Found one Java-level deadlock"</li>
+</ol>
+
+<h3>12. Java Memory Model (JMM)</h3>
+<div class="simple-box">
+  <p>The JMM is a specification that defines <strong>how threads interact through memory</strong> — when writes by one thread become visible to another, and what instruction reordering is allowed. Without JMM rules, multi-threaded programs would be unpredictable.</p>
+</div>
+
+<h4>Three Problems JMM Solves</h4>
+<ul>
+  <li><strong>Visibility</strong> — Thread A sets x=1, but Thread B still sees x=0 (CPU cache issue)</li>
+  <li><strong>Ordering</strong> — CPU/JVM reorders instructions for performance; Thread B sees partially constructed object</li>
+  <li><strong>Atomicity</strong> — <code>count++</code> is actually read + add + write (3 steps); two threads can lose an increment</li>
+</ul>
+
+<h4>Happens-Before Rules (Key Ones)</h4>
+<ul>
+  <li>Unlock of a monitor happens-before every subsequent lock of that same monitor</li>
+  <li>Write to a volatile field happens-before every subsequent read of that volatile</li>
+  <li><code>thread.start()</code> happens-before any action in the started thread</li>
+  <li>All actions in a thread happen-before <code>thread.join()</code> returns</li>
+</ul>
+</div>
+
+<!-- TOPIC 13 & 14 -->
+<div class="topic">
+<h2 class="topic-title">13. Heap vs Stack vs Metaspace &nbsp;|&nbsp; 14. Garbage Collection</h2>
+
+<h3>13. JVM Memory Areas</h3>
+<div class="diagram">┌────────────────────────── JVM MEMORY ──────────────────────────────┐
+│                                                                      │
+│  STACK (per thread)          HEAP (shared, garbage collected)        │
+│  ─────────────────           ──────────────────────────────          │
+│  • Method call frames        • All objects created with new()        │
+│  • Local variables           • Arrays, Strings, instance fields      │
+│  • Object references         • Divided into Young + Old generation   │
+│  • Primitive locals                                                  │
+│  Auto-freed when method      Freed by GC when no references exist     │
+│  returns                                                               │
+│                                                                      │
+│  METASPACE (Java 8+, replaced PermGen)                               │
+│  ─────────────────────────────────────                               │
+│  • Class definitions, method bytecode, static metadata               │
+│  • Grows as classes are loaded; rarely garbage collected             │
+└──────────────────────────────────────────────────────────────────────┘</div>
+
+<pre><code>class MemoryExample {
+    static int classVar = 100;     // Stored in Metaspace area
+
+    void processOrder() {
+        int quantity = 5;           // STACK — primitive local variable
+        String status = "NEW";      // reference on STACK, "NEW" object on HEAP
+        Order order = new Order();  // reference on STACK, Order object on HEAP
+    }  // method ends → stack frame removed; heap objects wait for GC
+}</code></pre>
+
+<table>
+  <tr><th>Memory Area</th><th>What It Stores</th><th>Lifetime</th><th>Garbage Collected?</th></tr>
+  <tr><td>Stack</td><td>Method frames, local variables, object references</td><td>Duration of method call</td><td>No — auto-removed when method returns</td></tr>
+  <tr><td>Heap</td><td>All objects (new), arrays, instance fields</td><td>Until no references point to them</td><td>Yes — by Garbage Collector</td></tr>
+  <tr><td>Metaspace</td><td>Class structures, static metadata, bytecode</td><td>While class is loaded in JVM</td><td>Rarely (class unloading)</td></tr>
+</table>
+
+<h3>14. Garbage Collection (GC)</h3>
+<div class="simple-box">
+  <p>Garbage Collection <strong>automatically frees memory</strong> occupied by objects that are no longer reachable (no active references). You never call <code>delete</code> in Java — the GC handles it for you.</p>
+</div>
+
+<div class="diagram">HEAP divided into generations:
+
+  ┌──── Young Generation ────────────┐     ┌──── Old Generation ────┐
+  │  Eden  │  Survivor0  │ Survivor1 │ ──► │  Long-lived objects    │
+  │ (new)  │    (S0)     │   (S1)    │     │  (tenured)             │
+  └────────┴─────────────┴───────────┘     └────────────────────────┘
+       Minor GC (fast, frequent)              Major / Full GC (slow)
+
+  Object lifecycle:
+    new Object()  →  created in Eden
+    Minor GC      →  if still alive, moved to Survivor space
+    More GC cycles →  promoted to Old Generation
+    No references  →  eligible for GC → memory reclaimed</div>
+
+<table>
+  <tr><th>GC Type</th><th>What It Cleans</th><th>Speed</th><th>When It Runs</th></tr>
+  <tr><td>Minor GC</td><td>Young generation (Eden + Survivors)</td><td>Fast (milliseconds)</td><td>Very frequently</td></tr>
+  <tr><td>Major GC</td><td>Old generation</td><td>Slow (can be seconds)</td><td>When old gen is full</td></tr>
+  <tr><td>Full GC</td><td>Entire heap</td><td>Slowest — pauses application</td><td>When heap is nearly full</td></tr>
+  <tr><td>G1 GC (Java 9+ default)</td><td>Regions across entire heap</td><td>Targets predictable pause times</td><td>Balanced default choice</td></tr>
+</table>
+</div>
+
+<!-- TOPIC 15 -->
+<div class="topic">
+<h2 class="topic-title">15. LRU Cache Design</h2>
+
+<div class="simple-box">
+  <h4>In Simple Terms</h4>
+  <p><strong>LRU = Least Recently Used.</strong> A cache stores a limited number of items for fast access. When the cache is full and a new item arrives, the item that has <strong>not been accessed for the longest time</strong> is removed. Like a small desk — when it is full, you remove the paper you have not looked at in the longest time.</p>
+</div>
+
+<h3>Operation Walkthrough (Capacity = 3)</h3>
+<div class="diagram">put(A)  →  Cache: [ A ]
+put(B)  →  Cache: [ A, B ]
+put(C)  →  Cache: [ A, B, C ]          ← cache is now FULL
+
+get(A)  →  Cache: [ B, C, A ]          ← A moved to "most recently used" position
+
+put(D)  →  Cache: [ C, A, D ]          ← B was evicted (least recently used)
+
+  MRU (Most Recently Used) ──────────────────────► LRU (evict this)
+     head                                              tail</div>
+
+<h3>Approach 1: LinkedHashMap (Simplest — Best for Learning)</h3>
+<pre><code>class LRUCache&lt;K, V&gt; extends LinkedHashMap&lt;K, V&gt; {
+    private final int capacity;
+
+    LRUCache(int capacity) {
+        super(capacity, 0.75f, true);  // true = access-order mode (LRU behavior)
+        this.capacity = capacity;
+    }
+
+    @Override
+    protected boolean removeEldestEntry(Map.Entry&lt;K, V&gt; eldest) {
+        return size() &gt; capacity;  // auto-remove oldest when over capacity
+    }
+}
+
+// Demo
+LRUCache&lt;Integer, String&gt; cache = new LRUCache&lt;&gt;(3);
+cache.put(1, "A");
+cache.put(2, "B");
+cache.put(3, "C");
+cache.get(1);       // 1 becomes most recently used
+cache.put(4, "D");  // evicts key 2 (least recently used)</code></pre>
+
+<h3>Approach 2: HashMap + Doubly Linked List (Interview Favorite)</h3>
+<div class="diagram">Why this design achieves O(1) for both get and put:
+
+  HashMap:  key ──► Node reference     (O(1) lookup by key)
+  Doubly Linked List:  HEAD(MRU) ◄──► Node ◄──► Node ◄──► TAIL(LRU)
+
+  get(key):
+    1. HashMap lookup → find Node         O(1)
+    2. Remove node from current position  O(1)
+    3. Insert node at HEAD (most recent)  O(1)
+
+  put(key, value):
+    If key exists  → update value, move to HEAD     O(1)
+    If new + full  → remove TAIL node, add at HEAD  O(1)
+    If new + space → add at HEAD                    O(1)
+
+  Total: get O(1), put O(1), Space O(capacity)</div>
+
+<div class="interview-q">
+  <div class="q">Interview Question: Design an LRU Cache with O(1) get and put.</div>
+  <div class="answer-simple"><strong>Answer:</strong> Use HashMap for O(1) key lookup + Doubly Linked List for O(1) move-to-front and O(1) eviction from tail. HashMap stores key→Node mapping. DLL maintains access order with HEAD=most recent, TAIL=least recent.</div>
+</div>
+</div>
+
+<!-- CHEAT SHEET -->
+<div class="topic">
+<h2 class="topic-title">16. Quick Revision Cheat Sheet</h2>
+
+<table>
+  <tr><th>#</th><th>Topic</th><th>One-Line Answer</th><th>Interview Must-Know</th></tr>
+  <tr><td>1</td><td>== vs equals</td><td>== compares memory address; equals compares content</td><td>Always use equals() for objects</td></tr>
+  <tr><td>2</td><td>hashCode + equals</td><td>Equal objects must have same hashCode</td><td>Override both; use same fields</td></tr>
+  <tr><td>3</td><td>String / Builder / Buffer</td><td>Immutable / fast mutable / thread-safe mutable</td><td>StringBuilder in loops</td></tr>
+  <tr><td>4</td><td>Immutability</td><td>Cannot change after creation</td><td>final class + final fields + no setters</td></tr>
+  <tr><td>5</td><td>Abstract vs Interface</td><td>One inheritance with shared code vs multiple contracts</td><td>Interface = "can do"; Abstract = "is-a"</td></tr>
+  <tr><td>6</td><td>Overload vs Override</td><td>Same class different params vs child replaces parent</td><td>Compile-time vs runtime polymorphism</td></tr>
+  <tr><td>7</td><td>HashMap</td><td>Array of buckets + hashCode + equals</td><td>Not thread-safe; load factor 0.75</td></tr>
+  <tr><td>8</td><td>ArrayList vs LinkedList</td><td>Array = fast random access; Linked = fast middle insert</td><td>Use ArrayList 95% of the time</td></tr>
+  <tr><td>9</td><td>volatile</td><td>Visibility across threads, not atomicity</td><td>Good for flags; not for count++</td></tr>
+  <tr><td>10</td><td>synchronized</td><td>One thread at a time + visibility</td><td>Keep lock scope small</td></tr>
+  <tr><td>11</td><td>Deadlock</td><td>Circular waiting for locks</td><td>Consistent lock ordering</td></tr>
+  <tr><td>12</td><td>JMM</td><td>Rules for thread memory visibility</td><td>happens-before; volatile/sync/Atomic</td></tr>
+  <tr><td>13</td><td>Stack / Heap / Metaspace</td><td>Local variables / objects / class metadata</td><td>new() goes to heap; locals to stack</td></tr>
+  <tr><td>14</td><td>Garbage Collection</td><td>Auto-deletes unreachable objects</td><td>Young gen = minor GC; Old = major GC</td></tr>
+  <tr><td>15</td><td>LRU Cache</td><td>Evict least recently used when full</td><td>HashMap + Doubly Linked List = O(1)</td></tr>
+</table>
+
+<p class="footer">Core &amp; Advanced Java — Complete Beginner Guide · Print Edition · For Java Backend Interview Preparation</p>
+</div>
+
+</body>
+</html>

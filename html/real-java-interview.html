@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real Java Interview — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html" class="nav-active">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="real-java-interview">
+      <h2 class="section-title">Real Java Interview Questions — Production Thinking</h2>
+      <p class="section-desc">Java interviews don't reject you for syntax mistakes — they reject you for <strong>weak thinking around how Java behaves in real systems</strong>. These 20 questions test real understanding, not memorization.</p>
+
+      <div class="section-banner">
+        <span class="trend-badge">REAL JAVA · NOT TEXTBOOK</span>
+        <h3>How Java behaves under load, in production, and over time</h3>
+        <p>JVM, threads, GC, collections, caching — the questions senior interviewers actually ask today.</p>
+      </div>
+
+      <span class="cat-label-real-java">JVM &amp; Runtime Behavior</span>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 01</span><h3>Why does a Java application slow down over time without throwing errors?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Nothing crashes — but memory fills up, GC runs more often, connection pools get exhausted, caches grow unbounded, or thread pools queue up. Each request takes longer even though code didn't change.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>Memory leak / heap pressure:</strong> objects retained in caches, maps, ThreadLocals — GC pauses grow.</li>
+          <li><strong>Connection pool exhaustion:</strong> leaked JDBC connections — threads block waiting.</li>
+          <li><strong>Thread pool queue growth:</strong> tasks pile up under sustained load.</li>
+          <li><strong>Disk full:</strong> logs can't write — I/O blocks.</li>
+          <li><strong>Metaspace creep:</strong> dynamic class generation (CGLIB, Groovy) fills metaspace.</li>
+          <li>Debug: GC logs, heap trend (Micrometer), thread dump count, connection pool metrics.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 02</span><h3>What causes OutOfMemoryError even when heap size looks sufficient?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>OOM isn't always "heap too small." Java has other memory areas — metaspace, direct memory, native memory, thread stacks — that can blow up while heap looks fine on a chart.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>Metaspace OOM:</strong> too many classes loaded (hot redeploy, classloader leak).</li>
+          <li><strong>Direct buffer OOM:</strong> Netty/NIO off-heap (<code>-XX:MaxDirectMemorySize</code>).</li>
+          <li><strong>Unable to create native thread:</strong> thousands of threads × ~1 MB stack each.</li>
+          <li><strong>Heap sized for average, not peak:</strong> traffic spike exceeds -Xmx.</li>
+          <li>Read the OOM message — it tells you which area failed.</li>
+          <li>Enable <code>-XX:+HeapDumpOnOutOfMemoryError</code> + analyze with MAT/Eclipse Memory Analyzer.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 03</span><h3>How does GC tuning impact application latency in production?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>GC stops application threads during collection (stop-the-world). Wrong heap size or wrong collector = frequent or long pauses → API p99 latency spikes even when average looks fine.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>G1GC</strong> (Java 9+ default): targets pause time via <code>-XX:MaxGCPauseMillis=200</code>.</li>
+          <li><strong>Young GC</strong> frequent = short pauses; <strong>Full GC</strong> = long pause — avoid Full GC in prod.</li>
+          <li><strong>ZGC / Shenandoah:</strong> sub-ms pauses for latency-sensitive services (Java 17+).</li>
+          <li>Too small heap → GC thrashing (constant collection, high CPU).</li>
+          <li>Monitor p99 latency alongside GC pause metrics — correlate spikes.</li>
+          <li>Don't tune blindly — profile allocation rate first; often fix is code (object churn), not flags.</li>
+        </ul></div></div>
+        <pre><code>-Xms4g -Xmx4g -XX:+UseG1GC -XX:MaxGCPauseMillis=200
+-Xlog:gc*:file=gc.log:time,uptime,level,tags</code></pre></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 14</span><h3>What happens if GC runs too frequently?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>App spends more time collecting garbage than doing work. CPU spikes, throughput drops, latency jitter increases — but no error is thrown.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>GC thrashing:</strong> heap too small for allocation rate — constant Young GC.</li>
+          <li>Symptoms: high CPU, low business throughput, GC logs show back-to-back collections.</li>
+          <li>Fix: increase heap, reduce object allocation (reuse buffers, avoid boxing in loops), fix leaks.</li>
+          <li>Premature promotion: short-lived objects reach Old gen → expensive Full GC cycles.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 16</span><h3>How does JVM warm-up affect benchmark results?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Cold JVM is slow — JIT hasn't compiled hot code yet. First few thousand requests are misleading. Production apps get faster after warm-up; benchmarks without warm-up lie.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>C1 (fast compile) → C2 (aggressive optimize) tiers over time.</li>
+          <li>First run: interpreted bytecode; after 10K iterations: inlined hot methods.</li>
+          <li>Use <strong>JMH</strong> with warmup iterations — never benchmark cold start for steady-state perf.</li>
+          <li>K8s cold pod after scale-up: use readiness probe + synthetic warm-up traffic.</li>
+          <li>Class loading at startup also adds latency — Spring context init time matters.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 09</span><h3>How does JVM handle memory for threads vs objects?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Objects live on the <strong>heap</strong> (shared by all threads). Each thread gets its own <strong>stack</strong> for local variables and method calls — not visible to other threads. Thread metadata also consumes native memory.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Heap: all <code>new</code> objects, shared — GC manages this.</li>
+          <li>Stack: per-thread, stores primitives and object references — no GC, freed when frame pops.</li>
+          <li>Default stack ~1 MB/thread (<code>-Xss</code>) — 10,000 threads ≈ 10 GB native memory.</li>
+          <li>Metaspace: class metadata (separate from heap since Java 8).</li>
+          <li>Race conditions happen when multiple threads mutate shared heap objects without sync.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 20</span><h3>What JVM flags are most useful during performance issues?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>When prod is slow or OOM, these flags give you evidence — not guesses. GC logs, heap dumps, native memory tracking, and flight recorder.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><code>-Xlog:gc*</code> — GC logging (Java 9+ unified logging).</li>
+          <li><code>-XX:+HeapDumpOnOutOfMemoryError</code> — snapshot on OOM for MAT analysis.</li>
+          <li><code>-XX:NativeMemoryTracking=summary</code> — thread/direct/metaspace breakdown.</li>
+          <li><code>jcmd &lt;pid&gt; VM.native_memory summary</code> — live NMT report.</li>
+          <li><strong>async-profiler</strong> / JFR — CPU flame graphs without heavy overhead.</li>
+          <li><code>jstack &lt;pid&gt;</code> — thread dump for deadlocks and blocked threads.</li>
+        </ul></div></div>
+        <pre><code>java -Xms2g -Xmx2g -XX:+UseG1GC \
+  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp \
+  -Xlog:gc*:file=gc.log:time,level,tags \
+  -jar app.jar</code></pre></div>
+
+      <span class="cat-label-real-java">Concurrency &amp; Threads</span>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 04</span><h3>Why is synchronized sometimes worse than Lock?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p><code>synchronized</code> is simpler but less flexible. <code>ReentrantLock</code> gives try-lock with timeout, interruptible waits, and multiple Condition queues — useful when you can't afford to block forever.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><code>synchronized</code>: no timeout — thread blocks until lock free (deadlock risk).</li>
+          <li><code>lock.tryLock(5, SECONDS)</code> — fail fast instead of hanging prod request.</li>
+          <li><code>lock.lockInterruptibly()</code> — respond to shutdown signals.</li>
+          <li><code>Condition</code> — multiple wait sets (not just one intrinsic wait set).</li>
+          <li>Prefer <code>synchronized</code> for simple cases — less error-prone (auto-release).</li>
+          <li><code>ReentrantLock</code> must unlock in <code>finally</code> — easy to leak lock if misused.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 05</span><h3>How do thread leaks happen and how do you detect them?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Threads are created but never stopped — each one holds ~1 MB stack. Over days, thread count climbs until "unable to create native thread" or system slows down.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>Causes:</strong> <code>ExecutorService</code> never shut down; new Thread per request; HTTP client threads; scheduled tasks without lifecycle management.</li>
+          <li><strong>Detect:</strong> monitor thread count metric over time; <code>jstack</code> — count threads with same stack trace.</li>
+          <li>Actuator <code>/actuator/metrics/jvm.threads.live</code> — alert on steady growth.</li>
+          <li>Fix: use managed thread pools, <code>@PreDestroy shutdown()</code>, daemon threads for background only.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 07</span><h3>What happens if a thread dies while holding a lock?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>With <code>synchronized</code>, JVM releases the monitor when the thread terminates — waiting threads can proceed. With <code>ReentrantLock</code> left unlocked in a crash path, other threads block forever unless you used tryLock/timeout.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><code>synchronized</code>: lock released on thread death — JVM cleans up monitor.</li>
+          <li><code>ReentrantLock</code>: NOT auto-released — must use <code>finally { lock.unlock(); }</code>.</li>
+          <li>Uncaught exception in synchronized block still releases lock (block exit).</li>
+          <li>Always prefer try/finally with explicit locks in production code.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 13</span><h3>How do you debug deadlocks in a live Java application?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Two threads each hold a lock the other needs — both wait forever. Take a thread dump — JVM prints "Found one Java-level deadlock" with the exact threads and locks.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><code>jstack &lt;pid&gt;</code> or <code>kill -3 &lt;pid&gt;</code> — thread dump without stopping app.</li>
+          <li>Spring Actuator <code>/actuator/threaddump</code> — same output via HTTP.</li>
+          <li>Look for <code>BLOCKED</code> threads waiting on same monitor chain.</li>
+          <li>Fix: consistent lock ordering, timeout with tryLock, reduce lock scope.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 15</span><h3>Why do microservices fail due to thread pool misconfiguration?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Too few threads → requests queue and timeout. Too many threads → overwhelm DB (more connections than pool allows), memory exhaustion, context switching overhead.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Tomcat default 200 threads × 5 services calling same DB with 20 connections = disaster.</li>
+          <li>Rule: max threads ≤ DB pool size for DB-bound services.</li>
+          <li>Blocking HTTP calls on limited pool → cascade timeout across microservices.</li>
+          <li>Fix: right-size pools, async/reactive for I/O, bulkhead pattern (Resilience4j).</li>
+        </ul></div></div></div>
+
+      <span class="cat-label-real-java">Collections, Streams &amp; APIs</span>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 10</span><h3>What are real-world pitfalls of using parallel streams?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Parallel streams use the common ForkJoinPool. Blocking I/O or DB calls inside parallel stream starves the entire JVM's parallel tasks. Small lists are slower due to fork overhead.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Default pool = <code>ForkJoinPool.commonPool()</code> — shared globally.</li>
+          <li>Never do blocking I/O inside <code>.parallelStream()</code>.</li>
+          <li>Shared mutable state in forEach → race conditions.</li>
+          <li>Small collections (&lt; 10K): parallel overhead &gt; benefit.</li>
+        </ul></div></div>
+        <pre><code>// BAD — blocks common pool
+orders.parallelStream().forEach(o -> restClient.call(o));
+// GOOD — CPU-bound transform on large in-memory list
+largeList.parallelStream().map(this::computeHash).toList();</code></pre></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 11</span><h3>How can improper equals/hashCode crash a production system?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>HashMap/HashSet rely on hashCode for bucket placement and equals for lookup. Break the contract → duplicates in sets, "lost" objects in maps, O(n) bucket chains — silent data corruption or sudden slowdown.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Mutable object as HashMap key — hash changes after insert → object unreachable.</li>
+          <li>Lombok <code>@Data</code> on entity with lazy field — wrong equals/hashCode.</li>
+          <li>Only override equals without hashCode — HashSet contains() breaks.</li>
+          <li>Fix: immutable keys, business ID in equals/hashCode only.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 17</span><h3>What are common mistakes with CompletableFuture in production?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Async code that blocks, swallows exceptions, or hogs the common pool causes mysterious prod failures — timeouts, thread starvation, silent errors.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><code>.get()</code> without timeout — blocks calling thread forever.</li>
+          <li>Exceptions swallowed unless <code>.exceptionally()</code> or <code>.handle()</code> added.</li>
+          <li>Default <code>supplyAsync()</code> uses common pool — blocking I/O starves JVM.</li>
+          <li>Fix: dedicated executor; <code>orTimeout(5, SECONDS)</code> (Java 9+).</li>
+        </ul></div></div>
+        <pre><code>CompletableFuture.supplyAsync(() -> callPayment(), paymentExecutor)
+    .orTimeout(5, TimeUnit.SECONDS)
+    .exceptionally(ex -> { log.error("Payment failed", ex); return fallback; });</code></pre></div>
+
+      <span class="cat-label-real-java">Production Behavior &amp; Debugging</span>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 06</span><h3>Why does high CPU usage occur even when traffic is low?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>CPU isn't only driven by user requests. Background jobs, GC loops, infinite retry logic, tight spin-waits, or a scheduled task gone wrong can peg CPU at 100% with zero traffic.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li><strong>GC thrashing</strong>, runaway @Scheduled task, busy-wait loops, regex backtracking.</li>
+          <li>Debug: async-profiler flame graph, JFR, per-thread CPU in top -H.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 08</span><h3>Why do applications behave differently under load compared to local runs?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Locally: one user, H2 database, no network. In prod: concurrent requests expose race conditions, pool limits, GC pressure, and latency that never appear on your machine.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Race conditions at 100+ parallel requests; pool limits; H2 vs PostgreSQL; cold cache after deploy.</li>
+          <li>Load test with Gatling/k6 before release.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 12</span><h3>Why does caching sometimes reduce performance instead of improving it?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Cache adds a network hop, serialization cost, and complexity. Low hit rate or huge values can make you slower than hitting the DB once.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Low hit rate = Redis RTT + DB on every miss; thundering herd on expiry; large value serialization cost.</li>
+          <li>Measure hit rate and p99 with vs without cache.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 18</span><h3>Why does excessive logging slow down Java apps?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Logging in hot paths does string building and sync I/O — even when DEBUG is off, if you use string concat instead of parameterized logs.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>Use <code>log.debug("User {} order {}", user, order)</code> not string concat.</li>
+          <li>Async appenders (Logback AsyncAppender); don't log full JSON payloads in hot path.</li>
+        </ul></div></div></div>
+
+      <div class="topic-block tb-real-java"><span class="block-num">REAL 19</span><h3>How do memory leaks occur without static references?</h3>
+        <div class="interview-helper-wrap"><div class="simple-words"><span class="simple-label">In simple words</span><p>Objects stay alive if anything still references them — ThreadLocals, listeners, unbounded caches, classloader leaks — not just static fields.</p></div>
+        <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+          <li>ThreadLocal not removed in pooled threads; event listeners never unregistered; unbounded Guava/CHM cache.</li>
+          <li>Heap dump → MAT "Leak Suspects" → dominator tree.</li>
+        </ul></div></div></div>
+
+      <div class="tip-box">
+        <strong>How to stand out:</strong> Don't recite definitions — tell a story. "We had p99 latency spike every 30 seconds — GC logs showed promotion failure. We fixed a ThreadLocal leak in our request filter." That's what gets offers.
+        <p style="margin-top:0.75rem"><a class="cross-link" href="java-concurrency.html">→ Core Java &amp; Concurrency</a> · <a class="cross-link" href="production-topics.html">→ Production Topics</a> · <a class="cross-link" href="latency-throughput.html">→ Latency vs Throughput</a></p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

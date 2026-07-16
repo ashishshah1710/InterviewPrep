@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Answer (4-Step Script) — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html" class="nav-active">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="interview-answer-framework">
+      <h2 class="section-title">What to Tell the Interviewer — 4-Step Answer Script</h2>
+      <p class="section-desc">Don't stop at definitions. Structure every answer in <strong>four parts</strong> — interviewers hear textbook answers all day; this format shows you think like an engineer.</p>
+
+      <div class="section-banner">
+        <span class="trend-badge">ANSWER FRAMEWORK</span>
+        <h3>Open → Depth → Project → Close</h3>
+        <p>Used across this guide wherever you see numbered steps under "What to tell the interviewer".</p>
+      </div>
+
+      <div class="faq-master-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="journey-card jc-oop">
+          <h4>1 · Open with</h4>
+          <p style="font-size:0.88rem;color:var(--muted);margin:0">One clear sentence — what it is and why it exists. No jargon dump.</p>
+          <p style="font-size:0.82rem;color:#58a6ff;margin-top:0.5rem"><em>"A constructor is the special method that runs when you create an object — it sets up initial state."</em></p>
+        </div>
+        <div class="journey-card jc-advanced">
+          <h4>2 · Add depth</h4>
+          <p style="font-size:0.88rem;color:var(--muted);margin:0">How it works internally, or how it differs from the alternative.</p>
+          <p style="font-size:0.82rem;color:#58a6ff;margin-top:0.5rem"><em>"JVM allocates memory first, then calls the constructor. Unlike normal methods, it's not inherited — subclass must call super() explicitly."</em></p>
+        </div>
+        <div class="journey-card jc-thread">
+          <h4>3 · Project example</h4>
+          <p style="font-size:0.88rem;color:var(--muted);margin:0">One line from something you built — proves it's not memorized.</p>
+          <p style="font-size:0.82rem;color:#58a6ff;margin-top:0.5rem"><em>"In our Order service, the constructor validates that line items aren't empty before assigning final fields."</em></p>
+        </div>
+        <div class="journey-card jc-collections">
+          <h4>4 · Close with</h4>
+          <p style="font-size:0.88rem;color:var(--muted);margin:0">Best practice, common pitfall, or a smart follow-up question you'd ask back.</p>
+          <p style="font-size:0.82rem;color:#58a6ff;margin-top:0.5rem"><em>"Pitfall: heavy I/O in constructors hurts testing. I'd ask: when would you use a builder instead?"</em></p>
+        </div>
+      </div>
+
+      <div class="topic-block tb-real-java" style="margin-top:1.5rem">
+        <span class="block-num">EXAMPLE</span>
+        <h3>What is a Constructor? — Full scripted answer</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>A special block that runs when you say <code>new MyClass()</code> — sets up the object's starting values. Same name as the class, no return type.</p></div>
+          <div class="interview-points">
+            <span class="interview-label">What to tell the interviewer</span>
+            <div class="interview-script">
+              <div class="script-step"><span class="script-step-label">1 · Open with</span><p class="script-step-text">A constructor is the special method that runs when you create an object with <code>new</code> — it initializes instance fields and prepares the object for use.</p></div>
+              <div class="script-step"><span class="script-step-label">2 · Add depth</span><p class="script-step-text">JVM allocates heap memory first, then invokes the constructor. Same name as class, no return type — not even void. If you define any constructor, the compiler stops providing a default no-arg one. Subclass constructors must call <code>super()</code> before using <code>this</code>. Constructors are not overridden like instance methods — each class defines its own.</p></div>
+              <div class="script-step"><span class="script-step-label">3 · Project example</span><p class="script-step-text">In our Order service, <code>Order(Long customerId, List&lt;LineItem&gt; items)</code> validates items aren't empty, assigns <code>final</code> fields, and sets <code>createdAt</code> — so every Order object starts in a valid state.</p></div>
+              <div class="script-step"><span class="script-step-label">4 · Close with</span><p class="script-step-text"><strong>Best practice:</strong> keep constructors thin — validation + field assignment only; no DB calls. <strong>Pitfall:</strong> heavy I/O in constructor makes unit testing painful. <strong>Follow-up you'd ask:</strong> "When would you switch to a static factory method or Builder pattern?"</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Timing:</strong> 45–90 seconds total per question. Open (10s) → Depth (20s) → Example (15s) → Close (10s). Practice out loud — awkward first time, natural by interview day.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

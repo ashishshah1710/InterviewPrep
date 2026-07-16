@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Companies 5+ YOE — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html" class="nav-active">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="top-companies">
+      <h2 class="section-title">50+ Questions — Top Companies (5+ YOE)</h2>
+      <p class="section-desc">Frequently asked at Citi, Goldman Sachs, JPMorgan, Morgan Stanley &amp; Deloitte for senior Java developers. Selection often hinges on understanding the <strong>why</strong>, not just syntax.</p>
+
+      <div class="company-banner">
+        <h3>Senior Java Developer Interview Bank</h3>
+        <p>After speaking with multiple candidates and analyzing recent trends, these questions appear again and again for 5+ years experienced developers in banking and consulting.</p>
+        <div class="company-tags">
+          <span class="company-tag">Citi</span>
+          <span class="company-tag">Goldman Sachs</span>
+          <span class="company-tag">JPMorgan</span>
+          <span class="company-tag">Morgan Stanley</span>
+          <span class="company-tag">Deloitte</span>
+        </div>
+      </div>
+
+      <div class="topic-category"><h4>Core Java</h4><p>Collections, OOP contracts, immutability, iterators</p></div>
+
+      <article>
+        <h3>How does HashMap work internally?</h3>
+        <span class="tag">Core Java</span>
+        <span class="tag">5+ YOE</span>
+        <p>Array of buckets. <code>put(key, value)</code>: compute <code>hash(key) ^ (hash &gt;&gt;&gt; 16)</code> → bucket index. Collision: linked list (Java 7) or tree if bucket &gt; 8 nodes (Java 8+). Load factor 0.75 triggers resize (2× capacity, rehash).</p>
+        <pre><code>// Contract: equal keys MUST have same hashCode
+// Unequal hashCodes CAN collide (handled by equals() chain in bucket)
+static final int hash(Object key) {
+    int h = key.hashCode();
+    return h ^ (h &gt;&gt;&gt; 16); // spread high bits into index
+}</code></pre>
+        <p><strong>Why interviewers ask:</strong> Leads to equals/hashCode, concurrency issues, and why HashMap is not thread-safe.</p>
+      </article>
+
+      <article>
+        <h3>HashMap vs ConcurrentHashMap</h3>
+        <span class="tag">Core Java</span>
+        <p>HashMap: not thread-safe, allows null key/value, fail-fast iterator. ConcurrentHashMap: bucket-level locking + CAS (Java 8+), no nulls, weakly consistent iterator, scales under concurrent reads/writes. Never use synchronized HashMap wrapper in high-throughput trading/cache paths.</p>
+        <p><a class="cross-link" href="java-concurrency.html">→ Full comparison</a></p>
+      </article>
+
+      <article>
+        <h3>equals() vs hashCode()</h3>
+        <span class="tag">Core Java</span>
+        <p><strong>equals():</strong> logical equality. <strong>hashCode():</strong> bucket index hint for hash-based collections.</p>
+        <ul class="detail-list">
+          <li>If <code>a.equals(b)</code> then <code>a.hashCode() == b.hashCode()</code> — mandatory contract</li>
+          <li>Equal hashCodes do NOT imply equal objects (collisions OK)</li>
+          <li>Override both together — breaking contract breaks HashMap/HashSet silently</li>
+        </ul>
+        <pre><code>@Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Trade t)) return false;
+    return tradeId.equals(t.tradeId);
+}
+@Override public int hashCode() { return Objects.hash(tradeId); }</code></pre>
+      </article>
+
+      <article>
+        <h3>String vs StringBuilder vs StringBuffer</h3>
+        <span class="tag">Core Java</span>
+        <p>String: immutable, thread-safe, string pool. StringBuilder: mutable, not synchronized, use in single-threaded loops. StringBuffer: mutable, synchronized on every method — legacy, slower. In banking report generation with heavy concatenation, StringBuilder in tight loops avoids O(n²) object creation.</p>
+        <p><a class="cross-link" href="interview-rounds.html#round-1">→ Code example in Round 1</a></p>
+      </article>
+
+      <article>
+        <h3>Abstract Class vs Interface</h3>
+        <span class="tag">Core Java</span>
+        <table>
+          <tr><th>Abstract Class</th><th>Interface</th></tr>
+          <tr><td>Single inheritance</td><td>Multiple implementation</td></tr>
+          <tr><td>Can have state (fields), constructors</td><td>Fields are public static final; Java 8+ default/static methods</td></tr>
+          <tr><td>IS-A with shared code</td><td>CAN-DO capability / contract</td></tr>
+          <tr><td>Use when subclasses share base behavior</td><td>Use for API contracts, strategy, plugin architecture</td></tr>
+        </table>
+        <p>Java 8+ blurs the line with default methods — prefer interface for service contracts in microservices; abstract class when sharing substantial implementation.</p>
+      </article>
+
+      <article>
+        <h3>Comparable vs Comparator</h3>
+        <span class="tag">Core Java</span>
+        <p><code>Comparable&lt;T&gt;</code>: natural ordering inside the class (<code>compareTo</code>) — one sort order only. <code>Comparator&lt;T&gt;</code>: external, multiple sort strategies without modifying the class.</p>
+        <pre><code>// Comparable — built into Trade
+class Trade implements Comparable&lt;Trade&gt; {
+    public int compareTo(Trade o) { return this.tradeDate.compareTo(o.tradeDate); }
+}
+// Comparator — sort by notional without changing Trade
+Comparator&lt;Trade&gt; byNotional = Comparator.comparing(Trade::getNotional).reversed();
+trades.sort(byNotional);</code></pre>
+      </article>
+
+      <article>
+        <h3>Immutable Class — How to create one?</h3>
+        <span class="tag">Core Java</span>
+        <p>Final class, final fields, no setters, defensive copy in constructor, unmodifiable getters. Critical in finance for thread-safe DTOs passed across threads without locks.</p>
+        <p><a class="cross-link" href="interview-rounds.html#round-1">→ Full pattern in Round 1</a></p>
+      </article>
+
+      <article>
+        <h3>What is the String Constant Pool?</h3>
+        <span class="tag">Core Java</span>
+        <p>Special area in heap (Java 7+ moved from PermGen) storing unique string literals. <code>String s = "hello"</code> reuses pool reference; <code>new String("hello")</code> creates heap object outside pool.</p>
+        <pre><code>String a = "trade";      // pool
+String b = "trade";      // same reference
+String c = new String("trade"); // new object
+System.out.println(a == b);     // true
+System.out.println(a == c);     // false
+System.out.println(a.equals(c)); // true</code></pre>
+        <p><code>intern()</code> adds string to pool — use sparingly; uncontrolled interning caused PermGen OOM in older JVMs.</p>
+      </article>
+
+      <article>
+        <h3>Deep Copy vs Shallow Copy</h3>
+        <span class="tag">Core Java</span>
+        <p>Shallow: copies field values — object references shared. Deep: recursively copies nested objects — fully independent clone. Matters when passing trade objects between threads or caching — shallow copy + mutable nested List = subtle bugs.</p>
+        <p><a class="cross-link" href="lld.html">→ Clone implementation in LLD section</a></p>
+      </article>
+
+      <article>
+        <h3>Fail Fast vs Fail Safe Iterator</h3>
+        <span class="tag">Core Java</span>
+        <table>
+          <tr><th>Fail-Fast</th><th>Fail-Safe</th></tr>
+          <tr><td>ArrayList, HashMap</td><td>CopyOnWriteArrayList, ConcurrentHashMap</td></tr>
+          <tr><td>Throws ConcurrentModificationException on structural change during iteration</td><td>Iterates snapshot/copy — no exception</td></tr>
+          <tr><td>Detects concurrent modification eagerly</td><td>May not see latest data (weakly consistent)</td></tr>
+        </table>
+        <p>Never modify a collection while iterating except via iterator's <code>remove()</code>. In prod: use concurrent collections or collect-then-modify pattern.</p>
+      </article>
+
+      <div class="topic-category"><h4>Multithreading</h4><p>Locks, futures, coordination, thread pools</p></div>
+
+      <article>
+        <h3>synchronized vs ReentrantLock</h3>
+        <span class="tag">Multithreading</span>
+        <table>
+          <tr><th>synchronized</th><th>ReentrantLock</th></tr>
+          <tr><td>Language keyword, automatic unlock</td><td>Explicit lock()/unlock() in finally</td></tr>
+          <tr><td>Non-fair by default</td><td>Optional fair ordering</td></tr>
+          <tr><td>No tryLock, no timeout</td><td>tryLock(), lockInterruptibly()</td></tr>
+          <tr><td>Single wait set per monitor</td><td>Multiple Conditions (signal specific threads)</td></tr>
+        </table>
+        <p>Use ReentrantLock when you need timed lock attempts (avoid deadlock in payment routing) or separate read/write conditions.</p>
+      </article>
+
+      <article>
+        <h3>volatile keyword</h3>
+        <span class="tag">Multithreading</span>
+        <p>Guarantees visibility (reads/writes go to main memory) and prevents instruction reordering for the variable. Does NOT make <code>count++</code> atomic. Use for status flags: <code>volatile boolean shutdownRequested</code>. For compound operations use AtomicInteger or synchronized.</p>
+      </article>
+
+      <article>
+        <h3>Callable vs Runnable</h3>
+        <span class="tag">Multithreading</span>
+        <table>
+          <tr><th>Runnable</th><th>Callable&lt;V&gt;</th></tr>
+          <tr><td><code>void run()</code></td><td><code>V call()</code> throws Exception</td></tr>
+          <tr><td>Cannot return value</td><td>Returns result via Future</td></tr>
+          <tr><td>Cannot throw checked exceptions</td><td>Can throw checked exceptions</td></tr>
+        </table>
+        <pre><code>Future&lt;BigDecimal&gt; future = executor.submit(() -> pricingEngine.calculate(tradeId));
+BigDecimal price = future.get(5, TimeUnit.SECONDS);</code></pre>
+      </article>
+
+      <article>
+        <h3>Future vs CompletableFuture</h3>
+        <span class="tag">Multithreading</span>
+        <p>Future: blocking <code>get()</code>, no chaining. CompletableFuture: non-blocking pipelines — <code>thenApply</code>, <code>thenCombine</code>, <code>allOf</code>, exception handling with <code>exceptionally</code>. Use CompletableFuture to parallelize independent risk calculations then aggregate.</p>
+        <p><a class="cross-link" href="interview-rounds.html#round-2">→ Code example in Round 2</a></p>
+      </article>
+
+      <article>
+        <h3>Deadlock and how to prevent it</h3>
+        <span class="tag">Multithreading</span>
+        <p>Thread A holds lock1, waits for lock2; Thread B holds lock2, waits for lock1. Prevention:</p>
+        <ul class="detail-list">
+          <li>Lock ordering — always acquire locks in same global order</li>
+          <li>tryLock with timeout — back off and retry</li>
+          <li>Reduce lock scope and duration</li>
+          <li>Use concurrent collections instead of nested synchronized blocks</li>
+          <li>Detect: <code>jstack</code>, thread dump — "Found one Java-level deadlock"</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>CountDownLatch vs CyclicBarrier</h3>
+        <span class="tag">Multithreading</span>
+        <table>
+          <tr><th>CountDownLatch</th><th>CyclicBarrier</th></tr>
+          <tr><td>One-shot — count down to zero, awaiters released</td><td>Reusable — threads meet at barrier repeatedly</td></tr>
+          <tr><td>Main thread waits for workers to finish</td><td>All threads wait for each other</td></tr>
+          <tr><td>EOD batch: wait for all file processors</td><td>Parallel Monte Carlo: sync phases per iteration</td></tr>
+        </table>
+      </article>
+
+      <article>
+        <h3>ExecutorService internals</h3>
+        <span class="tag">Multithreading</span>
+        <p>ThreadPoolExecutor: core pool → queue (BlockingQueue) → max pool → RejectedExecutionHandler. Worker threads loop: pull task from queue, run, repeat. <code>submit()</code> wraps Runnable in FutureTask. Shutdown: <code>shutdown()</code> stops new tasks; <code>awaitTermination()</code> waits for completion.</p>
+        <pre><code>new ThreadPoolExecutor(
+    corePoolSize, maxPoolSize, keepAlive,
+    TimeUnit.SECONDS,
+    new LinkedBlockingQueue&lt;&gt;(queueCapacity),
+    threadFactory,
+    new CallerRunsPolicy() // backpressure when saturated
+);</code></pre>
+      </article>
+
+      <article>
+        <h3>Thread Pool tuning</h3>
+        <span class="tag">Multithreading</span>
+        <ul class="detail-list">
+          <li><strong>CPU-bound:</strong> pool size ≈ cores + 1</li>
+          <li><strong>I/O-bound:</strong> pool size ≈ cores × (1 + wait/compute ratio) — often 2×–4× cores</li>
+          <li>Bounded queue prevents unbounded memory growth under spike</li>
+          <li>Monitor: queue depth, active threads, rejection count via Micrometer</li>
+          <li>Separate pools for batch vs online API — bulkhead isolation</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Producer-Consumer problem</h3>
+        <span class="tag">Multithreading</span>
+        <p>Producers add to shared buffer; consumers remove. Solved with <code>BlockingQueue</code> — <code>put()</code> blocks when full, <code>take()</code> when empty. Used in trade event pipelines: market data feed (producer) → queue → risk engine (consumer).</p>
+        <pre><code>BlockingQueue&lt;TradeEvent&gt; queue = new ArrayBlockingQueue&lt;&gt;(1000);
+// Producer
+queue.put(event);
+// Consumer
+TradeEvent e = queue.take();</code></pre>
+      </article>
+
+      <article>
+        <h3>Java Memory Model (JMM)</h3>
+        <span class="tag">Multithreading</span>
+        <p>Specifies when writes by one thread are visible to another. Without synchronization/volatile, threads may see stale cached values. Happens-before rules: unlock→lock, volatile write→read, thread start/join. Critical for double-checked locking and lazy singleton initialization.</p>
+        <p><a class="cross-link" href="java-concurrency.html">→ JVM memory diagram</a></p>
+      </article>
+
+      <div class="topic-category"><h4>JVM</h4><p>Memory, GC, class loading, performance</p></div>
+
+      <article>
+        <h3>Heap vs Stack</h3>
+        <span class="tag">JVM</span>
+        <p>Stack: per-thread, stores frames and local refs — fast, auto-freed. Heap: shared, all objects live here — GC managed. StackOverflowError vs OutOfMemoryError:heap space. Large collections and cached trade data → heap; method calls → stack.</p>
+      </article>
+
+      <article>
+        <h3>Metaspace vs PermGen</h3>
+        <span class="tag">JVM</span>
+        <p>PermGen (Java 7 and earlier): fixed-size, class metadata — PermGen OOM common with dynamic proxies (Spring/Hibernate). Metaspace (Java 8+): native memory, grows dynamically, class unloading when ClassLoader GC'd. Still can OOM if class loaders leak (hot redeploy without restart).</p>
+      </article>
+
+      <article>
+        <h3>Garbage Collection algorithms</h3>
+        <span class="tag">JVM</span>
+        <ul class="detail-list">
+          <li><strong>Serial:</strong> single thread, small apps</li>
+          <li><strong>Parallel (Throughput):</strong> multi-thread Young/Old collection — batch jobs</li>
+          <li><strong>G1:</strong> divides heap into regions, predictable pauses — default Java 9+</li>
+          <li><strong>ZGC / Shenandoah:</strong> sub-ms pauses, large heaps (Java 17+)</li>
+        </ul>
+        <p>Minor GC (Eden full) → Survivor → promoted to Old Gen → Major/Full GC when Old Gen full.</p>
+      </article>
+
+      <article>
+        <h3>G1 GC vs Parallel GC</h3>
+        <span class="tag">JVM</span>
+        <table>
+          <tr><th>G1</th><th>Parallel GC</th></tr>
+          <tr><td>Region-based, targets pause time (-XX:MaxGCPauseMillis)</td><td>Stop-the-world, maximize throughput</td></tr>
+          <tr><td>Better for low-latency services (&lt;200ms p99)</td><td>Better for overnight batch with long pauses OK</td></tr>
+          <tr><td>Default in Java 9+</td><td>-XX:+UseParallelGC for throughput-first</td></tr>
+        </table>
+      </article>
+
+      <article>
+        <h3>Memory Leak vs Memory Overflow</h3>
+        <span class="tag">JVM</span>
+        <p><strong>Leak:</strong> objects no longer needed but still referenced (static caches, ThreadLocal not cleared, unclosed connections) — heap grows until OOM. <strong>Overflow:</strong> legitimate data exceeds allocated heap (-Xmx). Fix leak: heap dump + MAT/VisualVM dominator tree. Fix overflow: increase -Xmx or reduce data retained.</p>
+      </article>
+
+      <article>
+        <h3>Class Loading Process</h3>
+        <span class="tag">JVM</span>
+        <p>Loading → Linking (verify, prepare, resolve) → Initialization (static blocks). Delegation model: Bootstrap → Platform → Application class loaders. Child asks parent first — prevents duplicate core classes. Custom ClassLoaders in app servers and Spring Boot nested jars (LaunchedURLClassLoader).</p>
+      </article>
+
+      <article>
+        <h3>How JVM handles object creation?</h3>
+        <span class="tag">JVM</span>
+        <p><code>new Trade()</code>: class check → allocate memory on Eden (TLAB — thread-local allocation buffer for lock-free fast path) → zero memory → set header → init fields → invoke constructor. Most objects die young — collected in minor GC. Long-lived trade caches promote to Old Gen.</p>
+      </article>
+
+      <div class="topic-category"><h4>Spring Boot &amp; Microservices</h4><p>DI, auto-config, resilience, distributed systems</p></div>
+
+      <article>
+        <h3>Bean Lifecycle</h3>
+        <span class="tag">Spring Boot</span>
+        <p>Instantiate → populate → @PostConstruct → use → @PreDestroy. AOP proxy applied in BeanPostProcessor.afterInitialization. Know this to debug why @Transactional doesn't work (proxy not created) or init order issues.</p>
+        <p><a class="cross-link" href="spring-boot.html#spring-boot-deep">→ Full lifecycle diagram</a></p>
+      </article>
+
+      <article>
+        <h3>Dependency Injection</h3>
+        <span class="tag">Spring Boot</span>
+        <p>IoC container creates and wires beans. Constructor injection preferred — immutable, testable. Spring resolves by type; @Qualifier/@Primary for ambiguity. At banks, DI enables swapping mock pricing engines in tests vs prod implementations.</p>
+        <p><a class="cross-link" href="spring-boot.html">→ DI internals</a></p>
+      </article>
+
+      <article>
+        <h3>@Component vs @Service vs @Repository</h3>
+        <span class="tag">Spring Boot</span>
+        <p>All @Component stereotypes. @Repository adds persistence exception translation. @Service marks business layer semantically. Functionally identical for scanning — choose for clarity and tooling.</p>
+      </article>
+
+      <article>
+        <h3>@Controller vs @RestController</h3>
+        <span class="tag">Spring Boot</span>
+        <p>@RestController = @Controller + @ResponseBody on every method. Returns JSON via HttpMessageConverter. @Controller returns view names for server-rendered pages. Trading UIs may mix both — REST API + legacy JSP/Thymeleaf admin.</p>
+      </article>
+
+      <article>
+        <h3>Spring Boot Auto Configuration</h3>
+        <span class="tag">Spring Boot</span>
+        <p>Classpath scanning of AutoConfiguration.imports + @ConditionalOn* rules. Only matching configs apply. Override with custom @Bean or exclude via @SpringBootApplication(exclude=...). Explain with example: JPA starter → DataSource + EntityManagerFactory auto-wired.</p>
+        <p><a class="cross-link" href="spring-boot.html#spring-boot-deep">→ 30 deep-dive questions</a></p>
+      </article>
+
+      <article>
+        <h3>Exception Handling in Microservices</h3>
+        <span class="tag">Spring Boot</span>
+        <pre><code>@RestControllerAdvice
+public class GlobalHandler {
+    @ExceptionHandler(TradeNotFoundException.class)
+    public ResponseEntity&lt;ErrorBody&gt; handle(TradeNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorBody("TRADE_NOT_FOUND", ex.getMessage()));
+    }
+}</code></pre>
+        <p>Standardize error schema across services (code, message, traceId). Propagate correlation ID for distributed debugging. Map domain exceptions to HTTP status — never expose stack traces in prod.</p>
+      </article>
+
+      <article>
+        <h3>Service Discovery</h3>
+        <span class="tag">Microservices</span>
+        <p>Services register with registry (Eureka, Consul); clients resolve dynamic instances instead of hardcoded URLs. Enables scaling and rolling deploys. In Kubernetes, often replaced by native DNS + Services, but pattern remains same.</p>
+      </article>
+
+      <article>
+        <h3>API Gateway</h3>
+        <span class="tag">Microservices</span>
+        <p>Single entry: routing, auth (JWT/OAuth), rate limiting, SSL termination, request aggregation. Spring Cloud Gateway, Kong. Banks use gateway for WAF integration and centralized audit logging of all API access.</p>
+        <p><a class="cross-link" href="interview-rounds.html#round-2">→ Full explanation</a></p>
+      </article>
+
+      <article>
+        <h3>Circuit Breaker Pattern</h3>
+        <span class="tag">Microservices</span>
+        <p>Closed → Open (fail fast) → Half-Open (probe). Resilience4j in Spring Boot. Prevents cascade when downstream pricing/reference data service fails during market hours.</p>
+        <p><a class="cross-link" href="microservices.html">→ State diagram</a></p>
+      </article>
+
+      <article>
+        <h3>Distributed Transactions</h3>
+        <span class="tag">Microservices</span>
+        <p>Avoid 2PC across services in most cases. Use Saga (choreography/orchestration) with compensating transactions. Outbox pattern for reliable events. Idempotency keys for payment/settlement retries. Eventual consistency accepted in banking for non-critical paths.</p>
+        <p><a class="cross-link" href="microservices.html">→ Saga &amp; outbox details</a></p>
+      </article>
+
+      <div class="topic-category"><h4>Production Support</h4><p>Incident response, profiling, monitoring, RCA — heavily weighted at senior level in banks</p></div>
+
+      <article>
+        <h3>Tell me about a critical production issue you solved</h3>
+        <span class="tag">Production</span>
+        <span class="tag">Behavioral</span>
+        <p>Use STAR. Example: settlement batch missed deadline (S) → you led triage (T) → thread dump showed deadlock in payment aggregator, fixed lock ordering, added timeout + alert (A) → batch completed, no SLA breach (R). Emphasize calm under pressure, communication to stakeholders, post-incident review.</p>
+        <p><a class="cross-link" href="interview-rounds.html#round-3">→ STAR framework in Round 3</a></p>
+      </article>
+
+      <article>
+        <h3>How do you investigate high CPU usage?</h3>
+        <span class="tag">Production</span>
+        <ol class="detail-list">
+          <li>Confirm: top/htop, which JVM process</li>
+          <li><code>jstack &lt;pid&gt;</code> — take 3 dumps 30s apart, find threads consistently in RUNNABLE on same stack</li>
+          <li>async-profiler or <code>jcmd &lt;pid&gt; Thread.print</code> for hot methods</li>
+          <li>Check recent deploy, traffic spike, GC thrashing (high usr vs sys CPU)</li>
+          <li>Common causes: infinite loop, regex catastrophic backtracking, excessive GC, crypto without hardware accel</li>
+        </ol>
+      </article>
+
+      <article>
+        <h3>How do you troubleshoot OutOfMemoryError?</h3>
+        <span class="tag">Production</span>
+        <ul class="detail-list">
+          <li>Identify type: Java heap space, Metaspace, GC overhead limit exceeded, Direct buffer memory</li>
+          <li>Enable heap dump on OOM: <code>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs/</code></li>
+          <li>Analyze with Eclipse MAT — dominator tree, leak suspects, largest retained sets</li>
+          <li>Check heap trend in Grafana before crash — gradual climb = leak; sudden spike = traffic/data burst</li>
+          <li>Fix: remove leak source or tune -Xmx/GC; never just increase heap without root cause</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>How do you analyze slow APIs?</h3>
+        <span class="tag">Production</span>
+        <ol class="detail-list">
+          <li>APM trace (Dynatrace, AppDynamics, Zipkin) — identify slow span: DB, external call, or app code</li>
+          <li>DB: slow query log, EXPLAIN ANALYZE, missing index, N+1 from Hibernate</li>
+          <li>External: timeout config, circuit breaker state, downstream latency</li>
+          <li>App: thread pool saturation, lock contention, large payload serialization</li>
+          <li>Compare p50 vs p99 — tail latency often reveals contention outliers</li>
+        </ol>
+      </article>
+
+      <article>
+        <h3>What monitoring tools have you used?</h3>
+        <span class="tag">Production</span>
+        <p>Mention what you know: Prometheus + Grafana (metrics), ELK/Splunk (logs), Jaeger/Zipkin (tracing), Micrometer + Spring Actuator, Dynatrace/AppDynamics (APM), PagerDuty/Opsgenie (alerting). Banks often require all three pillars: metrics, logs, traces with correlation ID tying them together.</p>
+      </article>
+
+      <article>
+        <h3>How do you perform Root Cause Analysis (RCA)?</h3>
+        <span class="tag">Production</span>
+        <ol class="detail-list">
+          <li><strong>Timeline:</strong> when detected, when started, deploy correlation</li>
+          <li><strong>Impact:</strong> users affected, financial/SLA impact</li>
+          <li><strong>5 Whys:</strong> dig past symptoms to systemic cause</li>
+          <li><strong>Evidence:</strong> logs, metrics, thread dumps, change records</li>
+          <li><strong>Action items:</strong> fix, test, monitor, runbook update — preventive not just reactive</li>
+          <li>Blameless postmortem — focus on process and system improvements</li>
+        </ol>
+      </article>
+
+      <div class="tip-box">
+        <strong>The difference between selected and rejected:</strong> Often not coding ability — it's how deeply you understand the <em>why</em> behind HashMap buckets, GC pause targets, saga vs 2PC, and how you'd debug a 3 AM OOM in production.
+        <br><br>
+        <strong>Self-check:</strong> Which of these would make you nervous? That's your study priority — go deep on that topic using the cross-links in this guide.
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

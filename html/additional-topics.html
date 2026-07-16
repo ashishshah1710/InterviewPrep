@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Additional Topics — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html" class="nav-active">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="additional-topics">
+      <h2 class="section-title">Additional Interview Topics</h2>
+      <p class="section-desc">18 commonly asked questions — each in its own color-coded block with simple explanation and interview talking points.</p>
+
+      <!-- 1 -->
+      <div class="topic-block tb-streams">
+        <span class="block-num">TOPIC 01 · JAVA STREAMS</span>
+        <h3>Find the length of each element using Streams</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Use stream map to turn each string into its length — one line per word, no manual for-loop.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Say: map each element to length with <code>String::length</code> or <code>s -&gt; s.length()</code>.</li>
+            <li>Show collect to List or print with forEach.</li>
+            <li>Mention time O(n), space O(n) for result list.</li>
+          </ul></div>
+        </div>
+        <pre><code>List&lt;String&gt; words = List.of("java", "spring", "boot");
+
+// Length of each element
+List&lt;Integer&gt; lengths = words.stream()
+    .map(String::length)
+    .toList();
+// [4, 6, 4]
+
+words.stream()
+    .mapToInt(String::length)
+    .forEach(System.out::println);
+
+// With index if needed
+IntStream.range(0, words.size())
+    .forEach(i -> System.out.println(words.get(i) + " -> " + words.get(i).length()));</code></pre>
+      </div>
+
+      <!-- 2 -->
+      <div class="topic-block tb-collections">
+        <span class="block-num">TOPIC 02 · HASHMAP BEHAVIOUR</span>
+        <h3>What will be the output? put("abc","tan"); put("abc","cho"); get("abc");</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>HashMap does not allow duplicate keys. The second put replaces the first value for the same key.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Answer: <strong>"cho"</strong> — second put overwrites "tan".</li>
+            <li>HashMap stores unique keys; put on existing key updates value only.</li>
+            <li>Size stays 1 — only one entry for key "abc".</li>
+            <li>Contrast: if you need multiple values per key, use <code>Map&lt;K, List&lt;V&gt;&gt;</code> or Multimap.</li>
+          </ul></div>
+        </div>
+        <pre><code>Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+map.put("abc", "tan");
+map.put("abc", "cho");
+System.out.println(map.get("abc")); // "cho"
+System.out.println(map.size());   // 1</code></pre>
+      </div>
+
+      <!-- 3 -->
+      <div class="topic-block tb-dsa">
+        <span class="block-num">TOPIC 03 · MISSING NUMBER</span>
+        <h3>Find the missing number from int[] arr = {1, 2, 5, 6, 3, 7}</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Missing number is 4. For huge arrays, use math (expected sum minus actual sum) or XOR — no need to sort or scan twice.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Small array: sort and scan, or use a Set — O(n log n) or O(n).</li>
+            <li>Large array: expected sum = n×(n+1)/2 minus actual sum → missing number in O(n) time, O(1) space.</li>
+            <li>Alternative: XOR all indices 1..n XOR all array values → result is missing number.</li>
+            <li>Watch overflow on sum — use long for very large n.</li>
+          </ul></div>
+        </div>
+        <pre><code>// Sum formula — O(n) time, O(1) space
+public static int missingNumber(int[] arr, int n) {
+    long expected = (long) n * (n + 1) / 2;
+    long actual = 0;
+    for (int x : arr) actual += x;
+    return (int) (expected - actual);
+}
+// arr has n-1 elements from 1..n → missing = 4
+
+// XOR — no overflow risk
+public static int missingXor(int[] arr, int n) {
+    int xor = 0;
+    for (int i = 1; i &lt;= n; i++) xor ^= i;
+    for (int x : arr) xor ^= x;
+    return xor;
+}</code></pre>
+      </div>
+
+      <!-- 4 -->
+      <div class="topic-block tb-spring">
+        <span class="block-num">TOPIC 04 · SPRING ANNOTATIONS</span>
+        <h3>Explain @Autowired, @PathVariable, and @RequestParam</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>@Autowired = Spring injects a dependency. @PathVariable = value from URL path. @RequestParam = value from query string (?key=value).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>@Autowired: DI by type — constructor injection preferred in production.</li>
+            <li>@PathVariable: part of URI template — <code>/orders/{id}</code> → id=101.</li>
+            <li>@RequestParam: query param — <code>/orders?status=ACTIVE</code>.</li>
+            <li>Show one controller method using all three concepts.</li>
+          </ul></div>
+        </div>
+        <pre><code>@RestController
+@RequestMapping("/api/orders")
+public class OrderController {
+
+    private final OrderService orderService; // @Autowired via constructor
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @GetMapping("/{id}")
+    public Order getOrder(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "false") boolean includeItems) {
+        return orderService.findById(id, includeItems);
+    }
+}</code></pre>
+      </div>
+
+      <!-- 5 -->
+      <div class="topic-block tb-streams">
+        <span class="block-num">TOPIC 05 · SORT MAP</span>
+        <h3>Sort a Map&lt;String, Integer&gt;</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Convert map entries to a stream, sort by key or value, collect into LinkedHashMap (order preserved) or TreeMap (auto-sorted).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>By value desc: stream entries → sorted by Map.Entry.comparingByValue(Comparator.reverseOrder()).</li>
+            <li>Collect to LinkedHashMap to keep sort order.</li>
+            <li>Or use TreeMap with custom comparator for always-sorted map.</li>
+          </ul></div>
+        </div>
+        <pre><code>Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+map.put("apple", 3);
+map.put("banana", 1);
+map.put("cherry", 2);
+
+// Sort by value ascending
+Map&lt;String, Integer&gt; byValue = map.entrySet().stream()
+    .sorted(Map.Entry.comparingByValue())
+    .collect(Collectors.toMap(
+        Map.Entry::getKey,
+        Map.Entry::getValue,
+        (a, b) -> a,
+        LinkedHashMap::new
+    ));
+
+// Sort by key — TreeMap
+Map&lt;String, Integer&gt; byKey = new TreeMap&lt;&gt;(map);</code></pre>
+      </div>
+
+      <!-- 6 -->
+      <div class="topic-block tb-oop">
+        <span class="block-num">TOPIC 06 · OOP</span>
+        <h3>Difference between Encapsulation and Abstraction</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Encapsulation = hide data inside a class (private fields + getters). Abstraction = hide complexity — show only what user needs (interface or abstract idea).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Encapsulation: data hiding — private fields, controlled access via methods.</li>
+            <li>Abstraction: design-level hiding — PaymentService interface, user doesn't see DB logic.</li>
+            <li>Encapsulation protects object state; abstraction simplifies usage.</li>
+            <li>Example: ATM button (abstraction) vs account balance stored privately (encapsulation).</li>
+          </ul></div>
+        </div>
+        <table>
+          <tr><th>Encapsulation</th><th>Abstraction</th></tr>
+          <tr><td>Hides data (implementation detail of one class)</td><td>Hides complexity (what object does, not how)</td></tr>
+          <tr><td>private, getters/setters</td><td>interface, abstract class, API design</td></tr>
+        </table>
+      </div>
+
+      <!-- 7 -->
+      <div class="topic-block tb-oop">
+        <span class="block-num">TOPIC 07 · CUSTOM EXCEPTION</span>
+        <h3>How do you create a Custom Exception in Java?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Extend RuntimeException (unchecked, common in Spring) or Exception (checked). Add constructors that pass message to super.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Extend RuntimeException for business errors mapped to HTTP 4xx/5xx.</li>
+            <li>Include meaningful message and optional error code field.</li>
+            <li>Handle globally with @ControllerAdvice — don't catch in every method.</li>
+          </ul></div>
+        </div>
+        <pre><code>public class InsufficientBalanceException extends RuntimeException {
+    private final String accountId;
+
+    public InsufficientBalanceException(String accountId, BigDecimal required) {
+        super("Insufficient balance for account " + accountId + ", required: " + required);
+        this.accountId = accountId;
+    }
+}
+
+// Usage
+throw new InsufficientBalanceException(accountId, amount);</code></pre>
+      </div>
+
+      <!-- 8 -->
+      <div class="topic-block tb-oop">
+        <span class="block-num">TOPIC 08 · CUSTOM CLASS</span>
+        <h3>How do you create a Custom Class in Java?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Define a class with fields, constructor to set them, getters (and setters if mutable). Override equals/hashCode if used in collections.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Fields, constructor, accessors — basic POJO.</li>
+            <li>Override equals/hashCode if object goes in HashMap/HashSet.</li>
+            <li>Consider immutable design (final fields) for thread safety.</li>
+            <li>Java 16+ record for simple data carriers.</li>
+          </ul></div>
+        </div>
+        <pre><code>public class Employee {
+    private final Long id;
+    private String name;
+    private double salary;
+
+    public Employee(Long id, String name, double salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public double getSalary() { return salary; }
+}</code></pre>
+      </div>
+
+      <!-- 9 -->
+      <div class="topic-block tb-collections">
+        <span class="block-num">TOPIC 09 · MAP COMPARISON</span>
+        <h3>Difference between HashMap, Hashtable, and ConcurrentHashMap</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>HashMap = fast, not thread-safe, allows null. Hashtable = old, synchronized on every call, slow, no null. ConcurrentHashMap = modern, thread-safe, fine-grained locking.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Hashtable is legacy — don't use in new code.</li>
+            <li>HashMap for single-threaded; CHM for concurrent apps.</li>
+            <li>CHM: no null keys/values; better throughput than Hashtable.</li>
+          </ul></div>
+        </div>
+        <table>
+          <tr><th>Feature</th><th>HashMap</th><th>Hashtable</th><th>ConcurrentHashMap</th></tr>
+          <tr><td>Thread-safe</td><td>No</td><td>Yes (synchronized methods)</td><td>Yes (bucket locks + CAS)</td></tr>
+          <tr><td>Null key/value</td><td>One null key OK</td><td>Not allowed</td><td>Not allowed</td></tr>
+          <tr><td>Performance</td><td>Fast single-thread</td><td>Slow under contention</td><td>Scales well</td></tr>
+          <tr><td>Since</td><td>Java 1.2</td><td>Java 1.0 (legacy)</td><td>Java 5+ (Java 8+ improved)</td></tr>
+        </table>
+      </div>
+
+      <!-- 10 -->
+      <div class="topic-block tb-collections">
+        <span class="block-num">TOPIC 10 · CONCURRENCY CAPACITY</span>
+        <h3>How many elements can ConcurrentHashMap process at a time? What about HashMap?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>There is no fixed limit on how many entries you can store — both grow as needed. The real question is how many threads can read/write safely at once.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Clarify: they likely mean concurrent access, not element count.</li>
+            <li>HashMap: many threads = unsafe — can corrupt data; use external sync.</li>
+            <li>CHM: multiple threads can read concurrently; writes lock only one bucket.</li>
+            <li>Default concurrency level (legacy) was 16 segments — Java 8+ uses bucket-level locking, scales with cores and bucket count.</li>
+            <li>Element capacity: both limited by heap memory, not a fixed thread-style cap.</li>
+          </ul></div>
+        </div>
+        <div class="warn-box"><strong>Trap answer to avoid:</strong> Don't say "16 elements" — say unlimited entries (memory-bound), but concurrent <em>threads</em> are handled safely by CHM without locking the entire map.</div>
+      </div>
+
+      <!-- 11 -->
+      <div class="topic-block tb-http">
+        <span class="block-num">TOPIC 11 · REST HTTP</span>
+        <h3>Difference between PUT and PATCH</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>PUT replaces the entire resource. PATCH updates only the fields you send — partial update.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>PUT: send full object — missing fields may become null/default.</li>
+            <li>PATCH: send only changed fields — e.g. update email only.</li>
+            <li>PUT is idempotent; PATCH should be designed idempotent too.</li>
+            <li>Spring: @PutMapping vs @PatchMapping with JsonMergePatch or custom DTO.</li>
+          </ul></div>
+        </div>
+        <pre><code>// PUT /users/1 — replace entire user
+{ "name": "Alice", "email": "a@x.com", "role": "ADMIN" }
+
+// PATCH /users/1 — update email only
+{ "email": "new@x.com" }</code></pre>
+      </div>
+
+      <!-- 12 -->
+      <div class="topic-block tb-sql">
+        <span class="block-num">TOPIC 12 · SQL DDL</span>
+        <h3>Difference between DROP and TRUNCATE</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>DROP deletes the table structure and all data — table gone. TRUNCATE deletes all rows but keeps the empty table structure — faster, cannot rollback easily in some DBs.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>DROP TABLE: removes metadata + data; need CREATE to use again.</li>
+            <li>TRUNCATE: deallocates data pages; structure, indexes remain.</li>
+            <li>TRUNCATE faster than DELETE without WHERE; minimal logging.</li>
+            <li>TRUNCATE fails if FK references exist; DELETE can row-by-row with constraints.</li>
+          </ul></div>
+        </div>
+        <table>
+          <tr><th>DROP</th><th>TRUNCATE</th><th>DELETE</th></tr>
+          <tr><td>Removes table object</td><td>Empties table</td><td>Removes rows (with WHERE)</td></tr>
+          <tr><td>DDL — slow to undo</td><td>DDL — fast bulk</td><td>DML — row level, rollback OK</td></tr>
+        </table>
+      </div>
+
+      <!-- 13 -->
+      <div class="topic-block tb-oop">
+        <span class="block-num">TOPIC 13 · IMMUTABLE CLASS</span>
+        <h3>How do you create an Immutable Class in Java?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Final class, all fields final and private, no setters, copy mutable objects in constructor, return unmodifiable views from getters.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>1) final class 2) private final fields 3) constructor-only init</li>
+            <li>Defensive copy: List.copyOf() in constructor and getters</li>
+            <li>Thread-safe without locks — good for DTOs shared across threads</li>
+            <li>Java Records are immutable by default for simple cases</li>
+          </ul></div>
+        </div>
+        <pre><code>public final class Money {
+    private final BigDecimal amount;
+    private final String currency;
+
+    public Money(BigDecimal amount, String currency) {
+        this.amount = amount;
+        this.currency = currency;
+    }
+    public BigDecimal getAmount() { return amount; }
+    public String getCurrency() { return currency; }
+    // no setters
+}</code></pre>
+      </div>
+
+      <!-- 14 -->
+      <div class="topic-block tb-streams">
+        <span class="block-num">TOPIC 14 · STREAMS</span>
+        <h3>Difference between map() and flatMap()</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>map = 1 input → 1 output. flatMap = 1 input → many outputs, then flatten into one stream.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>map: List&lt;Order&gt; → List&lt;List&lt;Item&gt;&gt; (nested)</li>
+            <li>flatMap: List&lt;Order&gt; → List&lt;Item&gt; (flat)</li>
+            <li>Also used with Optional to chain without nested if-present checks</li>
+          </ul></div>
+        </div>
+        <pre><code>// map — one-to-one
+List&lt;String&gt; upper = words.stream().map(String::toUpperCase).toList();
+
+// flatMap — one-to-many, flattened
+List&lt;String&gt; allWords = sentences.stream()
+    .flatMap(s -> Arrays.stream(s.split(" ")))
+    .toList();</code></pre>
+      </div>
+
+      <!-- 15 -->
+      <div class="topic-block tb-serial">
+        <span class="block-num">TOPIC 15 · SERIALIZATION</span>
+        <h3>What is Serialization and why is it used?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Turn a Java object into bytes to save or send over network. Deserialization rebuilds the object from bytes.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Implements Serializable — object → byte stream → file/socket/cache</li>
+            <li>Uses: RMI (legacy), session replication, Kafka (prefer JSON/Avro today)</li>
+            <li>serialVersionUID for version compatibility</li>
+            <li>Security risk: never deserialize untrusted data — use JSON + validation instead in modern apps</li>
+          </ul></div>
+        </div>
+        <pre><code>public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String name;
+    private transient String password; // not serialized
+}</code></pre>
+      </div>
+
+      <!-- 16 -->
+      <div class="topic-block tb-oop">
+        <span class="block-num">TOPIC 16 · EXCEPTION HANDLING</span>
+        <h3>How do you handle Exceptions in Java?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>try/catch/finally catches errors; throw sends error up; custom exceptions for business rules; global handler in Spring for APIs.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Checked: must handle (IOException). Unchecked: RuntimeException.</li>
+            <li>Don't swallow exceptions — log with context</li>
+            <li>Spring: @ControllerAdvice maps exceptions to HTTP status + JSON body</li>
+            <li>Fail fast on unrecoverable errors; retry only idempotent operations</li>
+          </ul></div>
+        </div>
+        <pre><code>try {
+    processPayment(order);
+} catch (PaymentFailedException e) {
+    log.error("Payment failed for order {}", order.getId(), e);
+    throw e; // or return fallback
+} finally {
+    MDC.clear();
+}</code></pre>
+      </div>
+
+      <!-- 17 -->
+      <div class="topic-block tb-spring">
+        <span class="block-num">TOPIC 17 · SPRING WEB</span>
+        <h3>Difference between @PathVariable and @RequestParam</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>@PathVariable = part of the URL path (/users/5). @RequestParam = query string after ? (/users?role=admin).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>PathVariable: required part of REST resource identity — /orders/{orderId}</li>
+            <li>RequestParam: optional filters, pagination — ?page=0&amp;size=20</li>
+            <li>RequestParam can have defaultValue and required=false</li>
+            <li>Example URL: GET /api/orders/42?includeItems=true</li>
+          </ul></div>
+        </div>
+        <pre><code>@GetMapping("/orders/{orderId}")
+public Order get(
+    @PathVariable Long orderId,
+    @RequestParam(defaultValue = "false") boolean includeItems) { ... }
+
+// GET /api/orders/42?includeItems=true
+// orderId=42, includeItems=true</code></pre>
+      </div>
+
+      <!-- 18 -->
+      <div class="topic-block tb-prod">
+        <span class="block-num">TOPIC 18 · PRODUCTION SUPPORT</span>
+        <h3>If a production issue occurs, how would you investigate after checking the logs?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>After logs: check metrics/dashboards, reproduce scope, thread dump or heap if JVM issue, DB slow queries, recent deploys, then fix and document RCA.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>1) Confirm impact — how many users, which API, since when</li>
+            <li>2) Metrics: CPU, memory, error rate, latency (Grafana/Dynatrace)</li>
+            <li>3) Correlate with deploy/config change</li>
+            <li>4) JVM: jstack (threads), heap dump (OOM), GC logs</li>
+            <li>5) DB: slow query log, connection pool exhaustion</li>
+            <li>6) External deps: downstream timeout, circuit breaker open</li>
+            <li>7) Mitigate (rollback/scale), then RCA and preventive action</li>
+          </ul></div>
+        </div>
+        <div class="diagram">Logs → Metrics → Recent change? → Thread/Heap dump → DB/Network
+  → Mitigate → Root cause → Fix + alert + runbook update</div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

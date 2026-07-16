@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>20 Concurrency Concepts — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html" class="nav-active">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="concurrency-20">
+      <h2 class="section-title">20 Must-Know Concurrency Concepts</h2>
+      <p class="section-desc">Core concurrency building blocks + deep-dive FAQ answers for senior Java interviews.</p>
+
+      <div class="section-banner">
+        <h3>20 Must-Know Concurrency Concepts</h3>
+        <p>From concurrency vs parallelism to blocking queues — each concept in its own block with simple explanation and interview script.</p>
+      </div>
+
+      <p class="concept-grid-label">Core concepts 1 – 20</p>
+
+      <!-- 1 Concurrency -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 01</span>
+        <h3>Concurrency — Tasks interleaving execution on a single core</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>One CPU switches fast between tasks so they appear to run together — like one chef chopping while soup simmers, switching back and forth.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Concurrency = dealing with many things at once (structure), not necessarily at the same instant.</li>
+            <li>OS time-slices threads on one core — interleaved execution.</li>
+            <li>I/O-bound apps benefit: while one thread waits on DB, another runs.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 2 Parallelism -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 02</span>
+        <h3>Parallelism — Tasks executing simultaneously on multiple cores</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Multiple cores truly run work at the same time — like four chefs each cooking a different dish simultaneously.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Parallelism = simultaneous execution — needs multiple CPU cores.</li>
+            <li>Java: parallelStream(), ForkJoinPool, multiple threads on multi-core machine.</li>
+            <li>You can have concurrency without parallelism (1 core); parallelism usually includes concurrency.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 3 Processes vs Threads -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 03</span>
+        <h3>Processes vs Threads — Isolated buckets vs lightweight units</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Process = separate app with its own memory. Thread = worker inside a process sharing the same memory heap.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Process isolation: crash in one JVM app doesn't kill another process.</li>
+            <li>Threads share heap — fast communication but need synchronization.</li>
+            <li>Creating a process is heavy; creating a thread is lighter.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 4 Thread Lifecycle -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 04</span>
+        <h3>Thread Lifecycle — New → Runnable → Running → Blocked → Terminated</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>A thread is born, waits its turn, runs, pauses when waiting for lock/I/O, then dies when done.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>NEW → start() → RUNNABLE → scheduler picks → RUNNING.</li>
+            <li>BLOCKED/WAITING/TIMED_WAITING: waiting for lock, wait(), sleep(), join().</li>
+            <li>TERMINATED: run() completes or uncaught exception.</li>
+            <li>jstack shows thread states during production incidents.</li>
+          </ul></div>
+        </div>
+        <div class="diagram">NEW → start() → RUNNABLE ⇄ RUNNING
+              ↓ blocked/wait/sleep/I/O
+         BLOCKED / WAITING / TIMED_WAITING
+              ↓ run completes
+         TERMINATED</div>
+      </div>
+
+      <!-- 5 Race Conditions -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 05</span>
+        <h3>Race Conditions — Output depends on unpredictable timing</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Two threads update the same variable without coordination — who wins depends on luck, so results are wrong sometimes.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Classic: count++ — read-modify-write, not atomic.</li>
+            <li>Symptoms: flaky tests, bugs only under production load.</li>
+            <li>Fix: locks, atomic variables, immutable data, or thread confinement.</li>
+          </ul></div>
+        </div>
+        <pre><code>// Race: both read count=5, both write 6
+private int count = 0;
+count++; // NOT safe without sync or AtomicInteger</code></pre>
+      </div>
+
+      <!-- 6 Mutex -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 06</span>
+        <h3>Mutex — Mutual exclusion lock for exclusive single-thread access</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Only one thread at a time can enter the protected code — like one person in a bathroom with a lock on the door.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Java: synchronized block/method, ReentrantLock.</li>
+            <li>Protects critical section — shared counter, balance update.</li>
+            <li>Trade-off: correctness vs potential contention and deadlocks.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 7 Semaphores -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 07</span>
+        <h3>Semaphores — Signaling counter controlling access for N threads</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>A permit counter — N threads can enter at once; others wait until a permit is released. Like N parking slots.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Java: Semaphore(N) — acquire() takes permit, release() returns it.</li>
+            <li>Limit concurrent DB connections or API calls to N.</li>
+            <li>Binary semaphore (1 permit) behaves like mutex but different semantics (see FAQ).</li>
+          </ul></div>
+        </div>
+        <pre><code>Semaphore sem = new Semaphore(5); // max 5 concurrent
+sem.acquire();
+try { callExternalApi(); }
+finally { sem.release(); }</code></pre>
+      </div>
+
+      <!-- 8 Condition Variables -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 08</span>
+        <h3>Condition Variables — Safe queues letting threads sleep until signaled</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Threads wait on a condition (queue empty/full) and get woken when another thread signals — no busy-waiting.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Java: Lock + Condition (await/signal) or wait/notify on monitor.</li>
+            <li>Producer waits when buffer full; consumer waits when empty.</li>
+            <li>Always use while loop to re-check condition (spurious wakeup).</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 9 Coarse vs Fine Locking -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 09</span>
+        <h3>Coarse vs Fine Locking — Big slow lock vs small fast locks</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Coarse = one lock for everything (simple but slow). Fine = many small locks (complex but less contention).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Coarse: synchronized entire map — one writer blocks all readers.</li>
+            <li>Fine: ConcurrentHashMap bucket locks — threads hit different buckets.</li>
+            <li>Start coarse; optimize to fine when profiling shows lock contention.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 10 Reentrant Locks -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 10</span>
+        <h3>Reentrant Locks — Thread can re-acquire its own lock</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Same thread can lock twice without deadlocking itself — Java synchronized and ReentrantLock are both reentrant.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Thread holds count: lock → call method that locks again → count=2 → unlock twice.</li>
+            <li>Needed when synchronized method calls another synchronized method on same object.</li>
+            <li>ReentrantLock also reentrant by name and design.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 11 Try-Lock -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 11</span>
+        <h3>Try-Lock — Non-blocking attempt that returns immediately if busy</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Try to get the lock — if someone else has it, don't wait forever; return false or use fallback.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>lock.tryLock() or tryLock(timeout, unit) — avoids indefinite blocking.</li>
+            <li>Use to prevent deadlock: try locks in order with timeout, back off if fail.</li>
+            <li>Good for optional work: skip cache refresh if lock busy.</li>
+          </ul></div>
+        </div>
+        <pre><code>if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
+    try { updateCache(); }
+    finally { lock.unlock(); }
+} else { return staleData(); }</code></pre>
+      </div>
+
+      <!-- 12 CAS -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 12</span>
+        <h3>CAS (Compare-and-Swap) — Atomic CPU instruction for lock-free updates</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>CPU atomically says: if memory equals expected, swap to new value — else retry. No lock needed for simple updates.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Used by AtomicInteger, ConcurrentHashMap internals.</li>
+            <li>Lock-free but may retry under contention (optimistic).</li>
+            <li>See FAQ below for ABA problem.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 13 Deadlock -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 13</span>
+        <h3>Deadlock — Circular wait where everyone is stuck</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Thread A holds lock 1, wants lock 2. Thread B holds lock 2, wants lock 1. Neither can proceed.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Detect with jstack — "Found one Java-level deadlock".</li>
+            <li>Prevent: lock ordering, timeouts, tryLock.</li>
+            <li>See FAQ: four Coffman conditions.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 14 Livelock -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 14</span>
+        <h3>Livelock — Active responses but zero progress</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Threads aren't blocked but keep yielding to each other — like two people in a hallway both stepping aside the same way forever.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Differs from deadlock: threads are RUNNABLE, CPU busy, no forward progress.</li>
+            <li>Fix: random backoff, priority, or assign roles (leader election).</li>
+            <li>Example: tryLock loops retrying instantly without backoff.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 15 Signaling Pattern -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 15</span>
+        <h3>Signaling Pattern — One thread explicitly waking another</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Worker waits until boss calls notify/signal — "data is ready, you can proceed."</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>wait/notify, Condition.await/signal, CountDownLatch.countDown().</li>
+            <li>Always signal under same lock that wait uses.</li>
+            <li>Prefer higher-level constructs (BlockingQueue, Latch) over raw wait/notify.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 16 Thread Pool -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 16</span>
+        <h3>Thread Pool — Reusing fixed threads to avoid allocation overhead</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Keep N workers alive; submit tasks to a queue instead of creating new Thread for every request.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>ExecutorService / ThreadPoolExecutor in Java.</li>
+            <li>Controls max concurrency — protects CPU and downstream systems.</li>
+            <li>Spring @Async uses TaskExecutor thread pool.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 17 Producer-Consumer -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 17</span>
+        <h3>Producer-Consumer — Decouple generation from processing via buffer</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Producers fill a queue; consumers drain it — each side works at its own pace.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>BlockingQueue is the standard Java implementation.</li>
+            <li>Used in log pipelines, order events, thread pool work queue.</li>
+            <li>Backpressure: full queue blocks producers.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 18 Reader-Writer -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 18</span>
+        <h3>Reader-Writer — Many readers OR one writer</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Many threads can read together, but writing requires exclusive access — good when reads dominate.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Java: ReentrantReadWriteLock — readLock() shared, writeLock() exclusive.</li>
+            <li>Config caches, reference data — frequent reads, rare updates.</li>
+            <li>See FAQ: when vs standard mutex.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- 19 Thread-Safe Cache -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 19</span>
+        <h3>Thread-Safe Cache — Safe concurrent in-memory store</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Multiple threads read/write cache without corrupting data — use ConcurrentHashMap + computeIfAbsent or Caffeine cache.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>ConcurrentHashMap.computeIfAbsent prevents duplicate loads.</li>
+            <li>Caffeine/Guava Cache handles eviction and concurrency.</li>
+            <li>Define TTL and invalidation on writes for consistency.</li>
+          </ul></div>
+        </div>
+        <pre><code>cache.computeIfAbsent(key, k -> loadFromDb(k));</code></pre>
+      </div>
+
+      <!-- 20 Blocking Queue -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">CONCEPT 20</span>
+        <h3>Blocking Queue — Blocks when full (producer) or empty (consumer)</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>put() waits if queue full; take() waits if empty — built-in producer-consumer without manual wait/notify.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>ArrayBlockingQueue (bounded), LinkedBlockingQueue, PriorityBlockingQueue.</li>
+            <li>ThreadPoolExecutor internal work queue is a BlockingQueue.</li>
+            <li>See FAQ: implementing bounded queue with Condition variables.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- FAQ SECTION -->
+      <div class="section-banner" id="concurrency-faq">
+        <h3>Frequently Asked Interview Questions — Deep Dive</h3>
+        <p>Can you confidently answer these right now? Each FAQ has full interview-ready detail.</p>
+      </div>
+
+      <!-- FAQ CAS -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">FAQ · CAS</span>
+        <h3>How does Compare-and-Swap work under the hood, and what is the ABA problem?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>CAS atomically checks "is memory still X?" — if yes, set to Y; if no, fail and retry. ABA = value looks same (A) but changed A→B→A in between, fooling some algorithms.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>CAS loop: read current → compute new → compareAndSet(expected, new) → retry if fail.</li>
+            <li>Hardware (cmpxchg on x86) guarantees atomicity of compare+swap.</li>
+            <li>ABA problem: pointer/object recycled — AtomicStampedReference adds version stamp.</li>
+            <li>Java Atomic* classes hide CAS; ConcurrentHashMap uses CAS for some updates.</li>
+          </ul></div>
+        </div>
+        <pre><code>// CAS logic (conceptual)
+do {
+    expected = current;
+    newVal = expected + 1;
+} while (!compareAndSet(expected, newVal));
+
+// ABA: stack top A → pop/push → still looks A but structure changed
+// Fix: AtomicStampedReference&lt;Node&gt; with incrementing stamp</code></pre>
+      </div>
+
+      <!-- FAQ Deadlock Coffman -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">FAQ · DEADLOCK</span>
+        <h3>What are the four Coffman conditions required for a deadlock?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>All four must be true for deadlock. Break any one condition and deadlock cannot happen.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>1) <strong>Mutual exclusion</strong> — resource held by only one thread at a time.</li>
+            <li>2) <strong>Hold and wait</strong> — thread holds one resource while waiting for another.</li>
+            <li>3) <strong>No preemption</strong> — resources can't be forcibly taken away.</li>
+            <li>4) <strong>Circular wait</strong> — cycle in wait graph (A→B→C→A).</li>
+            <li>Prevention: lock ordering breaks circular wait; tryLock breaks hold-and-wait.</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <!-- FAQ Mutex vs Semaphore -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">FAQ · MUTEX VS SEMAPHORE</span>
+        <h3>What is the core difference between a Mutex and a Binary Semaphore?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Both allow one thread at a time, but mutex = ownership (only locker unlocks). Binary semaphore = signaling (any thread can signal/release).</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Mutex: lock/unlock must be same thread — protects critical section.</li>
+            <li>Binary semaphore: thread A can acquire, thread B can release — signaling pattern.</li>
+            <li>Mutex solves mutual exclusion; semaphore solves resource counting + signaling.</li>
+            <li>Java ReentrantLock ≈ mutex; Semaphore(1) ≈ binary semaphore but different semantics.</li>
+          </ul></div>
+        </div>
+        <table>
+          <tr><th>Mutex</th><th>Binary Semaphore</th></tr>
+          <tr><td>Ownership — only owner unlocks</td><td>No ownership — any thread may release</td></tr>
+          <tr><td>Protect shared data</td><td>Signal event / permit availability</td></tr>
+        </table>
+      </div>
+
+      <!-- FAQ Bounded Blocking Queue -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">FAQ · DESIGN PATTERN</span>
+        <h3>How do you implement a bounded Blocking Queue using Condition Variables?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>Use one lock, two conditions: notFull (producer waits) and notEmpty (consumer waits). Array as ring buffer with head/tail.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>ReentrantLock + two Condition objects: notFull, notEmpty.</li>
+            <li>put: while full → notFull.await(); add item; signal notEmpty.</li>
+            <li>take: while empty → notEmpty.await(); remove item; signal notFull.</li>
+            <li>Use while not if — spurious wakeup and multiple waiters.</li>
+          </ul></div>
+        </div>
+        <pre><code>class BoundedQueue&lt;T&gt; {
+    final Lock lock = new ReentrantLock();
+    final Condition notFull = lock.newCondition();
+    final Condition notEmpty = lock.newCondition();
+    final Object[] items;
+    int head, tail, count;
+
+    void put(T item) throws InterruptedException {
+        lock.lock();
+        try {
+            while (count == items.length) notFull.await();
+            items[tail] = item;
+            tail = (tail + 1) % items.length;
+            count++;
+            notEmpty.signal();
+        } finally { lock.unlock(); }
+    }
+
+    T take() throws InterruptedException {
+        lock.lock();
+        try {
+            while (count == 0) notEmpty.await();
+            T item = (T) items[head];
+            head = (head + 1) % items.length;
+            count--;
+            notFull.signal();
+            return item;
+        } finally { lock.unlock(); }
+    }
+}</code></pre>
+      </div>
+
+      <!-- FAQ ReadWrite vs Mutex -->
+      <div class="topic-block tb-concurrency">
+        <span class="block-num">FAQ · PERFORMANCE</span>
+        <h3>When do you prefer a Read-Write Lock over a standard Mutex?</h3>
+        <div class="interview-helper-wrap">
+          <div class="simple-words"><span class="simple-label">In simple words</span><p>When reads are many and writes are rare — multiple readers run together; writers still get exclusive access.</p></div>
+          <div class="interview-points"><span class="interview-label">What to tell the interviewer</span><ul>
+            <li>Prefer RW lock: read-heavy cache, config, reference data (90%+ reads).</li>
+            <li>Standard mutex if writes are frequent — RW lock overhead not worth it.</li>
+            <li>Watch writer starvation — some implementations aren't fair.</li>
+            <li>Alternative: immutable snapshots + atomic reference — no locks on read path.</li>
+          </ul></div>
+        </div>
+        <table>
+          <tr><th>Use ReadWriteLock</th><th>Use simple Mutex</th></tr>
+          <tr><td>Read ratio very high</td><td>Balanced or write-heavy workload</td></tr>
+          <tr><td>Read operations take time</td><td>Critical section is very short</td></tr>
+          <tr><td>Shared config / cache</td><td>Counter updates, payment balance</td></tr>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <strong>Production discussion starter:</strong> Which concurrency bug has given you the hardest time? Prepare a story — race on shared cache, connection pool exhaustion, deadlock in batch job, or ThreadLocal leak in thread pool.
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

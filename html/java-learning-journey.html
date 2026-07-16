@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Java Journey — Java Interview Guide</title>
+  <link rel="stylesheet" href="guide-styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Java, Spring Boot, SQL &amp; System Design</h1>
+  <p>Study path by tech stack — <strong>cover phases top to bottom</strong>. Simple explanations + talking points on every topic.</p>
+</header>
+
+<div class="layout">
+<nav aria-label="Study path by technology">
+    <h2>Study path</h2>
+    <p class="nav-intro">Cover phases 1 → 8 in order (~6 weeks). Jump to weak areas anytime.</p>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-start">Start here</span>
+      <ul>
+        <li><a href="index.html">Learning Roadmap</a></li>
+        <li><a href="java-learning-journey.html" class="nav-active">My Java Journey (Core → Advanced)</a></li>
+        <li><a href="interview-topics-checklist.html">FAQ Topics Checklist (100+)</a></li>
+        <li><a href="interview-answer-framework.html">How to Answer (4-Step Script)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 1 · Core Java</span>
+      <ul>
+        <li><a href="java-oop.html">Java OOP &amp; Constructors</a></li>
+        <li><a href="java-concurrency.html">Core Java &amp; Concurrency</a></li>
+        <li><a href="multithreading-1min.html">1-Min Multithreading Cheat Sheet</a></li>
+        <li><a href="concurrency-20.html">20 Concurrency Concepts</a></li>
+        <li><a href="multithreading-pro.html">Multithreading (Pro Level)</a></li>
+        <li><a href="additional-topics.html">Additional Topics (18)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 2 · DSA</span>
+      <ul><li><a href="dsa-coding.html">DSA &amp; Coding</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 3 · Spring Boot</span>
+      <ul>
+        <li><a href="spring-boot.html">Spring Boot</a></li>
+        <li><a href="spring-boot.html#spring-boot-deep" class="nav-sub">↳ Deep Dive (30 Q)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 4 · Database</span>
+      <ul><li><a href="sql.html">SQL &amp; Database</a></li></ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 5 · Design</span>
+      <ul>
+        <li><a href="design-patterns.html">Design Patterns</a></li>
+        <li><a href="lld.html">Low-Level Design</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 6 · Microservices</span>
+      <ul>
+        <li><a href="microservices.html">Microservices &amp; DevOps</a></li>
+        <li><a href="microservices-2026.html">Microservices 2026 (3–5 YOE)</a></li>
+        <li><a href="event-driven-architecture.html">Event-Driven Architecture</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase">Phase 7 · Production</span>
+      <ul>
+        <li><a href="production-topics.html">Production &amp; DevOps Topics</a></li>
+        <li><a href="latency-throughput.html">Latency vs Throughput (10 Q)</a></li>
+        <li><a href="real-java-interview.html">Real Java — 20 Q (Production)</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-phase nav-phase-final">Phase 8 · Interview prep</span>
+      <ul>
+        <li><a href="interview-rounds.html">Interview Rounds</a></li>
+        <li><a href="interview-rounds.html#round-1" class="nav-sub">↳ Round 1 — Technical</a></li>
+        <li><a href="interview-rounds.html#round-2" class="nav-sub">↳ Round 2 — Advanced</a></li>
+        <li><a href="interview-rounds.html#round-3" class="nav-sub">↳ Round 3 — HR / Manager</a></li>
+        <li><a href="top-companies.html">Top Companies (5+ YOE)</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+<section id="java-learning-journey">
+      <h2 class="section-title">My Java Learning Journey — Core → Advanced</h2>
+      <p class="section-desc">A structured record of topics covered so far — fundamentals first, then how things actually work behind the scenes. Use this to see what's done and what to study next in this guide.</p>
+
+      <div class="section-banner">
+        <span class="trend-badge">LEARNING LOG · HANDS-ON</span>
+        <h3>Building strong fundamentals + understanding what happens under the hood</h3>
+        <p>Consistent practice over the last few weeks — Core Java through Collections &amp; Multithreading.</p>
+      </div>
+
+      <div class="journey-progress">
+        <span class="journey-badge">✓ Core Java &amp; OOP</span>
+        <span class="journey-badge">✓ Advanced Java</span>
+        <span class="journey-badge">✓ Exception Handling</span>
+        <span class="journey-badge">✓ Multithreading</span>
+        <span class="journey-badge">✓ Collections</span>
+        <span class="journey-badge upcoming">→ Spring Boot (Phase 3)</span>
+        <span class="journey-badge upcoming">→ SQL &amp; JPA (Phase 4)</span>
+      </div>
+
+      <div class="journey-grid">
+        <div class="journey-card jc-oop">
+          <h4>🔹 Core Java &amp; OOP</h4>
+          <ul>
+            <li>Inheritance, Polymorphism, Abstraction, Encapsulation</li>
+            <li><code>final</code>, <code>static</code>, constructors, access modifiers</li>
+            <li>Object class: <code>equals()</code>, <code>hashCode()</code>, <code>toString()</code></li>
+          </ul>
+          <p style="margin-top:0.65rem;font-size:0.8rem"><a class="cross-link" href="java-oop.html">→ Interview prep: OOP section</a> · <a class="cross-link" href="additional-topics.html">→ equals/hashCode deep dive</a></p>
+        </div>
+
+        <div class="journey-card jc-advanced">
+          <h4>🔹 Advanced Java Concepts</h4>
+          <ul>
+            <li>Inner classes — member, static, local, anonymous</li>
+            <li>Interfaces, functional interfaces &amp; lambda expressions</li>
+            <li>Enums with constructors and methods</li>
+            <li>Wrapper classes &amp; type casting</li>
+          </ul>
+          <p style="margin-top:0.65rem;font-size:0.8rem"><a class="cross-link" href="production-topics.html">→ Functional interfaces in Production Topics</a></p>
+        </div>
+
+        <div class="journey-card jc-exception">
+          <h4>🔹 Exception Handling</h4>
+          <ul>
+            <li><code>try-catch</code>, multiple catch blocks</li>
+            <li><code>throw</code> vs <code>throws</code></li>
+            <li>Custom exceptions &amp; ducking (propagating)</li>
+            <li><code>try-with-resources</code> (AutoCloseable)</li>
+          </ul>
+          <p style="margin-top:0.65rem;font-size:0.8rem"><a class="cross-link" href="microservices-2026.html">→ Global exception handling (Spring)</a></p>
+        </div>
+
+        <div class="journey-card jc-thread">
+          <h4>🔹 Multithreading (hands-on)</h4>
+          <ul>
+            <li><code>Thread</code> vs <code>Runnable</code></li>
+            <li>Lambda with threads</li>
+            <li>Thread lifecycle, <code>sleep</code>, priority</li>
+            <li>Race conditions, <code>synchronized</code>, <code>join()</code></li>
+            <li>JVM scheduling behavior</li>
+          </ul>
+          <p style="margin-top:0.65rem;font-size:0.8rem"><a class="cross-link" href="java-concurrency.html">→ Core Java &amp; Concurrency</a> · <a class="cross-link" href="multithreading-pro.html">→ Pro level</a> · <a class="cross-link" href="concurrency-20.html">→ 20 concepts</a></p>
+        </div>
+
+        <div class="journey-card jc-collections">
+          <h4>🔹 Collections Framework</h4>
+          <ul>
+            <li><code>List</code>, <code>Set</code>, <code>Queue</code>, <code>Deque</code></li>
+            <li><code>Map</code> implementations and their differences</li>
+          </ul>
+          <p style="margin-top:0.65rem;font-size:0.8rem"><a class="cross-link" href="java-concurrency.html">→ HashMap vs ConcurrentHashMap</a> · <a class="cross-link" href="additional-topics.html">→ HashMap put/get internals</a></p>
+        </div>
+
+        <div class="journey-card jc-next">
+          <h4>💡 Recommended next in this guide</h4>
+          <ul>
+            <li><a href="dsa-coding.html">Phase 2 — DSA &amp; Coding</a> (Two Sum, HashMap patterns)</li>
+            <li><a href="spring-boot.html">Phase 3 — Spring Boot</a> (REST, DI, Security)</li>
+            <li><a href="sql.html">Phase 4 — SQL &amp; Database</a></li>
+            <li><a href="real-java-interview.html">Real Java — 20 production questions</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="journey-insight">
+        <strong>💡 Biggest learning so far:</strong> Debugging real problems helped me understand Java much better than just reading theory. When you hit a race condition, a NullPointerException in a lambda, or a HashMap lookup that returns null — trace it, fix it, then explain <em>why</em> it happened. That's exactly what interviewers ask at 3–5 YOE.
+      </div>
+
+      <div class="tip-box">
+        <strong>Interview tip from your journey:</strong> You already cover the "why" topics — thread lifecycle, equals/hashCode, map differences. Next step: tie each to a story. "I debugged a race condition by adding synchronized on the shared counter" beats listing thread states from memory. Cross-check against the full <a class="cross-link" href="interview-topics-checklist.html">61-topic interview checklist</a>.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Study Roadmap · Core Java → Spring → Microservices · 3–5 YOE Interview Guide
+</footer>
+
+<script src="interview-points.js"></script>
+<script src="simple-explanations.js"></script>
+<script src="question-checkboxes.js"></script>
+<script src="topic-references.js"></script>
+<script src="topic-references-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top 100 Java Stream Problems — With Solutions</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --sidebar: #161b22;
+      --panel: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --java-orange: #f89820;
+      --highlight: #1f6feb33;
+      --code-bg: #0d1117;
+      --success: #3fb950;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .layout { display: flex; height: 100vh; }
+    .sidebar {
+      width: 320px;
+      min-width: 320px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-header h1 { font-size: 1.05rem; font-weight: 600; }
+    .sidebar-header p { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+    .sidebar-header a {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--java-orange);
+      text-decoration: none;
+    }
+    .sidebar-header a:hover { text-decoration: underline; }
+    .search-box {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+    .topic-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+    .topic-list::-webkit-scrollbar { width: 6px; }
+    .topic-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 12px 14px 4px;
+    }
+    .topic-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 8px 14px;
+      margin-bottom: 2px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      line-height: 1.35;
+    }
+    .topic-item:hover { background: var(--highlight); color: var(--text); }
+    .topic-item.active {
+      background: var(--highlight);
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .topic-item .qnum {
+      color: var(--java-orange);
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px 48px;
+      max-width: 960px;
+    }
+    .content::-webkit-scrollbar { width: 8px; }
+    .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .welcome {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .welcome h2 { font-size: 1.8rem; color: var(--text); margin-bottom: 12px; }
+    .welcome p { max-width: 560px; margin: 0 auto 8px; }
+    .welcome .stats {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+    .welcome .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 28px;
+    }
+    .welcome .stat strong {
+      display: block;
+      font-size: 1.6rem;
+      color: var(--java-orange);
+    }
+    .topic-content h2 {
+      font-size: 1.75rem;
+      margin-bottom: 8px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .interview-q {
+      background: var(--panel);
+      border-left: 3px solid var(--java-orange);
+      padding: 16px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .interview-q .q {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+    .interview-q pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 0;
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+    .interview-q code {
+      color: #c9d1d9;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    }
+    .single-problem-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .nav-link {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.85rem;
+      text-decoration: none;
+    }
+    .nav-link:hover { border-color: var(--accent); }
+    .nav-link.disabled { opacity: 0.3; pointer-events: none; }
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; min-width: unset; max-height: 45vh; }
+      .content { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Java Stream Interview Prep</h1>
+        <p>100 problems with Java solutions</p>
+        <a href="java-streams-linkedin.html">← LinkedIn Carousel Generator</a>
+      </div>
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search by # or keyword..." autocomplete="off">
+      </div>
+      <nav class="topic-list" id="topicList"></nav>
+    </aside>
+    <main class="content" id="contentPanel">
+      <div class="welcome">
+        <h2>Top 100 Java Stream Problems</h2>
+        <p>Every problem includes a ready-to-run Java 17 solution. Pick a category or a specific question from the sidebar.</p>
+        <p style="font-size:0.85rem;margin-top:12px;">Inspired by <a href="https://alokratnaparkhi8.medium.com/top-100-java-stream-interview-problems-for-practice-ea2278f492b2" style="color:var(--accent)">Alok Ratnaparkhi's collection</a></p>
+        <div class="stats">
+          <div class="stat"><strong>100</strong>Problems</div>
+          <div class="stat"><strong>11</strong>Categories</div>
+          <div class="stat"><strong>Java 17</strong>Solutions</div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="java-streams-content.js"></script>
+  <script>
+    const topicList = document.getElementById('topicList');
+    const contentPanel = document.getElementById('contentPanel');
+    const searchInput = document.getElementById('search');
+    let activeId = null;
+
+    const SECTIONS = [
+      { label: 'Overview', ids: ['all'] },
+      { label: 'Categories', ids: ['basics','numeric','string','employee','optional','collectors','flattening','datetime','statistical','advanced','practical'] },
+    ];
+
+    function renderProblemHtml(p) {
+      return `<div class="topic-content">
+        <h2>Problem #${p.num}</h2>
+        <div class="interview-q">
+          <div class="q">${p.title}</div>
+          <pre><code class="language-java">${p.code.trim()}</code></pre>
+        </div>
+        <div class="single-problem-nav">
+          ${p.num > 1 ? `<a class="nav-link" href="#q${p.num - 1}">← #${p.num - 1}</a>` : '<span></span>'}
+          ${p.num < 100 ? `<a class="nav-link" href="#q${p.num + 1}">#${p.num + 1} →</a>` : '<span></span>'}
+        </div>
+      </div>`;
+    }
+
+    PROBLEMS.forEach(p => {
+      TOPICS['q' + p.num] = {
+        title: `#${p.num} ${p.title}`,
+        html: renderProblemHtml(p)
+      };
+    });
+
+    function renderSidebar(filter = '') {
+      topicList.innerHTML = '';
+      const q = filter.toLowerCase().trim();
+
+      if (q && /^\d+$/.test(q)) {
+        const num = parseInt(q, 10);
+        const p = PROBLEMS.find(x => x.num === num);
+        if (p) {
+          const btn = document.createElement('button');
+          btn.className = 'topic-item active';
+          btn.innerHTML = `<span class="qnum">#${p.num}</span>${p.title}`;
+          btn.onclick = () => showTopic('q' + p.num);
+          topicList.appendChild(btn);
+          return;
+        }
+      }
+
+      const matchProblem = p => !q || p.title.toLowerCase().includes(q) || String(p.num).includes(q);
+      const matchedProblems = q ? PROBLEMS.filter(matchProblem) : [];
+
+      if (q && matchedProblems.length) {
+        const label = document.createElement('div');
+        label.className = 'section-label';
+        label.textContent = `Results (${matchedProblems.length})`;
+        topicList.appendChild(label);
+        matchedProblems.forEach(p => {
+          const id = 'q' + p.num;
+          const btn = document.createElement('button');
+          btn.className = 'topic-item' + (id === activeId ? ' active' : '');
+          btn.innerHTML = `<span class="qnum">#${p.num}</span>${p.title}`;
+          btn.onclick = () => showTopic(id);
+          topicList.appendChild(btn);
+        });
+        return;
+      }
+
+      SECTIONS.forEach(section => {
+        const visible = section.ids.filter(id => {
+          const t = TOPICS[id];
+          return t && (!q || t.title.toLowerCase().includes(q));
+        });
+        if (!visible.length) return;
+        const label = document.createElement('div');
+        label.className = 'section-label';
+        label.textContent = section.label;
+        topicList.appendChild(label);
+        visible.forEach(id => {
+          const btn = document.createElement('button');
+          btn.className = 'topic-item' + (id === activeId ? ' active' : '');
+          btn.textContent = TOPICS[id].title;
+          btn.onclick = () => showTopic(id);
+          topicList.appendChild(btn);
+        });
+      });
+
+      if (!q) {
+        const label = document.createElement('div');
+        label.className = 'section-label';
+        label.textContent = 'All Questions';
+        topicList.appendChild(label);
+        PROBLEMS.forEach(p => {
+          const id = 'q' + p.num;
+          const btn = document.createElement('button');
+          btn.className = 'topic-item' + (id === activeId ? ' active' : '');
+          btn.innerHTML = `<span class="qnum">#${p.num}</span>${p.title.length > 42 ? p.title.slice(0, 42) + '…' : p.title}`;
+          btn.onclick = () => showTopic(id);
+          topicList.appendChild(btn);
+        });
+      }
+    }
+
+    function showTopic(id) {
+      activeId = id;
+      const topic = TOPICS[id];
+      if (!topic) return;
+      contentPanel.innerHTML = topic.html.includes('topic-content')
+        ? topic.html
+        : '<div class="topic-content">' + topic.html + '</div>';
+      renderSidebar(searchInput.value);
+      contentPanel.scrollTop = 0;
+      history.replaceState(null, '', '#' + id);
+    }
+
+    searchInput.addEventListener('input', e => renderSidebar(e.target.value));
+    renderSidebar();
+    const hash = location.hash.slice(1);
+    if (hash && TOPICS[hash]) showTopic(hash);
+  </script>
+</body>
+</html>
